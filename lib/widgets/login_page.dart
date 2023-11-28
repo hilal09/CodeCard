@@ -3,8 +3,10 @@ import 'package:flutter/material.dart'; //import von packages
 //StatefulWidget (zustand derseite kann sich ändern)
 class LoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() => _LoginPageState(); //erstellt zugehöriges state-objekt, verwaltet zustand der seite
+  _LoginPageState createState() =>
+      _LoginPageState(); //erstellt zugehöriges state-objekt, verwaltet zustand der seite
 }
+
 //zustand für loginPage wird definiert
 class _LoginPageState extends State<LoginPage> {
   bool isAnmeldenTab = true; //damit kann man den ausgewählten tab verfolgen
@@ -12,8 +14,11 @@ class _LoginPageState extends State<LoginPage> {
   //build methode, erstellt ui der seite
   @override
   Widget build(BuildContext context) {
-    return Scaffold( //grundgerüst???
-      appBar: AppBar( //app leiste
+    return Scaffold(
+      //grundgerüst???
+      appBar: AppBar(
+        //app leiste
+        centerTitle: true,
         title: Text(
           'Code Card', //titel code card
           style: TextStyle(color: Colors.white), //weisser text
@@ -21,13 +26,16 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: Color(0xFF2c293a), //hintergrundfarbe
         elevation: 0,
       ),
-      body: Container( //body container, hauptinhalt der seite
+      body: Container(
+        //body container, hauptinhalt der seite
         color: Color(0xFF2c293a), //hintergrundfarbe
         padding: EdgeInsets.all(16.0), //abstand zwischen ui elementen
-        child: Column( //widget wird verwendet um widgets vertikal anzuordnen
+        child: Column(
+          //widget wird verwendet um widgets vertikal anzuordnen
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Row( //buttons für anmelden und registrieren
+            Row(
+              //buttons für anmelden und registrieren
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 buildTabButton('Anmelden', true),
@@ -35,7 +43,8 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
             SizedBox(height: 20),
-            TextField( //textfeld für email
+            TextField(
+              //textfeld für email
               style: TextStyle(color: Colors.white), // Textfarbe weiß setzen
               decoration: InputDecoration(
                 labelText: 'E-mail Adresse',
@@ -52,7 +61,8 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 20),
-            TextField( //textfeld für passwort
+            TextField(
+              //textfeld für passwort
               style: TextStyle(color: Colors.white), // Textfarbe weiß setzen
               decoration: InputDecoration(
                 labelText: 'Passwort',
@@ -70,12 +80,15 @@ class _LoginPageState extends State<LoginPage> {
               obscureText: true, //passwort verbergen
             ),
             SizedBox(height: 20),
-            ElevatedButton( //erhebener button für bestätigung
-              onPressed: () { //
+            ElevatedButton(
+              //erhebener button für bestätigung
+              onPressed: () {
+                //
                 // ANMELDELOGIK FEHLT!!! FIREBASE!!!
                 print('Bestätigen erfolgreich');
               },
-              style: ElevatedButton.styleFrom( //button stil
+              style: ElevatedButton.styleFrom(
+                //button stil
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
                 ),
@@ -97,8 +110,10 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget buildTabButton(String text, bool isSelected) { //funktion für tab buttons
-    return ElevatedButton( //tab wird hervorgehoben
+  Widget buildTabButton(String text, bool isSelected) {
+    //funktion für tab buttons
+    return ElevatedButton(
+      //tab wird hervorgehoben
       onPressed: () {
         setState(() {
           isAnmeldenTab = isSelected;
