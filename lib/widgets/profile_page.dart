@@ -12,7 +12,6 @@ class ProfilePage extends StatelessWidget {
         title: Text(title),
       ),
       body: Center(
-        //funktioniert noch nicht
         child: ElevatedButton(
           child: const Text('Settings'),
           onPressed: () {
