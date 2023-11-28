@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Profile',
+      //Theme für den Stil in der App (alle files haben gleiche font etc.)
       theme: ThemeData(
         fontFamily: GoogleFonts.sourceCodePro().fontFamily,
         primarySwatch: Colors.grey,
