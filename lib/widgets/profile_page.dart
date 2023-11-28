@@ -14,15 +14,7 @@ class ProfilePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
           child: const Text('Settings'),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const SettingsPage(
-                        title: 'settings',
-                      )),
-            );
-          },
+          onPressed: () {},
         ),
       ),
     );
