@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
           'Code Card',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF2c293a),
+        backgroundColor: const Color(0xFFFF2c293a),
         elevation: 0,
       ),
       body: AuthWidget(
@@ -27,8 +27,8 @@ class _LoginPageState extends State<LoginPage> {
           });
         },
         onAuthPressed: () {
-          // LOGIN LOGIC MISSING!!! FIREBASE!!!
-          print('Login successful');
+          // anmeldelogik fehlt
+          print('Anmeldung erfolgreich!');
         },
       ),
     );

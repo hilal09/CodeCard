@@ -16,7 +16,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           'Code Card',
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color(0xFF2c293a),
+        backgroundColor: const Color(0xFFFF2c293a),
         elevation: 0,
       ),
       body: RegistrationWidget(
@@ -27,8 +27,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
           });
         },
         onRegisterPressed: () {
-          // REGISTRATION LOGIC MISSING!!! FIREBASE!!!
-          print('Registration successful');
+          // registrierlogik fehlt
+          print('Registrierung erfolgreich!');
         },
       ),
     );
@@ -57,15 +57,15 @@ class RegistrationWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildTabButton('Login', false),
-              buildTabButton('Register', true),
+              buildTabButton('Anmelden', false),
+              buildTabButton('Registrieren', true),
             ],
           ),
           const SizedBox(height: 20),
           TextField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelText: 'E-Mail Address',
+              labelText: 'E-Mail Addresse',
               prefixIcon: const Icon(Icons.mail, color: Colors.white),
               labelStyle: const TextStyle(color: Colors.white),
               focusedBorder: OutlineInputBorder(
@@ -82,7 +82,25 @@ class RegistrationWidget extends StatelessWidget {
           TextField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelText: 'Password',
+              labelText: 'Passwort',
+              prefixIcon: const Icon(Icons.lock, color: Colors.white),
+              labelStyle: const TextStyle(color: Colors.white),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              labelText: 'Passwort wiederholen',
               prefixIcon: const Icon(Icons.lock, color: Colors.white),
               labelStyle: const TextStyle(color: Colors.white),
               focusedBorder: OutlineInputBorder(
@@ -109,7 +127,7 @@ class RegistrationWidget extends StatelessWidget {
               width: double.infinity,
               child: Center(
                 child: Text(
-                  'Register',
+                  'Registrieren',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
