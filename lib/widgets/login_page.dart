@@ -49,7 +49,7 @@ class AuthWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF2c293a),
+      color: const Color(0xFFFF2c293a),
       padding: const EdgeInsets.all(16.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -57,15 +57,15 @@ class AuthWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildTabButton('Login', true),
-              buildTabButton('Register', false),
+              buildTabButton('Anmelden', true),
+              buildTabButton('Registrieren', false),
             ],
           ),
           const SizedBox(height: 20),
           TextField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelText: 'E-Mail Address',
+              labelText: 'E-Mail Addresse',
               prefixIcon: const Icon(Icons.mail, color: Colors.white),
               labelStyle: const TextStyle(color: Colors.white),
               focusedBorder: OutlineInputBorder(
@@ -82,7 +82,7 @@ class AuthWidget extends StatelessWidget {
           TextField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelText: 'Password',
+              labelText: 'Passwort',
               prefixIcon: const Icon(Icons.lock, color: Colors.white),
               labelStyle: const TextStyle(color: Colors.white),
               focusedBorder: OutlineInputBorder(
@@ -103,13 +103,13 @@ class AuthWidget extends StatelessWidget {
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
-              backgroundColor: const Color(0xFF10111a),
+              backgroundColor: const Color(0xFFFF10111a),
             ),
             child: const SizedBox(
               width: double.infinity,
               child: Center(
                 child: Text(
-                  'Authenticate',
+                  'Bestätigen',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -126,7 +126,7 @@ class AuthWidget extends StatelessWidget {
         onTabChanged(isSelected);
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? const Color(0xFF10111a) : const Color(0xFF2c293a),
+        backgroundColor: isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
