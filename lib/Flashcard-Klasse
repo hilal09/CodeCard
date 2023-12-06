@@ -1,0 +1,6 @@
+class Flashcard {
+  String title;
+  String content;
+
+  Flashcard(this.title, this.content);
+}
