@@ -1,126 +1,132 @@
-import 'package:flutter/material.dart'; //import von packages
+import 'package:flutter/material.dart';
 
-//StatefulWidget (zustand derseite kann sich ändern)
 class LoginPage extends StatefulWidget {
   @override
-  _LoginPageState createState() =>
-      _LoginPageState(); //erstellt zugehöriges state-objekt, verwaltet zustand der seite
+  _LoginPageState createState() => _LoginPageState();
 }
 
-//zustand für loginPage wird definiert
 class _LoginPageState extends State<LoginPage> {
-  bool isAnmeldenTab = true; //damit kann man den ausgewählten tab verfolgen
+  bool isLoginTab = true;
 
-  //build methode, erstellt ui der seite
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //grundgerüst???
       appBar: AppBar(
-        //app leiste
-        centerTitle: true,
-        title: Text(
-          'Code Card', //titel code card
-          style: TextStyle(color: Colors.white), //weisser text
+        title: const Text(
+          'Code Card',
+          style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: Color(0xFF2c293a), //hintergrundfarbe
+        backgroundColor: const Color(0xFF2c293a),
         elevation: 0,
       ),
-      body: Container(
-        //body container, hauptinhalt der seite
-        color: Color(0xFF2c293a), //hintergrundfarbe
-        padding: EdgeInsets.all(16.0), //abstand zwischen ui elementen
-        child: Column(
-          //widget wird verwendet um widgets vertikal anzuordnen
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Row(
-              //buttons für anmelden und registrieren
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                buildTabButton('Anmelden', true),
-                buildTabButton('Registrieren', false),
-              ],
+      body: AuthWidget(
+        isLoginTab: isLoginTab,
+        onTabChanged: (bool isSelected) {
+          setState(() {
+            isLoginTab = isSelected;
+          });
+        },
+        onAuthPressed: () {
+          // LOGIN LOGIC MISSING!!! FIREBASE!!!
+          print('Login successful');
+        },
+      ),
+    );
+  }
+}
+
+class AuthWidget extends StatelessWidget {
+  final bool isLoginTab;
+  final Function(bool) onTabChanged;
+  final VoidCallback onAuthPressed;
+
+  AuthWidget({
+    required this.isLoginTab,
+    required this.onTabChanged,
+    required this.onAuthPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: const Color(0xFF2c293a),
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildTabButton('Login', true),
+              buildTabButton('Register', false),
+            ],
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              labelText: 'E-Mail Address',
+              prefixIcon: const Icon(Icons.mail, color: Colors.white),
+              labelStyle: const TextStyle(color: Colors.white),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
-            SizedBox(height: 20),
-            TextField(
-              //textfeld für email
-              style: TextStyle(color: Colors.white), // Textfarbe weiß setzen
-              decoration: InputDecoration(
-                labelText: 'E-mail Adresse',
-                prefixIcon: Icon(Icons.mail, color: Colors.white),
-                labelStyle: TextStyle(color: Colors.white),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(10),
+          ),
+          const SizedBox(height: 20),
+          TextField(
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              labelText: 'Password',
+              prefixIcon: const Icon(Icons.lock, color: Colors.white),
+              labelStyle: const TextStyle(color: Colors.white),
+              focusedBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: const BorderSide(color: Colors.white),
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            obscureText: true,
+          ),
+          const SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: onAuthPressed,
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              backgroundColor: const Color(0xFF10111a),
+            ),
+            child: const SizedBox(
+              width: double.infinity,
+              child: Center(
+                child: Text(
+                  'Authenticate',
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            TextField(
-              //textfeld für passwort
-              style: TextStyle(color: Colors.white), // Textfarbe weiß setzen
-              decoration: InputDecoration(
-                labelText: 'Passwort',
-                prefixIcon: Icon(Icons.lock, color: Colors.white),
-                labelStyle: TextStyle(color: Colors.white),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Colors.white),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-              obscureText: true, //passwort verbergen
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              //erhebener button für bestätigung
-              onPressed: () {
-                //
-                // ANMELDELOGIK FEHLT!!! FIREBASE!!!
-                print('Bestätigen erfolgreich');
-              },
-              style: ElevatedButton.styleFrom(
-                //button stil
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                primary: Color(0xFF10111a), //farbe
-              ),
-              child: Container(
-                width: double.infinity,
-                child: Center(
-                  child: Text(
-                    'Bestätigen',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget buildTabButton(String text, bool isSelected) {
-    //funktion für tab buttons
     return ElevatedButton(
-      //tab wird hervorgehoben
       onPressed: () {
-        setState(() {
-          isAnmeldenTab = isSelected;
-        });
+        onTabChanged(isSelected);
       },
       style: ElevatedButton.styleFrom(
-        primary: isSelected ? Color(0xFF10111a) : Color(0xFF2c293a),
+        backgroundColor: isSelected ? const Color(0xFF10111a) : const Color(0xFF2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
