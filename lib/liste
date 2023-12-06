@@ -1,0 +1,25 @@
+import 'package:flutter/material.dart';
+
+class FlashcardsListWidget extends StatelessWidget {
+  final List<Flashcard> flashcards;
+  final Function(Flashcard)? onFlashcardTap;
+
+  FlashcardsListWidget({required this.flashcards, this.onFlashcardTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: flashcards.length,
+      itemBuilder: (context, index) {
+        return FlashcardWidget(
+          flashcard: flashcards[index],
+          onTap: () {
+            if (onFlashcardTap != null) {
+              onFlashcardTap!(flashcards[index]);
+            }
+          },
+        );
+      },
+    );
+  }
+}
