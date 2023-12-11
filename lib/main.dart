@@ -1,9 +1,8 @@
-import 'package:codecard/widgets/profile_page.dart';
-import 'package:codecard/widgets/settings_page.dart';
+import 'package:codecard/pages/profile_page.dart';
+import 'package:codecard/pages/settings_page.dart';
 import 'package:flutter/material.dart';
-import 'package:codecard/widgets/register_page.dart';
-import 'package:codecard/widgets/login_page.dart';
-
+import 'package:codecard/pages/register_page.dart';
+import 'package:codecard/pages/login_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       theme: ThemeData.dark(),
       home: Scaffold(
-        body: SettingsPage(),
+        body: Dashboard(),
       ),
     );
   }
