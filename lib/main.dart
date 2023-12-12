@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
             .sourceCodeProTextTheme(), // Hier wird die Schriftart angewendet
       ),
       home: Scaffold(
-        body: ProfilePage(),
+        body: SettingsPage(),
       ),
     );
   }
