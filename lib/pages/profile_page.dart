@@ -34,16 +34,16 @@ class ProfilePage extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 ListTile(
-                  leading: Icon(Icons.dashboard, color: Colors.white),
-                  title: Text('Profil',
+                  leading: Icon(Icons.home_rounded, color: Colors.white),
+                  title: Text('Home',
                       style: TextStyle(fontSize: 16, color: Colors.white)),
                   onTap: () {
                     // Aktion beim Klicken von Dashboard Widget
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.widgets, color: Colors.white),
-                  title: Text('Stapel',
+                  leading: Icon(Icons.auto_graph_rounded, color: Colors.white),
+                  title: Text('Fortschritt',
                       style: TextStyle(fontSize: 16, color: Colors.white)),
                   onTap: () {
                     // Aktion bei Klicken auf Stapel Widget
