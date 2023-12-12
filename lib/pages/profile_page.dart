@@ -87,7 +87,8 @@ class ProfilePage extends StatelessWidget {
                         label: 'Name', initialValue: 'John Doe'),
                     SizedBox(height: 20),
                     LabeledEditableTextField(
-                        label: 'E-Mail', initialValue: 'john.doe@example.com'),
+                        label: 'Benutzername',
+                        initialValue: 'john.doe@example.com'),
                   ],
                 ),
               ),

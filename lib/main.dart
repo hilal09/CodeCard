@@ -1,6 +1,7 @@
 import 'package:codecard/pages/profile_page.dart';
 import 'package:codecard/pages/settings_page.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:codecard/pages/register_page.dart';
 import 'package:codecard/pages/login_page.dart';
 
@@ -14,9 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark(),
+      theme: ThemeData(
+        textTheme: GoogleFonts
+            .sourceCodeProTextTheme(), // Hier wird die Schriftart angewendet
+      ),
       home: Scaffold(
-        body: Dashboard(),
+        body: ProfilePage(),
       ),
     );
   }
