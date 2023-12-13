@@ -19,9 +19,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts
             .sourceCodeProTextTheme(), // Hier wird die Schriftart angewendet
       ),
-      home: Scaffold(
-        body: SettingsPage(),
-      ),
+        home: SplashScreen(), //  Splash Screen zuerst 
     );
   }
 }
