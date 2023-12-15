@@ -10,60 +10,25 @@ class ProfilePage extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: 250,
+            width: 70,
             decoration: BoxDecoration(
                 color: Colors.grey[800],
                 borderRadius: BorderRadius.all(Radius.circular(30.0))),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const SizedBox(height: 20),
-                Container(
-                  height: 60,
-                  color: Colors.blue,
-                  child: const Center(
-                    child: Text(
-                      'CodeCard',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'YourFont',
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ListTile(
-                  leading: Icon(Icons.home_rounded, color: Colors.white),
-                  title: Text('Home',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-                  onTap: () {
-                    // Aktion beim Klicken von Dashboard Widget
+                SizedBox(height: 20),
+                IconButton(
+                  icon: Icon(Icons.home_rounded, color: Colors.white),
+                  onPressed: () {
+                    // Aktion beim Klicken auf das Home-Icon
                   },
                 ),
-                ListTile(
-                  leading: Icon(Icons.auto_graph_rounded, color: Colors.white),
-                  title: Text('Fortschritt',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-                  onTap: () {
-                    // Aktion bei Klicken auf Stapel Widget
-                  },
-                ),
-                ListTile(
-                  leading: Icon(Icons.add, color: Colors.white),
-                  title: Text('Hinzufügen',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-                  onTap: () {
-                    // Aktion bei Klicken auf Hinzufügen Widget
-                  },
-                ),
-                Spacer(), // Fügt leeren Raum am Ende der Spalte hinzu
-                ListTile(
-                  leading: Icon(Icons.person, color: Colors.white),
-                  title: Text('Profil',
-                      style: TextStyle(fontSize: 16, color: Colors.white)),
-                  onTap: () {
-                    // Aktion beim Klicken des Profil-ListTiles
+                SizedBox(height: 10),
+                IconButton(
+                  icon: Icon(Icons.add, color: Colors.white),
+                  onPressed: () {
+                    // Aktion beim Klicken auf das Add-Icon
                   },
                 ),
               ],
