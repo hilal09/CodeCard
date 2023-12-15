@@ -55,62 +55,72 @@ class AuthWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.center, // Ändere die Ausrichtung hier
             children: [
               buildTabButton('Anmelden', true),
+              const SizedBox(width: 50), // Ändere die Breite der SizedBox
               buildTabButton('Registrieren', false),
             ],
           ),
           const SizedBox(height: 20),
-          TextField(
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: 'Benutzername',
-              prefixIcon: const Icon(Icons.mail, color: Colors.white),
-              labelStyle: const TextStyle(color: Colors.white),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
+          Container(
+            width: 300, // Ändere die Breite hier
+            child: TextField(
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Benutzername',
+                prefixIcon: const Icon(Icons.mail, color: Colors.white),
+                labelStyle: const TextStyle(color: Colors.white),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
           ),
           const SizedBox(height: 20),
-          TextField(
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: 'Passwort',
-              prefixIcon: const Icon(Icons.lock, color: Colors.white),
-              labelStyle: const TextStyle(color: Colors.white),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
+          Container(
+            width: 300, // Ändere die Breite hier
+            child: TextField(
+              style: const TextStyle(color: Colors.white),
+              decoration: InputDecoration(
+                labelText: 'Passwort',
+                prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                labelStyle: const TextStyle(color: Colors.white),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.white),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
-              ),
+              obscureText: true,
             ),
-            obscureText: true,
           ),
           const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: onAuthPressed,
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
+          Container(
+            width: 300, // Ändere die Breite hier
+            child: ElevatedButton(
+              onPressed: onAuthPressed,
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                backgroundColor: const Color(0xFFFF10111a),
               ),
-              backgroundColor: const Color(0xFFFF10111a),
-            ),
-            child: const SizedBox(
-              width: double.infinity,
-              child: Center(
-                child: Text(
-                  'Bestätigen',
-                  style: TextStyle(color: Colors.white),
+              child: const SizedBox(
+                width: double.infinity,
+                child: Center(
+                  child: Text(
+                    'Bestätigen',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ),
