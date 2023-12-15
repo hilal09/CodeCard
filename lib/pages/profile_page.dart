@@ -12,38 +12,56 @@ class ProfilePage extends StatelessWidget {
           Container(
             width: 70,
             decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.all(Radius.circular(30.0))),
+              color: Color(0xFFFF2c293a),
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                  color: const Color.fromARGB(255, 195, 188, 188),
+                  width: 0.5), // White border
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
+                ClipRRect(
+                  borderRadius:
+                      BorderRadius.circular(15), // Adjust the radius as needed
+                  child: Image.asset(
+                    'assets/images/CodeCardLogo.png',
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 10),
                 IconButton(
                   icon: Icon(Icons.home_rounded, color: Colors.white),
                   onPressed: () {
-                    // Aktion beim Klicken auf das Home-Icon
+                    // Action when clicking the Home Icon
                   },
                 ),
                 SizedBox(height: 10),
                 IconButton(
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
-                    // Aktion beim Klicken auf das Add-Icon
+                    // Action when clicking the Add Icon
                   },
                 ),
               ],
             ),
           ),
           SizedBox(
-              width:
-                  20), // Fügt einen Abstand zwischen dem Container und dem Rest der Seite hinzu
+            width: 20,
+          ), // Adds spacing between the container and the rest of the page
           Expanded(
             child: Container(
-              padding: EdgeInsets.all(60),
               decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.circular(30),
+                color: Color(0xFFFF2c293a),
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(
+                    color: const Color.fromARGB(255, 195, 188, 188),
+                    width: 0.5), // White border
               ),
+              padding: EdgeInsets.all(60),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
