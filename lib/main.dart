@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/profile_page.dart';
-import 'package:codecard/pages/settings_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:codecard/pages/register_page.dart';
 import 'package:codecard/pages/login_page.dart';
@@ -19,6 +18,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.sourceCodeProTextTheme().copyWith(),
       ),
       home: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 40, 43, 45),
         body: ProfilePage(),
       ),
     );
