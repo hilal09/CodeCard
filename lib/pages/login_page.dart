@@ -65,7 +65,7 @@ class AuthWidget extends StatelessWidget {
           TextField(
             style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
-              labelText: 'E-Mail Addresse',
+              labelText: 'Benutzername',
               prefixIcon: const Icon(Icons.mail, color: Colors.white),
               labelStyle: const TextStyle(color: Colors.white),
               focusedBorder: OutlineInputBorder(
@@ -126,7 +126,8 @@ class AuthWidget extends StatelessWidget {
         onTabChanged(isSelected);
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
+        backgroundColor:
+            isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

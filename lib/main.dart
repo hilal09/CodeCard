@@ -15,8 +15,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SplashScreen(),
-      theme: ThemeData.dark(),
+      theme: ThemeData.dark().copyWith(
+        textTheme: GoogleFonts.sourceCodeProTextTheme().copyWith(),
+      ),
+      home: Scaffold(
+        body: ProfilePage(),
+      ),
     );
   }
 }
@@ -79,19 +83,6 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.dispose(); // Ressourcen freigeben
     super.dispose();
   }
-}
-
-@override
-Widget build(BuildContext context) {
-  return MaterialApp(
-    theme: ThemeData(
-      textTheme: GoogleFonts
-          .sourceCodeProTextTheme(), // Hier wird die Schriftart angewendet
-    ),
-    home: Scaffold(
-      body: Dashboard(),
-    ),
-  );
 }
 
 class Dashboard extends StatelessWidget {
