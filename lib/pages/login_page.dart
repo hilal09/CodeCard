@@ -68,7 +68,7 @@ class AuthWidget extends StatelessWidget {
             child: TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                labelText: 'Benutzername',
+                labelText: 'E-Mail Adresse',
                 prefixIcon: const Icon(Icons.mail, color: Colors.white),
                 labelStyle: const TextStyle(color: Colors.white),
                 focusedBorder: OutlineInputBorder(

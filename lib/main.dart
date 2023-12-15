@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.sourceCodeProTextTheme().copyWith(),
       ),
       home: Scaffold(
-        body: RegistrationPage(),
+        body: LoginPage(),
       ),
     );
   }

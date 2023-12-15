@@ -68,7 +68,7 @@ class RegistrationWidget extends StatelessWidget {
             child: TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
-                labelText: 'E-Mail Addresse',
+                labelText: 'E-Mail Adresse',
                 prefixIcon: const Icon(Icons.mail, color: Colors.white),
                 labelStyle: const TextStyle(color: Colors.white),
                 focusedBorder: OutlineInputBorder(
