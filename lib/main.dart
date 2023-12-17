@@ -21,7 +21,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         textTheme: GoogleFonts.sourceCodeProTextTheme().copyWith(),
       ),
-      home: const SplashScreen(),
+      home: Scaffold(
+        body: DashboardPage(), //home: const SplashScreen(),
+      ),
     );
   }
 }
