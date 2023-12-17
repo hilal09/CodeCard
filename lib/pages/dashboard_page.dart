@@ -124,6 +124,8 @@ class _DashboardPageState extends State<DashboardPage> {
         return AlertDialog(
           title: Text('Ordner löschen'),
           content: Text('Bist du sicher, dass du den Ordner löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
+          contentTextStyle: TextStyle(color: Color.fromARGB(255, 149, 87, 151)), // Hier die Farbe ändern
+          titleTextStyle: TextStyle(color: Color.fromARGB(255, 149, 87, 151)),
           actions: [
             ElevatedButton(
               onPressed: () {
