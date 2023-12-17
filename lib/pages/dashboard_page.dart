@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(MyApp());
+}
+
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -54,6 +58,9 @@ class _DashboardPageState extends State<DashboardPage> {
                     // Action when clicking the Add Icon
                   },
                 ),
+                SizedBox(height: 10),
+                // Display folder icons with names in the left bar
+                ...folders.map((folder) => _buildFolderIcon(folder)),
               ],
             ),
           ),
@@ -103,6 +110,23 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildFolderIcon(Folder folder) {
+    return Column(
+      children: [
+        Icon(
+          Icons.folder,
+          color: folder.color,
+        ),
+        SizedBox(height: 5),
+        Text(
+          folder.name.toLowerCase(),
+          style: TextStyle(color: Colors.white, fontSize: 10),
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 }
@@ -240,6 +264,19 @@ class FolderWidget extends StatelessWidget {
           Text(folder.description, style: TextStyle(color: Colors.white)),
         ],
       ),
+    );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: DashboardPage(),
     );
   }
 }
