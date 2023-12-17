@@ -11,7 +11,6 @@ class _DashboardPageState extends State<DashboardPage> {
   List<Folder> folders = [];
 
   @override
-  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -51,6 +50,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 IconButton(
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
+                    _showCreateFolderDialog();
                     // Action when clicking the Add Icon
                   },
                 ),
@@ -59,7 +59,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           SizedBox(
             width: 20,
-          ), // Adds spacing between the container and the rest of the page
+          ),
           Expanded(
             child: Container(
               padding: EdgeInsets.all(20),
