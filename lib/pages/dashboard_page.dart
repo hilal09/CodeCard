@@ -11,6 +11,7 @@ class _DashboardPageState extends State<DashboardPage> {
   List<Folder> folders = [];
 
   @override
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(20.0),
@@ -19,23 +20,38 @@ class _DashboardPageState extends State<DashboardPage> {
           Container(
             width: 70,
             decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.all(Radius.circular(30.0))),
+              color: Color(0xFFFF2c293a),
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                color: Color.fromARGB(255, 141, 134, 134),
+                width: 0.5,
+              ), // White border
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    'assets/images/Logo.png',
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 10),
                 IconButton(
                   icon: Icon(Icons.home_rounded, color: Colors.white),
                   onPressed: () {
-                    // Aktion beim Klicken auf das Home-Icon
+                    // Action when clicking the Home Icon
                   },
                 ),
                 SizedBox(height: 10),
                 IconButton(
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
-                    _showCreateFolderDialog();
+                    // Action when clicking the Add Icon
                   },
                 ),
               ],
@@ -43,12 +59,12 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           SizedBox(
             width: 20,
-          ),
+          ), // Adds spacing between the container and the rest of the page
           Expanded(
             child: Container(
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.grey[800],
+                color: Color(0xFFFF2c293a),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: folders.isEmpty
