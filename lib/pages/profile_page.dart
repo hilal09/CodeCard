@@ -1,3 +1,4 @@
+import 'package:codecard/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
@@ -36,7 +37,10 @@ class ProfilePage extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.home_rounded, color: Colors.white),
                   onPressed: () {
-                    // Action when clicking the Home Icon
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => DashboardPage()),
+                    );
                   },
                 ),
                 SizedBox(height: 10),
