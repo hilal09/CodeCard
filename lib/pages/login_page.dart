@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
           );
         },
         onLoginPressed: () {
-          // Navigate to RegistrationPage
+          // Navigate to LoginPage
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => LoginPage()),
