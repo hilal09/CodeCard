@@ -12,14 +12,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Code Card',
-          style: TextStyle(color: Colors.white),
-        ),
-        backgroundColor: const Color(0xFFFF2c293a),
-        elevation: 0,
-      ),
       body: RegistrationWidget(
         isRegisterTab: isRegisterTab,
         onTabChanged: (bool isSelected) {
@@ -65,14 +57,20 @@ class RegistrationWidget extends StatelessWidget {
       color: const Color(0xFFFF2c293a),
       padding: const EdgeInsets.all(16.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(height: 50),
+          const Text(
+            'CODE CARD',
+            style: TextStyle(color: Colors.white, fontSize: 60),
+          ),
+          SizedBox(height: 50),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildTabButton('Anmelden', true, onLoginPressed),
+              buildTabButton('Anmelden', false, onLoginPressed),
               const SizedBox(width: 50),
-              buildTabButton('Registrieren', false, onRegisterPressed),
+              buildTabButton('Registrieren', true, onRegisterPressed),
             ],
           ),
           const SizedBox(height: 20),

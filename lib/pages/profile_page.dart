@@ -6,98 +6,100 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          LeftSideBar(),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Color(0xFFFF2c293a),
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(
-                  color: Color.fromARGB(255, 141, 134, 134),
-                  width: 0.5,
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          children: [
+            LeftSideBar(),
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF2c293a),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(
+                    color: Color.fromARGB(255, 141, 134, 134),
+                    width: 0.5,
+                  ),
                 ),
-              ),
-              padding: EdgeInsets.all(20),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    LabeledEditableTextField(
-                      label: 'E-MAIL ADRESSE',
-                      initialValue: 'john.doe@example.com',
-                      width: 400,
-                    ),
-                    SizedBox(height: 20),
-                    LabeledEditableTextField(
-                      label: 'PASSWORT',
-                      initialValue: '*********',
-                      width: 400,
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () {
-                            // Action when clicking the Logout button
-                          },
-                          style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
+                padding: EdgeInsets.all(20),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      LabeledEditableTextField(
+                        label: 'E-MAIL ADRESSE',
+                        initialValue: 'john.doe@example.com',
+                        width: 400,
+                      ),
+                      SizedBox(height: 20),
+                      LabeledEditableTextField(
+                        label: 'PASSWORT',
+                        initialValue: '*********',
+                        width: 400,
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              // Action when clicking the Logout button
+                            },
+                            style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 20,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
                             ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              Icon(Icons.logout_rounded, color: Colors.white),
-                              SizedBox(height: 5),
-                              Text('AUSLOGGEN'),
-                            ],
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        TextButton(
-                          onPressed: () {
-                            // Action when clicking the Delete button
-                          },
-                          style: TextButton.styleFrom(
-                            primary: Colors.white,
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 20,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                            child: Column(
+                              children: [
+                                Icon(Icons.logout_rounded, color: Colors.white),
+                                SizedBox(height: 5),
+                                Text('AUSLOGGEN'),
+                              ],
                             ),
                           ),
-                          child: Column(
-                            children: [
-                              Icon(Icons.delete_forever_rounded,
-                                  color: Colors.white),
-                              SizedBox(height: 5),
-                              Text('ACCOUNT LÖSCHEN'),
-                            ],
+                          SizedBox(width: 20),
+                          TextButton(
+                            onPressed: () {
+                              // Action when clicking the Delete button
+                            },
+                            style: TextButton.styleFrom(
+                              primary: Colors.white,
+                              padding: EdgeInsets.symmetric(
+                                vertical: 10,
+                                horizontal: 20,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                            child: Column(
+                              children: [
+                                Icon(Icons.delete_forever_rounded,
+                                    color: Colors.white),
+                                SizedBox(height: 5),
+                                Text('ACCOUNT LÖSCHEN'),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

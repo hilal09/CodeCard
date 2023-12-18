@@ -12,112 +12,117 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Container(
-            width: 70,
-            decoration: BoxDecoration(
-              color: Color(0xFFFF2c293a),
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: Color.fromARGB(255, 141, 134, 134),
-                width: 0.5,
-              ), // White border
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
-                    'assets/images/Logo.png',
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(height: 10),
-                IconButton(
-                  icon: Icon(Icons.home_rounded, color: Colors.white),
-                  onPressed: () {
-                    // Action when clicking the Home Icon
-                  },
-                ),
-                SizedBox(height: 10),
-                IconButton(
-                  icon: Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    _showCreateFolderDialog();
-                    // Action when clicking the Add Icon
-                  },
-                ),
-                SizedBox(height: 10),
-                // Display folder icons with names in the left bar
-                ...folders.map((folder) => _buildFolderIcon(folder)),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(20),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          children: [
+            Container(
+              width: 70,
               decoration: BoxDecoration(
                 color: Color(0xFFFF2c293a),
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(
+                  color: Color.fromARGB(255, 141, 134, 134),
+                  width: 0.5,
+                ),
               ),
-              child: folders.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Es sind noch keine Stacks vorhanden. Klicke auf das "+"-Symbol, um einen neuen Stack anzulegen.',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: folders.length,
-                      itemBuilder: (context, index) {
-                        return FolderWidget(
-                          folder: folders[index],
-                          onDelete: () => _deleteFolder(index),
-                          onEdit: (editedFolder) => _editFolder(index, editedFolder),
-                        );
-                      },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.asset(
+                      'assets/images/Logo.png',
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  IconButton(
+                    icon: Icon(Icons.home_rounded, color: Colors.white),
+                    onPressed: () {
+                      // Action when clicking the Home Icon
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  IconButton(
+                    icon: Icon(Icons.add, color: Colors.white),
+                    onPressed: () {
+                      _showCreateFolderDialog();
+                      // Action when clicking the Add Icon
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  // Display folder icons with names in the left bar
+                  ...folders.map((folder) => _buildFolderIcon(folder)),
+                ],
+              ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF2c293a),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: folders.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Es sind noch keine Stacks vorhanden. Klicke auf das "+"-Symbol, um einen neuen Stack anzulegen.',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: folders.length,
+                        itemBuilder: (context, index) {
+                          return FolderWidget(
+                            folder: folders[index],
+                            onDelete: () => _deleteFolder(index),
+                            onEdit: (editedFolder) =>
+                                _editFolder(index, editedFolder),
+                          );
+                        },
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-void _showCreateFolderDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Neuen Stack erstellen'),
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
-        contentTextStyle: TextStyle(color: Colors.white, fontSize: 15), //das ist die farbe von "farbe auswählen"
-        content: SizedBox(
-          height: 320, // Passe diese Höhe nach Bedarf an "pop up fenster beim stack erstellen"
-          child: CreateFolderForm(
-            onCreate: (Folder newFolder) {
-              setState(() {
-                folders.add(newFolder);
-              });
-              Navigator.of(context).pop();
-            },
+  void _showCreateFolderDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Neuen Stack erstellen'),
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
+          contentTextStyle: TextStyle(
+              color: Colors.white,
+              fontSize: 15), //das ist die farbe von "farbe auswählen"
+          content: SizedBox(
+            height:
+                320, // Passe diese Höhe nach Bedarf an "pop up fenster beim stack erstellen"
+            child: CreateFolderForm(
+              onCreate: (Folder newFolder) {
+                setState(() {
+                  folders.add(newFolder);
+                });
+                Navigator.of(context).pop();
+              },
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   void _deleteFolder(int index) {
     showDialog(
@@ -125,8 +130,10 @@ void _showCreateFolderDialog() {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Stack löschen'),
-          content: Text('Bist du sicher, dass du den Stack löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
-          contentTextStyle: TextStyle(color: Colors.white, fontSize: 10), // Hier die Farbe ändern
+          content: Text(
+              'Bist du sicher, dass du den Stack löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
+          contentTextStyle: TextStyle(
+              color: Colors.white, fontSize: 10), // Hier die Farbe ändern
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 10),
           actions: [
             ElevatedButton(
@@ -291,7 +298,8 @@ class FolderWidget extends StatelessWidget {
   final VoidCallback onDelete;
   final Function(Folder) onEdit;
 
-  FolderWidget({required this.folder, required this.onDelete, required this.onEdit});
+  FolderWidget(
+      {required this.folder, required this.onDelete, required this.onEdit});
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +316,8 @@ class FolderWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(folder.name, style: TextStyle(fontSize: 20, color: Colors.white)),
+              Text(folder.name,
+                  style: TextStyle(fontSize: 20, color: Colors.white)),
               Row(
                 children: [
                   IconButton(
@@ -370,7 +379,8 @@ class _EditFolderFormState extends State<EditFolderForm> {
   void initState() {
     super.initState();
     nameController = TextEditingController(text: widget.initialFolder.name);
-    descriptionController = TextEditingController(text: widget.initialFolder.description);
+    descriptionController =
+        TextEditingController(text: widget.initialFolder.description);
     selectedColor = widget.initialFolder.color;
   }
 

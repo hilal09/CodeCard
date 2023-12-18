@@ -1,3 +1,4 @@
+import 'package:codecard/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/dashboard_page.dart';
 
@@ -44,6 +45,17 @@ class LeftSideBar extends StatelessWidget {
               // Action when clicking the Add Icon
             },
           ),
+          Spacer(),
+          IconButton(
+            icon: Icon(Icons.person, color: Colors.white),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ProfilePage()),
+              );
+            },
+          ),
+          SizedBox(height: 10),
         ],
       ),
     );
