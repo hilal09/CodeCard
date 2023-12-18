@@ -19,16 +19,31 @@ class _DashboardPageState extends State<DashboardPage> {
           Container(
             width: 70,
             decoration: BoxDecoration(
-                color: Colors.grey[800],
-                borderRadius: BorderRadius.all(Radius.circular(30.0))),
+              color: Color(0xFFFF2c293a),
+              borderRadius: BorderRadius.circular(10.0),
+              border: Border.all(
+                color: Color.fromARGB(255, 141, 134, 134),
+                width: 0.5,
+              ), // White border
+            ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 SizedBox(height: 20),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(15),
+                  child: Image.asset(
+                    'assets/images/Logo.png',
+                    height: 50,
+                    width: 50,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                SizedBox(height: 10),
                 IconButton(
                   icon: Icon(Icons.home_rounded, color: Colors.white),
                   onPressed: () {
-                    // Aktion beim Klicken auf das Home-Icon
+                    // Action when clicking the Home Icon
                   },
                 ),
                 SizedBox(height: 10),
@@ -36,8 +51,12 @@ class _DashboardPageState extends State<DashboardPage> {
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
                     _showCreateFolderDialog();
+                    // Action when clicking the Add Icon
                   },
                 ),
+                SizedBox(height: 10),
+                // Display folder icons with names in the left bar
+                ...folders.map((folder) => _buildFolderIcon(folder)),
               ],
             ),
           ),
@@ -48,20 +67,24 @@ class _DashboardPageState extends State<DashboardPage> {
             child: Container(
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Colors.grey[800],
+                color: Color(0xFFFF2c293a),
                 borderRadius: BorderRadius.circular(30),
               ),
               child: folders.isEmpty
                   ? Center(
                       child: Text(
-                        'Es sind noch keine Lernsets vorhanden. Klicke auf das "+"-Symbol, um ein neues Lernset anzulegen.',
+                        'Es sind noch keine Ordner vorhanden. Klicke auf das "+"-Symbol, um einen neuen Ordner anzulegen.',
                         style: TextStyle(color: Colors.white),
                       ),
                     )
                   : ListView.builder(
                       itemCount: folders.length,
                       itemBuilder: (context, index) {
-                        return FolderWidget(folder: folders[index]);
+                        return FolderWidget(
+                          folder: folders[index],
+                          onDelete: () => _deleteFolder(index),
+                          onEdit: (editedFolder) => _editFolder(index, editedFolder),
+                        );
                       },
                     ),
             ),
@@ -76,7 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Neues Lernset erstellen'),
+          title: Text('Neuen Ordner erstellen'),
           content: CreateFolderForm(
             onCreate: (Folder newFolder) {
               setState(() {
@@ -85,8 +108,64 @@ class _DashboardPageState extends State<DashboardPage> {
               Navigator.of(context).pop();
             },
           ),
+        ),
+      );
+    },
+  );
+}
+
+
+  void _deleteFolder(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Stack löschen'),
+          content: Text('Bist du sicher, dass du den Stack löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
+          contentTextStyle: TextStyle(color: Colors.white, fontSize: 10), // Hier die Farbe ändern
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 10),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  folders.removeAt(index);
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text('Löschen'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Abbrechen'),
+            ),
+          ],
         );
       },
+    );
+  }
+
+  void _editFolder(int index, Folder editedFolder) {
+    setState(() {
+      folders[index] = editedFolder;
+    });
+  }
+
+  Widget _buildFolderIcon(Folder folder) {
+    return Column(
+      children: [
+        Icon(
+          Icons.folder,
+          color: folder.color,
+        ),
+        SizedBox(height: 5),
+        Text(
+          folder.name.toLowerCase(),
+          style: TextStyle(color: Colors.white, fontSize: 10),
+        ),
+        SizedBox(height: 10),
+      ],
     );
   }
 }
@@ -134,13 +213,13 @@ class _CreateFolderFormState extends State<CreateFolderForm> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(labelText: 'Name'),
+          decoration: InputDecoration(labelText: 'Ordnername'),
         ),
         TextField(
           controller: descriptionController,
           decoration: InputDecoration(labelText: 'Beschreibung'),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 0),
         Text('Farbe auswählen:'),
         Wrap(
           children: [
@@ -170,6 +249,171 @@ class _CreateFolderFormState extends State<CreateFolderForm> {
                   color: selectedColor,
                 );
                 widget.onCreate(newFolder);
+                Navigator.of(context).pop();
+              },
+              child: Text('Bestätigen'),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildColorPicker(Color color) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          selectedColor = color;
+        });
+      },
+      child: Container(
+        width: 90,
+        height: 30,
+        margin: EdgeInsets.all(5),
+        decoration: BoxDecoration(
+          color: color,
+          shape: BoxShape.circle,
+        ),
+        child: selectedColor == color
+            ? Icon(Icons.check, color: Colors.white)
+            : SizedBox(),
+      ),
+    );
+  }
+}
+
+class FolderWidget extends StatelessWidget {
+  final Folder folder;
+  final VoidCallback onDelete;
+  final Function(Folder) onEdit;
+
+  FolderWidget({required this.folder, required this.onDelete, required this.onEdit});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 20),
+      padding: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: folder.color,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(folder.name, style: TextStyle(fontSize: 20, color: Colors.white)),
+              Row(
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.edit, color: Colors.white),
+                    onPressed: () {
+                      _showEditFolderDialog(context);
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.white),
+                    onPressed: onDelete,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(height: 5),
+          Text(folder.description, style: TextStyle(color: Colors.white)),
+        ],
+      ),
+    );
+  }
+
+  void _showEditFolderDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Stack bearbeiten'),
+          content: EditFolderForm(
+            initialFolder: folder,
+            onEdit: (editedFolder) {
+              onEdit(editedFolder);
+              Navigator.of(context).pop();
+            },
+          ),
+        );
+      },
+    );
+  }
+}
+
+class EditFolderForm extends StatefulWidget {
+  final Folder initialFolder;
+  final Function(Folder) onEdit;
+
+  EditFolderForm({required this.initialFolder, required this.onEdit});
+
+  @override
+  _EditFolderFormState createState() => _EditFolderFormState();
+}
+
+class _EditFolderFormState extends State<EditFolderForm> {
+  late TextEditingController nameController;
+  late TextEditingController descriptionController;
+  Color selectedColor = Colors.blue; // Default color
+
+  @override
+  void initState() {
+    super.initState();
+    nameController = TextEditingController(text: widget.initialFolder.name);
+    descriptionController = TextEditingController(text: widget.initialFolder.description);
+    selectedColor = widget.initialFolder.color;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        TextField(
+          controller: nameController,
+          decoration: InputDecoration(labelText: 'Stackname:'),
+        ),
+        TextField(
+          controller: descriptionController,
+          decoration: InputDecoration(labelText: 'Beschreibung:'),
+        ),
+        SizedBox(height: 10),
+        Text('Farbe auswählen:'),
+        Wrap(
+          children: [
+            _buildColorPicker(Colors.blue),
+            _buildColorPicker(Colors.green),
+            _buildColorPicker(Colors.yellow),
+            _buildColorPicker(Colors.orange),
+            _buildColorPicker(Colors.red),
+            _buildColorPicker(Colors.purple),
+          ],
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Abbrechen'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Folder editedFolder = Folder(
+                  name: nameController.text,
+                  description: descriptionController.text,
+                  color: selectedColor,
+                );
+                widget.onEdit(editedFolder);
+                Navigator.of(context).pop();
               },
               child: Text('Bestätigen'),
             ),
@@ -202,28 +446,15 @@ class _CreateFolderFormState extends State<CreateFolderForm> {
   }
 }
 
-class FolderWidget extends StatelessWidget {
-  final Folder folder;
-
-  FolderWidget({required this.folder});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20),
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        color: folder.color,
-        borderRadius: BorderRadius.circular(10),
+    return MaterialApp(
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(folder.name, style: TextStyle(fontSize: 20, color: Colors.white)),
-          SizedBox(height: 5),
-          Text(folder.description, style: TextStyle(color: Colors.white)),
-        ],
-      ),
+      home: DashboardPage(),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:codecard/pages/login_page.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -27,8 +28,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
           });
         },
         onRegisterPressed: () {
-          // registrierlogik fehlt
-          print('Registrierung erfolgreich!');
+          // Navigate to RegistrationPage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => RegistrationPage()),
+          );
+        },
+        onLoginPressed: () {
+          // Navigate to RegistrationPage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
         },
       ),
     );
@@ -39,11 +50,13 @@ class RegistrationWidget extends StatelessWidget {
   final bool isRegisterTab;
   final Function(bool) onTabChanged;
   final VoidCallback onRegisterPressed;
+  final VoidCallback onLoginPressed;
 
   RegistrationWidget({
     required this.isRegisterTab,
     required this.onTabChanged,
     required this.onRegisterPressed,
+    required this.onLoginPressed,
   });
 
   @override
@@ -57,9 +70,9 @@ class RegistrationWidget extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildTabButton('Anmelden', false),
+              buildTabButton('Anmelden', true, onLoginPressed),
               const SizedBox(width: 50),
-              buildTabButton('Registrieren', true),
+              buildTabButton('Registrieren', false, onRegisterPressed),
             ],
           ),
           const SizedBox(height: 20),
@@ -124,10 +137,11 @@ class RegistrationWidget extends StatelessWidget {
               obscureText: true,
             ),
           ),
-          const SizedBox(height: 20), // Verringere die Höhe der SizedBox
+          const SizedBox(height: 20),
           Container(
             width: 300,
             child: ElevatedButton(
+              //onRegisterPressed muss geändert werden in die Registrationslogik!! muss Acc anlegen und auf dashboard weiterleiten
               onPressed: onRegisterPressed,
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -151,13 +165,18 @@ class RegistrationWidget extends StatelessWidget {
     );
   }
 
-  Widget buildTabButton(String text, bool isSelected) {
+  Widget buildTabButton(String text, bool isSelected,
+      [VoidCallback? onPressed]) {
     return ElevatedButton(
       onPressed: () {
         onTabChanged(isSelected);
+        if (onPressed != null) {
+          onPressed();
+        }
       },
       style: ElevatedButton.styleFrom(
-        backgroundColor: isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
+        backgroundColor:
+            isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -171,4 +190,3 @@ class RegistrationWidget extends StatelessWidget {
     );
   }
 }
-
