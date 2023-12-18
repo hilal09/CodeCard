@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:codecard/pages/register_page.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -30,6 +31,20 @@ class _LoginPageState extends State<LoginPage> {
           // anmeldelogik fehlt
           print('Anmeldung erfolgreich!');
         },
+        onRegisterPressed: () {
+          // Navigate to RegistrationPage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => RegistrationPage()),
+          );
+        },
+        onLoginPressed: () {
+          // Navigate to RegistrationPage
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+          );
+        },
       ),
     );
   }
@@ -39,11 +54,15 @@ class AuthWidget extends StatelessWidget {
   final bool isLoginTab;
   final Function(bool) onTabChanged;
   final VoidCallback onAuthPressed;
+  final VoidCallback onRegisterPressed;
+  final VoidCallback onLoginPressed;
 
   AuthWidget({
     required this.isLoginTab,
     required this.onTabChanged,
     required this.onAuthPressed,
+    required this.onRegisterPressed,
+    required this.onLoginPressed,
   });
 
   @override
@@ -55,16 +74,16 @@ class AuthWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.center, // Ändere die Ausrichtung hier
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              buildTabButton('Anmelden', true),
-              const SizedBox(width: 50), // Ändere die Breite der SizedBox
-              buildTabButton('Registrieren', false),
+              buildTabButton('Anmelden', true, onLoginPressed),
+              const SizedBox(width: 50),
+              buildTabButton('Registrieren', false, onRegisterPressed),
             ],
           ),
           const SizedBox(height: 20),
           Container(
-            width: 300, // Ändere die Breite hier
+            width: 300,
             child: TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
@@ -84,7 +103,7 @@ class AuthWidget extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Container(
-            width: 300, // Ändere die Breite hier
+            width: 300,
             child: TextField(
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
@@ -105,7 +124,7 @@ class AuthWidget extends StatelessWidget {
           ),
           const SizedBox(height: 20),
           Container(
-            width: 300, // Ändere die Breite hier
+            width: 300,
             child: ElevatedButton(
               onPressed: onAuthPressed,
               style: ElevatedButton.styleFrom(
@@ -130,10 +149,14 @@ class AuthWidget extends StatelessWidget {
     );
   }
 
-  Widget buildTabButton(String text, bool isSelected) {
+  Widget buildTabButton(String text, bool isSelected,
+      [VoidCallback? onPressed]) {
     return ElevatedButton(
       onPressed: () {
         onTabChanged(isSelected);
+        if (onPressed != null) {
+          onPressed();
+        }
       },
       style: ElevatedButton.styleFrom(
         backgroundColor:
