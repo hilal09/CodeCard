@@ -1,3 +1,4 @@
+import 'package:codecard/pages/flashcard_page.dart';
 import 'package:codecard/pages/splash_screen.dart';
 import 'package:codecard/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
