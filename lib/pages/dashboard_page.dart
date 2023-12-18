@@ -54,7 +54,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: folders.isEmpty
                   ? Center(
                       child: Text(
-                        'Es sind noch keine Ordner vorhanden. Klicke auf das "+"-Symbol, um einen neuen Ordner anzulegen.',
+                        'Es sind noch keine Lernsets vorhanden. Klicke auf das "+"-Symbol, um ein neues Lernset anzulegen.',
                         style: TextStyle(color: Colors.white),
                       ),
                     )
@@ -76,7 +76,7 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Neuen Ordner erstellen'),
+          title: Text('Neues Lernset erstellen'),
           content: CreateFolderForm(
             onCreate: (Folder newFolder) {
               setState(() {
@@ -134,7 +134,7 @@ class _CreateFolderFormState extends State<CreateFolderForm> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(labelText: 'Ordnername'),
+          decoration: InputDecoration(labelText: 'Name'),
         ),
         TextField(
           controller: descriptionController,
