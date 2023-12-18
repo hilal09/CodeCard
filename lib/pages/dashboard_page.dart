@@ -24,7 +24,7 @@ class _DashboardPageState extends State<DashboardPage> {
               border: Border.all(
                 color: Color.fromARGB(255, 141, 134, 134),
                 width: 0.5,
-              ), // White border
+              ),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -43,7 +43,6 @@ class _DashboardPageState extends State<DashboardPage> {
                 IconButton(
                   icon: Icon(Icons.home_rounded, color: Colors.white),
                   onPressed: () {
-                    // Action when clicking the Home Icon
                   },
                 ),
                 SizedBox(height: 10),
@@ -51,11 +50,9 @@ class _DashboardPageState extends State<DashboardPage> {
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
                     _showCreateFolderDialog();
-                    // Action when clicking the Add Icon
                   },
                 ),
                 SizedBox(height: 10),
-                // Display folder icons with names in the left bar
                 ...folders.map((folder) => _buildFolderIcon(folder)),
               ],
             ),
@@ -122,7 +119,7 @@ class _DashboardPageState extends State<DashboardPage> {
         return AlertDialog(
           title: Text('Stack löschen'),
           content: Text('Bist du sicher, dass du den Stack löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
-          contentTextStyle: TextStyle(color: Colors.white, fontSize: 10), // Hier die Farbe ändern
+          contentTextStyle: TextStyle(color: Colors.white, fontSize: 10),
           titleTextStyle: TextStyle(color: Colors.white, fontSize: 10),
           actions: [
             ElevatedButton(
@@ -190,7 +187,7 @@ class CreateFolderForm extends StatefulWidget {
 class _CreateFolderFormState extends State<CreateFolderForm> {
   late TextEditingController nameController;
   late TextEditingController descriptionController;
-  Color selectedColor = Colors.blue; // Default color
+  Color selectedColor = Colors.blue;
 
   @override
   void initState() {
@@ -360,7 +357,7 @@ class EditFolderForm extends StatefulWidget {
 class _EditFolderFormState extends State<EditFolderForm> {
   late TextEditingController nameController;
   late TextEditingController descriptionController;
-  Color selectedColor = Colors.blue; // Default color
+  Color selectedColor = Colors.blue; 
 
   @override
   void initState() {
