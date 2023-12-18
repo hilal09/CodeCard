@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'login_page.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import für Google Fonts
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -10,10 +10,29 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _fadeAnimation;
+
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2), // Anpassbare Animationsdauer
+    );
+
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    _animationController.forward();
+
     _navigateToLogin();
   }
 
@@ -27,6 +46,12 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFF2c293a),
@@ -34,23 +59,30 @@ class _SplashScreenState extends State<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Lottie.asset(
-              'assets/images/Ball.json',
-              width: 200,
-              height: 200,
-              fit: BoxFit.cover,
+            FadeTransition(
+              opacity: _fadeAnimation,
+              child: Lottie.asset(
+                'assets/images/balls.json',
+                width: 200,
+                height: 200,
+                fit: BoxFit.cover,
+              ),
             ),
             SizedBox(height: 20),
-            Padding(
-              padding: EdgeInsets.only(
-                  left: 77.0), // Abstand damit mittig zum Zentrum der Animation
-              child: Text(
-                'CodeCard',
-                style: GoogleFonts.sourceCodePro(
-                  textStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
+            FadeTransition(
+              opacity: _fadeAnimation,
+              child: Padding(
+                padding: EdgeInsets.only(
+                    left:
+                        67.0), // Abstand damit mittig zum Zentrum der Animation
+                child: Text(
+                  'CodeCard',
+                  style: GoogleFonts.sourceCodePro(
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 30,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
                 ),
               ),

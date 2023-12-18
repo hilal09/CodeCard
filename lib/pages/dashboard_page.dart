@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -77,7 +73,7 @@ class _DashboardPageState extends State<DashboardPage> {
               child: folders.isEmpty
                   ? Center(
                       child: Text(
-                        'Es sind noch keine Ordner vorhanden. Klicke auf das "+"-Symbol, um einen neuen Ordner anzulegen.',
+                        'Es sind noch keine Stacks vorhanden. Klicke auf das "+"-Symbol, um einen neuen Stack anzulegen.',
                         style: TextStyle(color: Colors.white),
                       ),
                     )
@@ -98,13 +94,17 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  void _showCreateFolderDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Neuen Ordner erstellen'),
-          content: CreateFolderForm(
+void _showCreateFolderDialog() {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Neuen Stack erstellen'),
+        titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
+        contentTextStyle: TextStyle(color: Colors.white, fontSize: 15), //das ist die farbe von "farbe auswählen"
+        content: SizedBox(
+          height: 320, // Passe diese Höhe nach Bedarf an "pop up fenster beim stack erstellen"
+          child: CreateFolderForm(
             onCreate: (Folder newFolder) {
               setState(() {
                 folders.add(newFolder);
@@ -112,20 +112,22 @@ class _DashboardPageState extends State<DashboardPage> {
               Navigator.of(context).pop();
             },
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
+
 
   void _deleteFolder(int index) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Ordner löschen'),
-          content: Text('Bist du sicher, dass du den Ordner löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
-          contentTextStyle: TextStyle(color: Color.fromARGB(255, 149, 87, 151)), // Hier die Farbe ändern
-          titleTextStyle: TextStyle(color: Color.fromARGB(255, 149, 87, 151)),
+          title: Text('Stack löschen'),
+          content: Text('Bist du sicher, dass du den Stack löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
+          contentTextStyle: TextStyle(color: Colors.white, fontSize: 10), // Hier die Farbe ändern
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 10),
           actions: [
             ElevatedButton(
               onPressed: () {
@@ -215,13 +217,13 @@ class _CreateFolderFormState extends State<CreateFolderForm> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(labelText: 'Ordnername'),
+          decoration: InputDecoration(labelText: 'Stackname:'),
         ),
         TextField(
           controller: descriptionController,
           decoration: InputDecoration(labelText: 'Beschreibung'),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 0),
         Text('Farbe auswählen:'),
         Wrap(
           children: [
@@ -269,7 +271,7 @@ class _CreateFolderFormState extends State<CreateFolderForm> {
         });
       },
       child: Container(
-        width: 30,
+        width: 90,
         height: 30,
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
@@ -335,7 +337,7 @@ class FolderWidget extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Ordner bearbeiten'),
+          title: Text('Stack bearbeiten'),
           content: EditFolderForm(
             initialFolder: folder,
             onEdit: (editedFolder) {
@@ -379,11 +381,11 @@ class _EditFolderFormState extends State<EditFolderForm> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(labelText: 'Ordnername'),
+          decoration: InputDecoration(labelText: 'Stackname:'),
         ),
         TextField(
           controller: descriptionController,
-          decoration: InputDecoration(labelText: 'Beschreibung'),
+          decoration: InputDecoration(labelText: 'Beschreibung:'),
         ),
         SizedBox(height: 10),
         Text('Farbe auswählen:'),
@@ -460,5 +462,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
