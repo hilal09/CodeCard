@@ -1,3 +1,4 @@
+import 'package:codecard/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -12,85 +13,98 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(20.0),
-      child: Row(
-        children: [
-          Container(
-            width: 70,
-            decoration: BoxDecoration(
-              color: Color(0xFFFF2c293a),
-              borderRadius: BorderRadius.circular(10.0),
-              border: Border.all(
-                color: Color.fromARGB(255, 141, 134, 134),
-                width: 0.5,
-              ), // White border
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                SizedBox(height: 20),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(15),
-                  child: Image.asset(
-                    'assets/images/Logo.png',
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                SizedBox(height: 10),
-                IconButton(
-                  icon: Icon(Icons.home_rounded, color: Colors.white),
-                  onPressed: () {
-                    // Action when clicking the Home Icon
-                  },
-                ),
-                SizedBox(height: 10),
-                IconButton(
-                  icon: Icon(Icons.add, color: Colors.white),
-                  onPressed: () {
-                    _showCreateFolderDialog();
-                    // Action when clicking the Add Icon
-                  },
-                ),
-                SizedBox(height: 10),
-                // Display folder icons with names in the left bar
-                ...folders.map((folder) => _buildFolderIcon(folder)),
-              ],
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.all(20),
+    return Scaffold(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Row(
+          children: [
+            Container(
+              width: 70,
               decoration: BoxDecoration(
                 color: Color(0xFFFF2c293a),
-                borderRadius: BorderRadius.circular(30),
+                borderRadius: BorderRadius.circular(10.0),
+                border: Border.all(
+                  color: Color.fromARGB(255, 141, 134, 134),
+                  width: 0.5,
+                ), // White border
               ),
-              child: folders.isEmpty
-                  ? Center(
-                      child: Text(
-                        'Es sind noch keine Stacks vorhanden. Klicke auf das "+"-Symbol, um einen neuen Stack anzulegen.',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  : ListView.builder(
-                      itemCount: folders.length,
-                      itemBuilder: (context, index) {
-                        return FolderWidget(
-                          folder: folders[index],
-                          onDelete: () => _deleteFolder(index),
-                          onEdit: (editedFolder) =>
-                              _editFolder(index, editedFolder),
-                        );
-                      },
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(height: 20),
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.asset(
+                      'assets/images/Logo.png',
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
                     ),
+                  ),
+                  SizedBox(height: 10),
+                  IconButton(
+                    icon: Icon(Icons.home_rounded, color: Colors.white),
+                    onPressed: () {
+                      // Action when clicking the Home Icon
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  IconButton(
+                    icon: Icon(Icons.add, color: Colors.white),
+                    onPressed: () {
+                      _showCreateFolderDialog();
+                      // Action when clicking the Add Icon
+                    },
+                  ),
+                  SizedBox(height: 10),
+                  // Display folder icons with names in the left bar
+                  ...folders.map((folder) => _buildFolderIcon(folder)),
+                  Spacer(),
+                  IconButton(
+                    icon: Icon(Icons.person, color: Colors.white),
+                    onPressed: () {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(builder: (context) => ProfilePage()),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 10),
+                ],
+              ),
             ),
-          ),
-        ],
+            SizedBox(
+              width: 20,
+            ),
+            Expanded(
+              child: Container(
+                padding: EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  color: Color(0xFFFF2c293a),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: folders.isEmpty
+                    ? Center(
+                        child: Text(
+                          'Es sind noch keine Stacks vorhanden. Klicke auf das "+"-Symbol, um einen neuen Stack anzulegen.',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: folders.length,
+                        itemBuilder: (context, index) {
+                          return FolderWidget(
+                            folder: folders[index],
+                            onDelete: () => _deleteFolder(index),
+                            onEdit: (editedFolder) =>
+                                _editFolder(index, editedFolder),
+                          );
+                        },
+                      ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -454,19 +468,6 @@ class _EditFolderFormState extends State<EditFolderForm> {
             ? Icon(Icons.check, color: Colors.white)
             : SizedBox(),
       ),
-    );
-  }
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: DashboardPage(),
     );
   }
 }
