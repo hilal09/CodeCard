@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -466,5 +462,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
