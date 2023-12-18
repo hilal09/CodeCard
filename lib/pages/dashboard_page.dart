@@ -114,14 +114,17 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Neuen Stack erstellen'),
-          titleTextStyle: TextStyle(color: Colors.white, fontSize: 25),
-          contentTextStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 15), //das ist die farbe von "farbe auswählen"
+          title: Text(
+            'Neuen Stack erstellen',
+            style: Theme.of(context)
+                .textTheme
+                .headline6
+                ?.copyWith(color: Colors.white),
+          ),
+          //Farbe muss noch weiß gemacht werden
+          contentTextStyle: Theme.of(context).textTheme.bodyText2,
           content: SizedBox(
-            height:
-                320, // Passe diese Höhe nach Bedarf an "pop up fenster beim stack erstellen"
+            height: 320,
             child: CreateFolderForm(
               onCreate: (Folder newFolder) {
                 setState(() {
