@@ -51,7 +51,7 @@ class FlashcardPage extends StatelessWidget {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Abbrechen', style: TextStyle(color: Colors.blue)),
+                      child: Text('Abbrechen'),
                     ),
                     SizedBox(width: 10),
                     ElevatedButton(
