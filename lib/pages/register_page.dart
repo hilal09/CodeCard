@@ -62,9 +62,19 @@ class RegistrationWidget extends StatelessWidget {
           SizedBox(height: 50),
           const Text(
             'CODE CARD',
-            style: TextStyle(color: Colors.white, fontSize: 60),
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 60,
+              shadows: [
+                Shadow(
+                  blurRadius: 6.0,
+                  color: Color(0xFFF4cae97),
+                  offset: Offset(3.0, 1.0),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 50),
+          SizedBox(height: 70),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
