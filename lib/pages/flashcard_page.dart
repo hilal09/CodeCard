@@ -16,6 +16,7 @@ class FlashcardPage extends StatelessWidget {
           ),
           elevation: 0,
           child: Container(
+            width: 1000,
             padding: EdgeInsets.all(16),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -27,7 +28,7 @@ class FlashcardPage extends StatelessWidget {
                 SizedBox(height: 20),
                 TextField(
                   controller: frontController,
-                  style: TextStyle(color: Colors.white), 
+                  style: TextStyle(color: Colors.white),
                   decoration: InputDecoration(
                     labelText: 'Vorderseite',
                     labelStyle: TextStyle(color: Colors.white),
@@ -44,17 +45,18 @@ class FlashcardPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                      child: Text('Abbrechen', style: TextStyle(color: Colors.blue)),
                     ),
+                    SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
-                        // logik karteikarte speichern
+                        // Hier kannst du die Logik zum Speichern der Karteikarte implementieren
                         String frontText = frontController.text;
                         String backText = backController.text;
                         print('Vorderseite: $frontText, Rückseite: $backText');
@@ -105,14 +107,14 @@ class FlashcardPage extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.home_rounded, color: Colors.white),
                   onPressed: () {
-                    // logik home button
+                    // Füge hier die Logik für den Home-Button hinzu
                   },
                 ),
                 SizedBox(height: 10),
                 IconButton(
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
-                    addFlashcard(context);
+                    //neues lernset erstellen
                   },
                 ),
               ],
