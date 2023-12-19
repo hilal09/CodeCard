@@ -56,7 +56,7 @@ class FlashcardPage extends StatelessWidget {
                     SizedBox(width: 10),
                     ElevatedButton(
                       onPressed: () {
-                        // Hier kannst du die Logik zum Speichern der Karteikarte implementieren
+                        //logik karteikarte speichern
                         String frontText = frontController.text;
                         String backText = backController.text;
                         print('Vorderseite: $frontText, Rückseite: $backText');
@@ -107,14 +107,14 @@ class FlashcardPage extends StatelessWidget {
                 IconButton(
                   icon: Icon(Icons.home_rounded, color: Colors.white),
                   onPressed: () {
-                    // Füge hier die Logik für den Home-Button hinzu
+                    // logik home button
                   },
                 ),
                 SizedBox(height: 10),
                 IconButton(
                   icon: Icon(Icons.add, color: Colors.white),
                   onPressed: () {
-                    //neues lernset erstellen
+                    //logik neues lernset erstellen
                   },
                 ),
               ],
