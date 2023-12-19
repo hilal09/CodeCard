@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.sourceCodeProTextTheme().copyWith(),
       ),
       home: Scaffold(
-        body: DashboardPage(), //home: const SplashScreen(),
+        body: FlashcardPage(), //home: const SplashScreen(),
       ),
     );
   }
