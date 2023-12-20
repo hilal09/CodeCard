@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:codecard/widgets/_Folder.dart';
+import 'package:codecard/widgets/_CreateFolderFormState.dart';
 
 class EditFolderForm extends StatefulWidget {
   final Folder initialFolder;

@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:codecard/widgets/_Folder.dart';
+import 'package:codecard/pages/dashboard_page.dart';
+import 'package:codecard/widgets/edit_folder.dart';
+import 'package:codecard/widgets/folder_widget.dart';
+
+class Folder {
+  final String name;
+  final String description;
+  final Color color;
+
+  Folder({required this.name, required this.description, required this.color});
+}
 
 class CreateFolderForm extends StatefulWidget {
   final Function(Folder) onCreate;
 
   CreateFolderForm({required this.onCreate});
-  
+
   @override
   _CreateFolderFormState createState() => _CreateFolderFormState();
 }
 
-
 class _CreateFolderFormState extends State<CreateFolderForm> {
   late TextEditingController nameController;
   late TextEditingController descriptionController;
-  Color selectedColor = Colors.blue;
+  Color selectedColor = Colors.blue; // Default color
 
   @override
   void initState() {
@@ -37,7 +46,7 @@ class _CreateFolderFormState extends State<CreateFolderForm> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(labelText: 'Ordnername'),
+          decoration: InputDecoration(labelText: 'Stackname:'),
         ),
         TextField(
           controller: descriptionController,
