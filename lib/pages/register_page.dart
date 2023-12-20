@@ -20,12 +20,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
             isRegisterTab = isSelected;
           });
         },
-        onRegisterPressed: () {
-          // Navigate to RegistrationPage
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => RegistrationPage()),
-          );
+        onAuthPressed: () {
+          // anmeldelogik fehlt
+          print('Anmeldung erfolgreich!');
         },
         onLoginPressed: () {
           // Navigate to RegistrationPage
@@ -42,13 +39,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
 class RegistrationWidget extends StatelessWidget {
   final bool isRegisterTab;
   final Function(bool) onTabChanged;
-  final VoidCallback onRegisterPressed;
+  final VoidCallback onAuthPressed;
+
   final VoidCallback onLoginPressed;
 
   RegistrationWidget({
     required this.isRegisterTab,
     required this.onTabChanged,
-    required this.onRegisterPressed,
+    required this.onAuthPressed,
     required this.onLoginPressed,
   });
 
@@ -75,7 +73,7 @@ class RegistrationWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 100),
+          SizedBox(height: 60),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -151,7 +149,7 @@ class RegistrationWidget extends StatelessWidget {
             width: 300,
             child: ElevatedButton(
               //onRegisterPressed muss geändert werden in die Registrationslogik!! muss Acc anlegen und auf dashboard weiterleiten
-              onPressed: onRegisterPressed,
+              onPressed: onAuthPressed,
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
@@ -169,6 +167,7 @@ class RegistrationWidget extends StatelessWidget {
               ),
             ),
           ),
+          //DEBUG NUR UM AUF DASHBOARD ZU KOMMEN;
           IconButton(
             icon: Icon(Icons.home, color: Colors.white),
             onPressed: () {

@@ -30,13 +30,6 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(builder: (context) => RegistrationPage()),
           );
         },
-        onLoginPressed: () {
-          // Navigate to LoginPage
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginPage()),
-          );
-        },
       ),
     );
   }
@@ -47,111 +40,125 @@ class AuthWidget extends StatelessWidget {
   final Function(bool) onTabChanged;
   final VoidCallback onAuthPressed;
   final VoidCallback onRegisterPressed;
-  final VoidCallback onLoginPressed;
 
   AuthWidget({
     required this.isLoginTab,
     required this.onTabChanged,
     required this.onAuthPressed,
     required this.onRegisterPressed,
-    required this.onLoginPressed,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFFFF2c293a),
-      padding: const EdgeInsets.all(16.0),
-      child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        SizedBox(height: 70),
-        const Text(
-          'CODE CARD',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 60,
-            shadows: [
-              Shadow(
-                blurRadius: 6.0,
-                color: Color(0xFFF4cae97),
-                offset: Offset(3.0, 1.0),
-              ),
-            ],
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-        SizedBox(height: 140),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            buildTabButton('Anmelden', true),
-            const SizedBox(width: 50),
-            buildTabButton('Registrieren', false, onRegisterPressed),
-          ],
-        ),
-        const SizedBox(height: 20),
-        Container(
-          width: 300,
-          child: TextField(
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: 'E-Mail Adresse',
-              prefixIcon: const Icon(Icons.mail, color: Colors.white),
-              labelStyle: const TextStyle(color: Colors.white),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Text(
+                    'CODE CARD',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 70,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 6.0,
+                          color: Color(0xFFF4cae97),
+                          offset: Offset(3.0, 1.0),
+                        ),
+                      ],
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  SizedBox(
+                    height: 100,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      buildTabButton('Anmelden', true),
+                      const SizedBox(width: 50),
+                      buildTabButton('Registrieren', false, onRegisterPressed),
+                    ],
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 300,
+                    child: TextField(
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'E-Mail Adresse',
+                        prefixIcon: const Icon(Icons.mail, color: Colors.white),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 300,
+                    child: TextField(
+                      style: const TextStyle(color: Colors.white),
+                      decoration: InputDecoration(
+                        labelText: 'Passwort',
+                        prefixIcon: const Icon(Icons.lock, color: Colors.white),
+                        labelStyle: const TextStyle(color: Colors.white),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(color: Colors.white),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      obscureText: true,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 300,
+                    child: ElevatedButton(
+                      onPressed: onAuthPressed,
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        backgroundColor: const Color(0xFFFF10111a),
+                      ),
+                      child: const SizedBox(
+                        width: double.infinity,
+                        child: Center(
+                          child: Text(
+                            'Bestätigen',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          width: 300,
-          child: TextField(
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              labelText: 'Passwort',
-              prefixIcon: const Icon(Icons.lock, color: Colors.white),
-              labelStyle: const TextStyle(color: Colors.white),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(color: Colors.white),
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            obscureText: true,
-          ),
-        ),
-        const SizedBox(height: 20),
-        Container(
-          width: 300,
-          child: ElevatedButton(
-            onPressed: onAuthPressed,
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              backgroundColor: const Color(0xFFFF10111a),
-            ),
-            child: const SizedBox(
-              width: double.infinity,
-              child: Center(
-                child: Text(
-                  'Bestätigen',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
