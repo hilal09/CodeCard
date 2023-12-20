@@ -45,7 +45,7 @@ class FlashcardPage extends StatelessWidget {
                 ),
                 SizedBox(height: 20),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     TextButton(
                       onPressed: () {
