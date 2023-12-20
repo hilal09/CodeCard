@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:codecard/widgets/_Folder.dart';
 
-class EditFolderForm extends StatefulWidget {
-  final Folder initialFolder;
-  final Function(Folder) onEdit;
+class CreateFolderForm extends StatefulWidget {
+  final Function(Folder) onCreate;
 
-  EditFolderForm({required this.initialFolder, required this.onEdit});
-
+  CreateFolderForm({required this.onCreate});
+  
   @override
-  _EditFolderFormState createState() => _EditFolderFormState();
+  _CreateFolderFormState createState() => _CreateFolderFormState();
 }
-class _EditFolderFormState extends State<EditFolderForm> {
+
+
+class _CreateFolderFormState extends State<CreateFolderForm> {
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   Color selectedColor = Colors.blue;
@@ -18,10 +19,15 @@ class _EditFolderFormState extends State<EditFolderForm> {
   @override
   void initState() {
     super.initState();
-    nameController = TextEditingController(text: widget.initialFolder.name);
-    descriptionController =
-        TextEditingController(text: widget.initialFolder.description);
-    selectedColor = widget.initialFolder.color;
+    nameController = TextEditingController();
+    descriptionController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -31,13 +37,13 @@ class _EditFolderFormState extends State<EditFolderForm> {
       children: [
         TextField(
           controller: nameController,
-          decoration: InputDecoration(labelText: 'Stackname:'),
+          decoration: InputDecoration(labelText: 'Ordnername'),
         ),
         TextField(
           controller: descriptionController,
-          decoration: InputDecoration(labelText: 'Beschreibung:'),
+          decoration: InputDecoration(labelText: 'Beschreibung'),
         ),
-        SizedBox(height: 10),
+        SizedBox(height: 0),
         Text('Farbe auswählen:'),
         Wrap(
           children: [
@@ -61,12 +67,12 @@ class _EditFolderFormState extends State<EditFolderForm> {
             ),
             ElevatedButton(
               onPressed: () {
-                Folder editedFolder = Folder(
+                Folder newFolder = Folder(
                   name: nameController.text,
                   description: descriptionController.text,
                   color: selectedColor,
                 );
-                widget.onEdit(editedFolder);
+                widget.onCreate(newFolder);
                 Navigator.of(context).pop();
               },
               child: Text('Bestätigen'),
@@ -85,7 +91,7 @@ class _EditFolderFormState extends State<EditFolderForm> {
         });
       },
       child: Container(
-        width: 30,
+        width: 90,
         height: 30,
         margin: EdgeInsets.all(5),
         decoration: BoxDecoration(
