@@ -1,3 +1,4 @@
+import 'package:codecard/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/login_page.dart';
 
@@ -59,7 +60,7 @@ class RegistrationWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          SizedBox(height: 50),
+          SizedBox(height: 70),
           const Text(
             'CODE CARD',
             style: TextStyle(
@@ -74,13 +75,13 @@ class RegistrationWidget extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 70),
+          SizedBox(height: 100),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               buildTabButton('Anmelden', false, onLoginPressed),
               const SizedBox(width: 50),
-              buildTabButton('Registrieren', true, onRegisterPressed),
+              buildTabButton('Registrieren', true),
             ],
           ),
           const SizedBox(height: 20),
@@ -167,6 +168,15 @@ class RegistrationWidget extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          IconButton(
+            icon: Icon(Icons.home, color: Colors.white),
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => DashboardPage()),
+              );
+            },
           ),
         ],
       ),

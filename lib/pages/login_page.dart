@@ -63,7 +63,7 @@ class AuthWidget extends StatelessWidget {
       color: const Color(0xFFFF2c293a),
       padding: const EdgeInsets.all(16.0),
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-        SizedBox(height: 50),
+        SizedBox(height: 70),
         const Text(
           'CODE CARD',
           style: TextStyle(
@@ -76,13 +76,14 @@ class AuthWidget extends StatelessWidget {
                 offset: Offset(3.0, 1.0),
               ),
             ],
+            fontWeight: FontWeight.w300,
           ),
         ),
-        SizedBox(height: 90),
+        SizedBox(height: 140),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            buildTabButton('Anmelden', true, onLoginPressed),
+            buildTabButton('Anmelden', true),
             const SizedBox(width: 50),
             buildTabButton('Registrieren', false, onRegisterPressed),
           ],

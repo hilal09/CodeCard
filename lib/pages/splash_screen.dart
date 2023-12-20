@@ -76,11 +76,18 @@ class _SplashScreenState extends State<SplashScreen>
                     left:
                         67.0), // Abstand damit mittig zum Zentrum der Animation
                 child: Text(
-                  'CodeCard',
+                  'CODE CARD',
                   style: GoogleFonts.sourceCodePro(
                     textStyle: TextStyle(
                       color: Colors.white,
-                      fontSize: 30,
+                      fontSize: 80,
+                      shadows: [
+                        Shadow(
+                          blurRadius: 6.0,
+                          color: Color(0xFFF4cae97),
+                          offset: Offset(3.0, 1.0),
+                        ),
+                      ],
                       fontWeight: FontWeight.w300,
                     ),
                   ),
