@@ -2,6 +2,8 @@ import 'package:codecard/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/widgets/edit_folder.dart';
 import 'package:codecard/widgets/folder_widget.dart';
+import 'package:codecard/widgets/_CreateFolderFormState.dart';
+
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -28,7 +30,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 border: Border.all(
                   color: Color.fromARGB(255, 141, 134, 134),
                   width: 0.5,
-                ),
+                ), // White border
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -47,6 +49,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   IconButton(
                     icon: Icon(Icons.home_rounded, color: Colors.white),
                     onPressed: () {
+                      // Action when clicking the Home Icon
                     },
                   ),
                   SizedBox(height: 10),
@@ -54,9 +57,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     icon: Icon(Icons.add, color: Colors.white),
                     onPressed: () {
                       _showCreateFolderDialog();
+                      // Action when clicking the Add Icon
                     },
                   ),
                   SizedBox(height: 10),
+                  // Display folder icons with names in the left bar
                   ...folders.map((folder) => _buildFolderIcon(folder)),
                   Spacer(),
                   IconButton(
@@ -191,118 +196,6 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         SizedBox(height: 10),
       ],
-    );
-  }
-}
-
-class Folder {
-  final String name;
-  final String description;
-  final Color color;
-
-  Folder({required this.name, required this.description, required this.color});
-}
-
-class CreateFolderForm extends StatefulWidget {
-  final Function(Folder) onCreate;
-
-  CreateFolderForm({required this.onCreate});
-
-  @override
-  _CreateFolderFormState createState() => _CreateFolderFormState();
-}
-
-class _CreateFolderFormState extends State<CreateFolderForm> {
-  late TextEditingController nameController;
-  late TextEditingController descriptionController;
-  Color selectedColor = Colors.blue;
-
-  @override
-  void initState() {
-    super.initState();
-    nameController = TextEditingController();
-    descriptionController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    descriptionController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        TextField(
-          controller: nameController,
-          decoration: InputDecoration(labelText: 'Ordnername'),
-        ),
-        TextField(
-          controller: descriptionController,
-          decoration: InputDecoration(labelText: 'Beschreibung'),
-        ),
-        SizedBox(height: 0),
-        Text('Farbe auswählen:'),
-        Wrap(
-          children: [
-            _buildColorPicker(Colors.blue),
-            _buildColorPicker(Colors.green),
-            _buildColorPicker(Colors.yellow),
-            _buildColorPicker(Colors.orange),
-            _buildColorPicker(Colors.red),
-            _buildColorPicker(Colors.purple),
-          ],
-        ),
-        SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Abbrechen'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Folder newFolder = Folder(
-                  name: nameController.text,
-                  description: descriptionController.text,
-                  color: selectedColor,
-                );
-                widget.onCreate(newFolder);
-                Navigator.of(context).pop();
-              },
-              child: Text('Bestätigen'),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget _buildColorPicker(Color color) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedColor = color;
-        });
-      },
-      child: Container(
-        width: 90,
-        height: 30,
-        margin: EdgeInsets.all(5),
-        decoration: BoxDecoration(
-          color: color,
-          shape: BoxShape.circle,
-        ),
-        child: selectedColor == color
-            ? Icon(Icons.check, color: Colors.white)
-            : SizedBox(),
-      ),
     );
   }
 }
