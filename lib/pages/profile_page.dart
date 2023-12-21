@@ -50,7 +50,7 @@ class ProfilePage extends StatelessWidget {
                               // Action when clicking the Logout button
                             },
                             style: TextButton.styleFrom(
-                              primary: Colors.white,
+                              foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
@@ -73,7 +73,7 @@ class ProfilePage extends StatelessWidget {
                               // Action when clicking the Delete button
                             },
                             style: TextButton.styleFrom(
-                              primary: Colors.white,
+                              foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
