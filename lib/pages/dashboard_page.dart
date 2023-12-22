@@ -1,4 +1,5 @@
 import 'package:codecard/widgets/colorpicker.dart';
+import 'package:codecard/widgets/folder.dart';
 import 'package:codecard/widgets/suchleiste.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
 
@@ -27,8 +28,10 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title:
-              Text(existingFolder == null ? "Create a Folder" : "Edit Folder"),
+          title: Text(
+            existingFolder == null ? "Create a Folder" : "Edit Folder",
+            style: TextStyle(color: Colors.white),
+          ),
           content: Container(
             width: MediaQuery.of(context).size.width *
                 0.5, // Adjust the width as needed
@@ -56,10 +59,25 @@ class _DashboardPageState extends State<DashboardPage> {
                       errorText: formKey.currentState?.validate() == false
                           ? 'You need to give the folder a name'
                           : null,
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Set label color
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white), // Set focused border color
+                      ),
+                      // Set text color
+                      // You can customize the text color further using TextStyle
+                      // Example: TextStyle(color: Colors.white, fontSize: 16),
+                      hintStyle: TextStyle(color: Colors.white),
+                      suffixStyle: TextStyle(color: Colors.white),
                     ),
+                    style: TextStyle(color: Colors.white), // Set text color
                   ),
                   SizedBox(height: 10),
-                  Text("Choose Folder Color:"),
+                  Text(
+                    "Choose Folder Color:",
+                    style: TextStyle(color: Colors.white),
+                  ),
                   SizedBox(height: 5),
                   ColorPicker(
                     onColorSelected: (color) {
@@ -75,7 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Cancel', style: TextStyle(color: Colors.white)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -96,7 +114,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text(existingFolder == null ? 'Create' : 'Update'),
+              child: Text(
+                existingFolder == null ? 'Create' : 'Update',
+                style: TextStyle(color: Colors.white),
+              ),
             ),
           ],
         );
@@ -109,8 +130,10 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Delete Folder'),
-          content: Text('Are you sure you want to delete the folder?'),
+          title: Text(style: TextStyle(color: Colors.white), 'Delete Folder'),
+          content: Text(
+              style: TextStyle(color: Colors.white),
+              'Are you sure you want to delete the folder?'),
           actions: [
             ElevatedButton(
               onPressed: () {
@@ -125,7 +148,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text('Delete'),
+              child: Text(style: TextStyle(color: Colors.white), 'Delete'),
             ),
           ],
         );
@@ -194,6 +217,7 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
+// UI der Seite
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -266,11 +290,4 @@ class _DashboardPageState extends State<DashboardPage> {
       ),
     );
   }
-}
-
-class Folder {
-  late String name;
-  late Color color;
-
-  Folder({required this.name, required this.color});
 }
