@@ -182,7 +182,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildEmptyFolderMessage() {
-    return Center(
+  return SizedBox(
+    height: 450, // Ändere die Höhe nach Bedarf
+    child: Center(
       child: Text(
         'Click on the + to create a new folder',
         style: TextStyle(
@@ -191,8 +193,10 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
         textAlign: TextAlign.center,
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -223,12 +227,17 @@ class _DashboardPageState extends State<DashboardPage> {
                             });
                           },
                         ),
-                        IconButton(
-                          icon: Icon(Icons.add, color: Colors.white),
-                          onPressed: () {
-                            _showCreateFolderDialog();
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromARGB(255, 96, 92, 100), // Hintergrundfarbe des Kreises
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.add, color: Colors.black), // Farbe des Pluszeichens
+                            onPressed: () {
+                              _showCreateFolderDialog();
                           },
-                        ),
+                        ),),
                       ],
                     ),
                     SizedBox(height: 20),
