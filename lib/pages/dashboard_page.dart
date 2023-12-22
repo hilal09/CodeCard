@@ -2,7 +2,6 @@ import 'package:codecard/widgets/colorpicker.dart';
 import 'package:codecard/widgets/folder.dart';
 import 'package:codecard/widgets/suchleiste.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
-
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -13,6 +12,7 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+//DAS IST DIE LISTE
   List<Folder> folders = [];
   String searchTerm = "";
 
@@ -116,7 +116,6 @@ class _DashboardPageState extends State<DashboardPage> {
               },
               child: Text(
                 existingFolder == null ? 'Create' : 'Update',
-                style: TextStyle(color: Colors.white),
               ),
             ),
           ],
