@@ -3,7 +3,6 @@ import 'package:codecard/widgets/folder.dart';
 import 'package:codecard/widgets/suchleiste.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
 import 'package:flutter/material.dart';
-
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -34,7 +33,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           content: Container(
             width: MediaQuery.of(context).size.width *
-                0.5, // Adjust the width as needed
+                0.3, // Adjust the width as needed
             child: Form(
               key: formKey,
               child: Column(
@@ -42,6 +41,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   TextFormField(
                     controller: folderNameController,
+                    maxLength: 35, // Set maximum length
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -56,6 +56,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Folder Name',
+                      counterText: "", // Remove character counter
                       errorText: formKey.currentState?.validate() == false
                           ? 'You need to give the folder a name'
                           : null,
@@ -65,13 +66,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         borderSide: BorderSide(
                             color: Colors.white), // Set focused border color
                       ),
-                      // Set text color
-                      // You can customize the text color further using TextStyle
-                      // Example: TextStyle(color: Colors.white, fontSize: 16),
                       hintStyle: TextStyle(color: Colors.white),
                       suffixStyle: TextStyle(color: Colors.white),
                     ),
-                    style: TextStyle(color: Colors.white), // Set text color
+                    style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -101,8 +99,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   if (existingFolder == null) {
                     // Create a new folder
                     setState(() {
-                      folders
-                          .add(Folder(name: folderName, color: selectedColor));
+                      folders.insert(0, Folder(name: folderName, color: selectedColor));
                     });
                   } else {
                     // Update the existing folder
