@@ -1,9 +1,9 @@
-import 'package:codecard/pages/profile_page.dart';
+import 'package:codecard/pages/flashcard_page.dart';
+import 'package:codecard/widgets/colorpicker.dart';
+import 'package:codecard/widgets/folder.dart';
+import 'package:codecard/widgets/suchleiste.dart';
+import 'package:codecard/widgets/left_sidebar.dart';
 import 'package:flutter/material.dart';
-import 'package:codecard/widgets/edit_folder.dart';
-import 'package:codecard/widgets/folder_widget.dart';
-import 'package:codecard/widgets/_CreateFolderFormState.dart';
-
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -13,8 +13,218 @@ class DashboardPage extends StatefulWidget {
 }
 
 class _DashboardPageState extends State<DashboardPage> {
+//DAS IST DIE LISTE
   List<Folder> folders = [];
+  String searchTerm = "";
 
+  Future<void> _showCreateFolderDialog({Folder? existingFolder}) async {
+    String folderName = existingFolder?.name ?? "";
+    Color selectedColor = existingFolder?.color ?? Color(0xFFFfd4a4a);
+
+    TextEditingController folderNameController =
+        TextEditingController(text: folderName);
+    GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            existingFolder == null ? "Erstelle ein Set" : "Bearbeite das Set",
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Container(
+            width: MediaQuery.of(context).size.width *
+                0.3, // Adjust the width as needed
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: folderNameController,
+                    maxLength: 35, // Set maximum length
+                    onChanged: (value) {
+                      setState(() {
+                        formKey.currentState?.validate();
+                      });
+                      folderName = value;
+                    },
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Trage einen Namen für das Set ein.';
+                      }
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Name des Sets',
+                      counterText: "", // Remove character counter
+                      errorText: formKey.currentState?.validate() == false
+                          ? 'Trage einen Namen für das Set ein.'
+                          : null,
+                      labelStyle:
+                          TextStyle(color: Colors.white), // Set label color
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white), // Set focused border color
+                      ),
+                      hintStyle: TextStyle(color: Colors.white),
+                      suffixStyle: TextStyle(color: Colors.white),
+                    ),
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Wähle eine Farbe aus:",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  SizedBox(height: 5),
+                  ColorPicker(
+                    onColorSelected: (color) {
+                      selectedColor = color;
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (formKey.currentState?.validate() == true) {
+                  if (existingFolder == null) {
+                    // Create a new folder
+                    setState(() {
+                      folders.insert(
+                          0, Folder(name: folderName, color: selectedColor));
+                    });
+                  } else {
+                    // Update the existing folder
+                    setState(() {
+                      existingFolder.name = folderName;
+                      existingFolder.color = selectedColor;
+                    });
+                  }
+                  Navigator.of(context).pop();
+                }
+              },
+              child: Text(
+                existingFolder == null ? 'Erstellen' : 'Bearbeiten',
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showDeleteFolderDialog(Folder folder) async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(style: TextStyle(color: Colors.white), 'Set löschen'),
+          content: Text(
+              style: TextStyle(color: Colors.white),
+              'Bist du dir sicher, dass du das Set löschen möchtest?'),
+          actions: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Abbrechen'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  folders.remove(folder);
+                });
+                Navigator.of(context).pop();
+              },
+              child: Text(style: TextStyle(color: Colors.white), 'Löschen'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Widget _buildFolderTile(Folder folder) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FlashcardPage(folder: folder),
+          ),
+        );
+      },
+      child: Stack(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: folder.color,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Align(
+              alignment: Alignment.topRight,
+              child: PopupMenuButton(
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 1,
+                    child: Text("Bearbeiten"),
+                  ),
+                  PopupMenuItem(
+                    value: 2,
+                    child: Text("Löschen"),
+                  ),
+                ],
+                onSelected: (value) {
+                  if (value == 1) {
+                    _showCreateFolderDialog(existingFolder: folder);
+                  } else if (value == 2) {
+                    _showDeleteFolderDialog(folder);
+                  }
+                },
+              ),
+            ),
+          ),
+          Center(
+            child: Text(
+              folder.name,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildEmptyFolderMessage() {
+    return SizedBox(
+      height: 450, // Ändere die Höhe nach Bedarf
+      child: Center(
+        child: Text(
+          'Klick auf das + Zeichen, um ein neues Set zu erstellen.',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+  }
+
+// UI der Seite
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,180 +232,77 @@ class _DashboardPageState extends State<DashboardPage> {
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
-            Container(
-              width: 70,
-              decoration: BoxDecoration(
-                color: Color(0xFFFF2c293a),
-                borderRadius: BorderRadius.circular(10.0),
-                border: Border.all(
-                  color: Color.fromARGB(255, 141, 134, 134),
-                  width: 0.5,
-                ), // White border
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(height: 20),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(15),
-                    child: Image.asset(
-                      'assets/images/Logo.png',
-                      height: 50,
-                      width: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  SizedBox(height: 10),
-                  IconButton(
-                    icon: Icon(Icons.home_rounded, color: Colors.white),
-                    onPressed: () {
-                      // Action when clicking the Home Icon
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  IconButton(
-                    icon: Icon(Icons.add, color: Colors.white),
-                    onPressed: () {
-                      _showCreateFolderDialog();
-                      // Action when clicking the Add Icon
-                    },
-                  ),
-                  SizedBox(height: 10),
-                  // Display folder icons with names in the left bar
-                  ...folders.map((folder) => _buildFolderIcon(folder)),
-                  Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.person, color: Colors.white),
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => ProfilePage()),
-                      );
-                    },
-                  ),
-                  SizedBox(height: 10),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 20,
-            ),
+            LeftSideBar(),
+            const SizedBox(width: 20),
             Expanded(
               child: Container(
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Color(0xFFFF2c293a),
+                  color: const Color(0xFFFF2c293a),
                   borderRadius: BorderRadius.circular(30),
                 ),
-                child: folders.isEmpty
-                    ? Center(
-                        child: Text(
-                          'Es sind noch keine Stacks vorhanden. Klicke auf das "+"-Symbol, um einen neuen Stack anzulegen.',
-                          style: TextStyle(color: Colors.white),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Suchleiste(
+                          onSearch: (term) {
+                            setState(() {
+                              searchTerm = term;
+                            });
+                          },
                         ),
-                      )
-                    : ListView.builder(
-                        itemCount: folders.length,
-                        itemBuilder: (context, index) {
-                          return FolderWidget(
-                            folder: folders[index],
-                            onDelete: () => _deleteFolder(index),
-                            onEdit: (editedFolder) =>
-                                _editFolder(index, editedFolder),
-                          );
-                        },
-                      ),
+                        Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Color.fromARGB(255, 96, 92,
+                                100), // Hintergrundfarbe des Kreises
+                          ),
+                          child: IconButton(
+                            icon: Icon(Icons.add,
+                                color: Colors.black), // Farbe des Pluszeichens
+                            onPressed: () {
+                              _showCreateFolderDialog();
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    folders.isEmpty
+                        ? _buildEmptyFolderMessage()
+                        : Expanded(
+                            child: GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemCount: folders
+                                  .where((folder) => folder.name
+                                      .toLowerCase()
+                                      .contains(searchTerm.toLowerCase()))
+                                  .length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Folder folder = folders
+                                    .where((folder) => folder.name
+                                        .toLowerCase()
+                                        .contains(searchTerm.toLowerCase()))
+                                    .toList()[index];
+                                return _buildFolderTile(folder);
+                              },
+                            ),
+                          ),
+                  ],
+                ),
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void _showCreateFolderDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Neuen Stack erstellen',
-            style: Theme.of(context)
-                .textTheme
-                .headline6
-                ?.copyWith(color: Colors.white),
-          ),
-          //Farbe muss noch weiß gemacht werden
-          contentTextStyle: Theme.of(context).textTheme.bodyText2,
-          content: SizedBox(
-            height: 320,
-            child: CreateFolderForm(
-              onCreate: (Folder newFolder) {
-                setState(() {
-                  folders.add(newFolder);
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void _deleteFolder(int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Stack löschen'),
-          content: Text(
-              'Bist du sicher, dass du den Stack löschen möchtest? Diese Aktion kann nicht rückgängig gemacht werden.'),
-          contentTextStyle: TextStyle(
-              color: Colors.white, fontSize: 10), // Hier die Farbe ändern
-          titleTextStyle: TextStyle(color: Colors.white, fontSize: 10),
-          actions: [
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  folders.removeAt(index);
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text('Löschen'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Abbrechen'),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _editFolder(int index, Folder editedFolder) {
-    setState(() {
-      folders[index] = editedFolder;
-    });
-  }
-
-  Widget _buildFolderIcon(Folder folder) {
-    return Column(
-      children: [
-        Icon(
-          Icons.folder,
-          color: folder.color,
-        ),
-        SizedBox(height: 5),
-        Text(
-          folder.name.toLowerCase(),
-          style: TextStyle(color: Colors.white, fontSize: 10),
-        ),
-        SizedBox(height: 10),
-      ],
     );
   }
 }

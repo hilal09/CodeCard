@@ -39,12 +39,6 @@ class LeftSideBar extends StatelessWidget {
             },
           ),
           SizedBox(height: 10),
-          IconButton(
-            icon: Icon(Icons.add, color: Colors.white),
-            onPressed: () {
-              // Action when clicking the Add Icon
-            },
-          ),
           Spacer(),
           IconButton(
             icon: Icon(Icons.person, color: Colors.white),
