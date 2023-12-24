@@ -1,8 +1,14 @@
+import 'package:codecard/widgets/flashcard.dart';
 import 'package:flutter/material.dart';
 
 class Folder {
-  late String name;
-  late Color color;
+  String name;
+  Color color;
+  List<Flashcard> flashcards;
 
-  Folder({required this.name, required this.color});
+  Folder({
+    required this.name,
+    required this.color,
+    this.flashcards = const [],
+  });
 }

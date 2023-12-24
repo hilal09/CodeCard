@@ -54,7 +54,7 @@ class _SuchleisteState extends State<Suchleiste> {
               ],
               style: TextStyle(fontSize: 17, color: Colors.white),
               decoration: InputDecoration(
-                labelText: _hasFocus ? '' : 'Search',
+                labelText: _hasFocus ? '' : 'Suche',
                 labelStyle: TextStyle(fontSize: 20, color: Colors.white),
                 fillColor: Color.fromARGB(255, 45, 31, 65),
                 filled: true,

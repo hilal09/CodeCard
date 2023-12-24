@@ -1,8 +1,10 @@
+import 'package:codecard/pages/flashcard_page.dart';
 import 'package:codecard/widgets/colorpicker.dart';
 import 'package:codecard/widgets/folder.dart';
 import 'package:codecard/widgets/suchleiste.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
 import 'package:flutter/material.dart';
+
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -28,7 +30,7 @@ class _DashboardPageState extends State<DashboardPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            existingFolder == null ? "Create a Folder" : "Edit Folder",
+            existingFolder == null ? "Erstelle ein Set" : "Bearbeite das Set",
             style: TextStyle(color: Colors.white),
           ),
           content: Container(
@@ -50,15 +52,15 @@ class _DashboardPageState extends State<DashboardPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'You need to give the folder a name';
+                        return 'Trage einen Namen für das Set ein.';
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Folder Name',
+                      labelText: 'Name des Sets',
                       counterText: "", // Remove character counter
                       errorText: formKey.currentState?.validate() == false
-                          ? 'You need to give the folder a name'
+                          ? 'Trage einen Namen für das Set ein.'
                           : null,
                       labelStyle:
                           TextStyle(color: Colors.white), // Set label color
@@ -73,7 +75,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Choose Folder Color:",
+                    "Wähle eine Farbe aus:",
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 5),
@@ -91,7 +93,7 @@ class _DashboardPageState extends State<DashboardPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel', style: TextStyle(color: Colors.white)),
+              child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
             ),
             ElevatedButton(
               onPressed: () {
@@ -99,7 +101,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   if (existingFolder == null) {
                     // Create a new folder
                     setState(() {
-                      folders.insert(0, Folder(name: folderName, color: selectedColor));
+                      folders.insert(
+                          0, Folder(name: folderName, color: selectedColor));
                     });
                   } else {
                     // Update the existing folder
@@ -112,7 +115,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 }
               },
               child: Text(
-                existingFolder == null ? 'Create' : 'Update',
+                existingFolder == null ? 'Erstellen' : 'Bearbeiten',
               ),
             ),
           ],
@@ -126,16 +129,16 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(style: TextStyle(color: Colors.white), 'Delete Folder'),
+          title: Text(style: TextStyle(color: Colors.white), 'Set löschen'),
           content: Text(
               style: TextStyle(color: Colors.white),
-              'Are you sure you want to delete the folder?'),
+              'Bist du dir sicher, dass du das Set löschen möchtest?'),
           actions: [
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Abbrechen'),
             ),
             ElevatedButton(
               onPressed: () {
@@ -144,7 +147,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 });
                 Navigator.of(context).pop();
               },
-              child: Text(style: TextStyle(color: Colors.white), 'Delete'),
+              child: Text(style: TextStyle(color: Colors.white), 'Löschen'),
             ),
           ],
         );
@@ -155,28 +158,33 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget _buildFolderTile(Folder folder) {
     return GestureDetector(
       onTap: () {
-        _showCreateFolderDialog(existingFolder: folder);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => FlashcardPage(folder: folder),
+          ),
+        );
       },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-        padding: const EdgeInsets.all(15),
-        decoration: BoxDecoration(
-          color: folder.color,
-          borderRadius: BorderRadius.circular(15),
-        ),
-        child: Stack(
-          children: [
-            Align(
+      child: Stack(
+        children: [
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+            padding: const EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: folder.color,
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Align(
               alignment: Alignment.topRight,
               child: PopupMenuButton(
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 1,
-                    child: Text("Edit"),
+                    child: Text("Bearbeiten"),
                   ),
                   PopupMenuItem(
                     value: 2,
-                    child: Text("Delete"),
+                    child: Text("Löschen"),
                   ),
                 ],
                 onSelected: (value) {
@@ -188,34 +196,33 @@ class _DashboardPageState extends State<DashboardPage> {
                 },
               ),
             ),
-            Center(
-              child: Text(
-                folder.name,
-                style: const TextStyle(color: Colors.white),
-              ),
+          ),
+          Center(
+            child: Text(
+              folder.name,
+              style: const TextStyle(color: Colors.white),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildEmptyFolderMessage() {
-  return SizedBox(
-    height: 450, // Ändere die Höhe nach Bedarf
-    child: Center(
-      child: Text(
-        'Click on the + to create a new folder',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
+    return SizedBox(
+      height: 450, // Ändere die Höhe nach Bedarf
+      child: Center(
+        child: Text(
+          'Klick auf das + Zeichen, um ein neues Set zu erstellen.',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
       ),
-    ),
-  );
-}
-
+    );
+  }
 
 // UI der Seite
   @override
@@ -250,14 +257,17 @@ class _DashboardPageState extends State<DashboardPage> {
                         Container(
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Color.fromARGB(255, 96, 92, 100), // Hintergrundfarbe des Kreises
+                            color: Color.fromARGB(255, 96, 92,
+                                100), // Hintergrundfarbe des Kreises
                           ),
                           child: IconButton(
-                            icon: Icon(Icons.add, color: Colors.black), // Farbe des Pluszeichens
+                            icon: Icon(Icons.add,
+                                color: Colors.black), // Farbe des Pluszeichens
                             onPressed: () {
                               _showCreateFolderDialog();
-                          },
-                        ),),
+                            },
+                          ),
+                        ),
                       ],
                     ),
                     SizedBox(height: 20),
