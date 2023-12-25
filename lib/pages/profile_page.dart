@@ -1,9 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
-import 'package:codecard/pages/login_page.dart';
+import 'login_page.dart';
+import 'package:codecard/auth/auth_service.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key});
+
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  late AuthService _authService;
+
+  @override
+  void initState() {
+    _authService = AuthService();
+    super.initState();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -47,17 +63,15 @@ class ProfilePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            onPressed: () {
-                              // Action when clicking the Logout button
-                              Navigator.push(
+                            onPressed: ()  {
+                              _authService.signOut();
+                              Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
-                                  ),
-                                  );
+                                MaterialPageRoute(builder: (context) => LoginPage()),
+                              );
                             },
                             style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
+                              primary: Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
@@ -68,7 +82,8 @@ class ProfilePage extends StatelessWidget {
                             ),
                             child: Column(
                               children: [
-                                Icon(Icons.logout_rounded, color: Colors.white),
+                                Icon(Icons.logout_rounded,
+                                    color: Colors.white),
                                 SizedBox(height: 5),
                                 Text('AUSLOGGEN'),
                               ],
@@ -76,17 +91,9 @@ class ProfilePage extends StatelessWidget {
                           ),
                           SizedBox(width: 20),
                           TextButton(
-                            onPressed: () {
-                              // Action when clicking the Delete button
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => LoginPage(),
-                                  ),
-                                );
-                            },
+                            onPressed: ()  {},
                             style: TextButton.styleFrom(
-                              foregroundColor: Colors.white,
+                              primary: Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
@@ -116,6 +123,7 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class LabeledEditableTextField extends StatefulWidget {
@@ -173,22 +181,23 @@ class _LabeledEditableTextFieldState extends State<LabeledEditableTextField> {
               Expanded(
                 child: _isEditing
                     ? TextField(
-                        controller: _controller,
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                        decoration: InputDecoration(
-                          isCollapsed: true,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                          border: InputBorder.none,
-                        ),
-                      )
+                  controller: _controller,
+                  style: TextStyle(fontSize: 18, color: Colors.white),
+                  decoration: InputDecoration(
+                    isCollapsed: true,
+                    contentPadding:
+                    EdgeInsets.symmetric(horizontal: 10),
+                    border: InputBorder.none,
+                  ),
+                )
                     : Text(
-                        _controller.text,
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
-                      ),
+                  _controller.text,
+                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                ),
               ),
               IconButton(
-                icon: Icon(_isEditing ? Icons.done : Icons.edit,
-                    color: Colors.white),
+                icon: Icon(
+                    _isEditing ? Icons.done : Icons.edit, color: Colors.white),
                 onPressed: () {
                   setState(() {
                     _isEditing = !_isEditing;

@@ -1,14 +1,38 @@
 import 'package:codecard/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/login_page.dart';
+import '../auth/auth_service.dart';
 
 class RegistrationPage extends StatefulWidget {
+  const RegistrationPage({Key? key}) : super(key: key);
+
   @override
   _RegistrationPageState createState() => _RegistrationPageState();
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
   bool isRegisterTab = false;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late TextEditingController confirmPasswordController;
+  late AuthService _authService;
+
+  @override
+  void initState() {
+    _authService = AuthService();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    confirmPasswordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,8 +45,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
           });
         },
         onAuthPressed: () {
-          // anmeldelogik fehlt
-          print('Anmeldung erfolgreich!');
+          _authService.signUpUsingEmailPassword(
+            email: emailController.text.trim(),
+            password: passwordController.text.trim(),
+          ).then((_) {
+            // Redirect to DashboardPage after successful registration
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => DashboardPage()),
+            );
+          });
         },
         onLoginPressed: () {
           // Navigate to RegistrationPage
@@ -31,6 +63,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
             MaterialPageRoute(builder: (context) => LoginPage()),
           );
         },
+        emailController: emailController,
+        passwordController: passwordController,
+        confirmPasswordController: confirmPasswordController,
       ),
     );
   }
@@ -40,14 +75,19 @@ class RegistrationWidget extends StatelessWidget {
   final bool isRegisterTab;
   final Function(bool) onTabChanged;
   final VoidCallback onAuthPressed;
-
   final VoidCallback onLoginPressed;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController confirmPasswordController;
 
   RegistrationWidget({
     required this.isRegisterTab,
     required this.onTabChanged,
     required this.onAuthPressed,
     required this.onLoginPressed,
+    required this.emailController,
+    required this.passwordController,
+    required this.confirmPasswordController,
   });
 
   @override
@@ -86,6 +126,7 @@ class RegistrationWidget extends StatelessWidget {
           Container(
             width: 300,
             child: TextField(
+              controller: emailController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'E-Mail Adresse',
@@ -106,6 +147,7 @@ class RegistrationWidget extends StatelessWidget {
           Container(
             width: 300,
             child: TextField(
+              controller: passwordController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Passwort',
@@ -127,6 +169,7 @@ class RegistrationWidget extends StatelessWidget {
           Container(
             width: 300,
             child: TextField(
+              controller: confirmPasswordController,
               style: const TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 labelText: 'Passwort wiederholen',
@@ -148,7 +191,6 @@ class RegistrationWidget extends StatelessWidget {
           Container(
             width: 300,
             child: ElevatedButton(
-              //onRegisterPressed muss geändert werden in die Registrationslogik!! muss Acc anlegen und auf dashboard weiterleiten
               onPressed: onAuthPressed,
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
@@ -193,7 +235,7 @@ class RegistrationWidget extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor:
-            isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
+        isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

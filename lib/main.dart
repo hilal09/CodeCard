@@ -1,20 +1,19 @@
-import 'package:codecard/pages/flashcard_page.dart';
 import 'package:codecard/pages/splash_screen.dart';
-import 'package:codecard/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
-import 'package:codecard/pages/profile_page.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:codecard/pages/register_page.dart';
-import 'package:codecard/pages/login_page.dart';
-import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 
-void main() {
+void main() async {
+  await Supabase.initialize(
+    url: 'https://uqdlcgvlokejuxhbliro.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVxZGxjZ3Zsb2tlanV4aGJsaXJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDMwODc4MjUsImV4cCI6MjAxODY2MzgyNX0.tTtYS2nfF9R2g4OZs1YYETtwnRe5ZmXecZFbK1gu53Y',
+  );
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +22,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         textTheme: GoogleFonts.sourceCodeProTextTheme().copyWith(),
       ),
-      home: Scaffold(
-        body: ProfilePage(), //home: const SplashScreen(),
+      home: const Scaffold(
+        body: SplashScreen(),
       ),
     );
   }

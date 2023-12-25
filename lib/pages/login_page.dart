@@ -1,13 +1,35 @@
+import 'package:codecard/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/register_page.dart';
+import 'dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({Key? key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   bool isLoginTab = true;
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+  late AuthService _authService;
+
+  @override
+  void initState() {
+    _authService = AuthService();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,17 +41,28 @@ class _LoginPageState extends State<LoginPage> {
             isLoginTab = isSelected;
           });
         },
-        onAuthPressed: () {
-          // anmeldelogik fehlt
-          print('Anmeldung erfolgreich!');
+        onAuthPressed: () async {
+          await _authService.logInUsingEmailPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
+
+          // Check if the user is authenticated
+          if (_authService.isLoggedIn()) {
+            // Redirect to DashboardPageh
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => DashboardPage()),
+            );
+          }
         },
         onRegisterPressed: () {
-          // Navigate to RegistrationPage
-          Navigator.pushReplacement(
-            context,
+          Navigator.of(context).push(
             MaterialPageRoute(builder: (context) => RegistrationPage()),
           );
         },
+        emailController: emailController,
+        passwordController: passwordController,
       ),
     );
   }
@@ -40,18 +73,23 @@ class AuthWidget extends StatelessWidget {
   final Function(bool) onTabChanged;
   final VoidCallback onAuthPressed;
   final VoidCallback onRegisterPressed;
+  final TextEditingController? emailController;
+  final TextEditingController? passwordController;
 
   AuthWidget({
+    Key? key,
     required this.isLoginTab,
     required this.onTabChanged,
     required this.onAuthPressed,
     required this.onRegisterPressed,
-  });
+    this.emailController,
+    this.passwordController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFFF2c293a),
+      color: const Color(0xffff2c293a),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -61,10 +99,10 @@ class AuthWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
-                  Text(
+                  const Text(
                     'CODE CARD',
                     style: TextStyle(
                       color: Colors.white,
@@ -72,14 +110,14 @@ class AuthWidget extends StatelessWidget {
                       shadows: [
                         Shadow(
                           blurRadius: 6.0,
-                          color: Color(0xFFF4cae97),
+                          color: Color(0xfff4cae97),
                           offset: Offset(3.0, 1.0),
                         ),
                       ],
                       fontWeight: FontWeight.w300,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 100,
                   ),
                   Row(
@@ -91,9 +129,10 @@ class AuthWidget extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 20),
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: TextField(
+                      controller: emailController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         labelText: 'E-Mail Adresse',
@@ -111,9 +150,10 @@ class AuthWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: TextField(
+                      controller: passwordController,
                       style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         labelText: 'Passwort',
@@ -132,7 +172,7 @@ class AuthWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: ElevatedButton(
                       onPressed: onAuthPressed,
@@ -140,7 +180,7 @@ class AuthWidget extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
-                        backgroundColor: const Color(0xFFFF10111a),
+                        backgroundColor: const Color(0xffff10111a),
                       ),
                       child: const SizedBox(
                         width: double.infinity,
@@ -173,7 +213,7 @@ class AuthWidget extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor:
-            isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
+        isSelected ? const Color(0xffff10111a) : const Color(0xffff2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
