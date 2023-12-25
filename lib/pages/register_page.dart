@@ -45,10 +45,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
           });
         },
         onAuthPressed: () {
-          _authService.signUpUsingEmailPassword(
+          _authService
+              .signUpUsingEmailPassword(
             email: emailController.text.trim(),
             password: passwordController.text.trim(),
-          ).then((_) {
+          )
+              .then((_) {
             // Redirect to DashboardPage after successful registration
             Navigator.pushReplacement(
               context,
@@ -210,15 +212,6 @@ class RegistrationWidget extends StatelessWidget {
             ),
           ),
           //DEBUG NUR UM AUF DASHBOARD ZU KOMMEN;
-          IconButton(
-            icon: Icon(Icons.home, color: Colors.white),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => DashboardPage()),
-              );
-            },
-          ),
         ],
       ),
     );
@@ -235,7 +228,7 @@ class RegistrationWidget extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor:
-        isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
+            isSelected ? const Color(0xFFFF10111a) : const Color(0xFFFF2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
