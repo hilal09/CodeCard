@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Importiere das Package für InputFormatters
-
 class Suchleiste extends StatefulWidget {
   final ValueChanged<String> onSearch;
 
@@ -13,6 +11,7 @@ class Suchleiste extends StatefulWidget {
 class _SuchleisteState extends State<Suchleiste> {
   late FocusNode _focusNode;
   bool _hasFocus = false;
+  bool _hasText = false;
 
   @override
   void initState() {
@@ -47,14 +46,16 @@ class _SuchleisteState extends State<Suchleiste> {
           SizedBox(width: 10),
           Expanded(
             child: TextField(
-              onChanged: widget.onSearch,
+              onChanged: (text) {
+                setState(() {
+                  _hasText = text.isNotEmpty;
+                });
+                widget.onSearch(text);
+              },
               focusNode: _focusNode,
-              inputFormatters: [
-                LengthLimitingTextInputFormatter(25), // Begrenze auf 25 Zeichen
-              ],
               style: TextStyle(fontSize: 17, color: Colors.white),
               decoration: InputDecoration(
-                labelText: _hasFocus ? '' : 'Suche',
+                labelText: _hasFocus || _hasText ? '' : 'Search',
                 labelStyle: TextStyle(fontSize: 20, color: Colors.white),
                 fillColor: Color.fromARGB(255, 45, 31, 65),
                 filled: true,
