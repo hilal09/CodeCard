@@ -123,38 +123,44 @@ class _FlashcardPageState extends State<FlashcardPage> {
             ),
           ),
           actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (formKey.currentState?.validate() == true) {
-                  if (existingFlashcard == null) {
-                    // Erstelle eine neue Karteikarte
-                    setState(() {
-                      flashcards.add(Flashcard(
-                        frontCaption: frontCaption,
-                        backCaption: backCaption,
-                        color: selectedColor,
-                      ));
-                    });
-                  } else {
-                    // Aktualisiere die vorhandene Karteikarte
-                    setState(() {
-                      existingFlashcard.frontCaption = frontCaption;
-                      existingFlashcard.backCaption = backCaption;
-                      existingFlashcard.color = selectedColor;
-                    });
-                  }
-                  Navigator.of(context).pop();
-                }
-              },
-              child: Text('Erstellen', style: TextStyle(color: Colors.white)),
-            ),
-          ],
+  ButtonBar(
+    alignment: MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+    children: [
+      ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          if (formKey.currentState?.validate() == true) {
+            if (existingFlashcard == null) {
+              // Erstelle eine neue Karteikarte
+              setState(() {
+                flashcards.add(Flashcard(
+                  frontCaption: frontCaption,
+                  backCaption: backCaption,
+                  color: selectedColor,
+                ));
+              });
+            } else {
+              // Aktualisiere die vorhandene Karteikarte
+              setState(() {
+                existingFlashcard.frontCaption = frontCaption;
+                existingFlashcard.backCaption = backCaption;
+                existingFlashcard.color = selectedColor;
+              });
+            }
+            Navigator.of(context).pop();
+          }
+        },
+        child: Text('Erstellen', style: TextStyle(color: Colors.white)),
+      ),
+    ],
+  ),
+],
+
         );
       },
     );
@@ -171,22 +177,28 @@ class _FlashcardPageState extends State<FlashcardPage> {
               'Bist du sicher, dass du die Karteikarte löschen möchtest?',
               style: TextStyle(color: Colors.white)),
           actions: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  flashcards.remove(karteikarte);
-                });
-                Navigator.of(context).pop();
-              },
-              child: Text('Löschen', style: TextStyle(color: Colors.white)),
-            ),
-          ],
+  ButtonBar(
+    alignment: MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+    children: [
+      ElevatedButton(
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+        child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
+      ),
+      ElevatedButton(
+        onPressed: () {
+          setState(() {
+            flashcards.remove(karteikarte);
+          });
+          Navigator.of(context).pop();
+        },
+        child: Text('Löschen', style: TextStyle(color: Colors.white)),
+      ),
+    ],
+  ),
+],
+
         );
       },
     );
