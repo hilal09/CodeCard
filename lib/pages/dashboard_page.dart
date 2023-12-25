@@ -89,40 +89,42 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           ),
           actions: [
-  ButtonBar(
-    alignment: MainAxisAlignment.spaceBetween, // Adjust alignment as needed
-    children: [
-      ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          if (formKey.currentState?.validate() == true) {
-            if (existingFolder == null) {
-              setState(() {
-                folders.insert(
-                    0, Folder(name: folderName, color: selectedColor));
-              });
-            } else {
-              setState(() {
-                existingFolder.name = folderName;
-                existingFolder.color = selectedColor;
-              });
-            }
-            Navigator.of(context).pop();
-          }
-        },
-        child: Text(
-          existingFolder == null ? 'Erstellen' : 'Bearbeiten',
-          style: TextStyle(color: Colors.green),
-        ),
-      ),
-    ],
-  ),
-],
+            ButtonBar(
+              alignment:
+                  MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child:
+                      Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState?.validate() == true) {
+                      if (existingFolder == null) {
+                        setState(() {
+                          folders.insert(0,
+                              Folder(name: folderName, color: selectedColor));
+                        });
+                      } else {
+                        setState(() {
+                          existingFolder.name = folderName;
+                          existingFolder.color = selectedColor;
+                        });
+                      }
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Text(
+                    existingFolder == null ? 'Erstellen' : 'Bearbeiten',
+                    style: TextStyle(color: Colors.green),
+                  ),
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
@@ -138,27 +140,29 @@ class _DashboardPageState extends State<DashboardPage> {
               style: TextStyle(color: Colors.white),
               'Bist du dir sicher, dass du das Set löschen möchtest?'),
           actions: [
-  ButtonBar(
-    alignment: MainAxisAlignment.spaceBetween, // Adjust alignment as needed
-    children: [
-      ElevatedButton(
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
-        child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
-      ),
-      ElevatedButton(
-        onPressed: () {
-          setState(() {
-            folders.remove(folder);
-          });
-          Navigator.of(context).pop();
-        },
-        child: Text('Löschen', style: TextStyle(color: Colors.red)),
-      ),
-    ],
-  ),
-],
+            ButtonBar(
+              alignment:
+                  MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child:
+                      Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      folders.remove(folder);
+                    });
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Löschen', style: TextStyle(color: Colors.red)),
+                ),
+              ],
+            ),
+          ],
         );
       },
     );
@@ -209,7 +213,16 @@ class _DashboardPageState extends State<DashboardPage> {
           Center(
             child: Text(
               folder.name,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(
+                color: Colors.white,
+                shadows: [
+                  Shadow(
+                    color: Colors.black,
+                    offset: Offset(2.0, 2.0),
+                    blurRadius: 3.0,
+                  ),
+                ],
+              ),
             ),
           ),
         ],
