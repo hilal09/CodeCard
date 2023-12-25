@@ -138,7 +138,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
             if (existingFlashcard == null) {
               // Erstelle eine neue Karteikarte
               setState(() {
-                flashcards.add(Flashcard(
+                flashcards.insert(0, Flashcard(
                   frontCaption: frontCaption,
                   backCaption: backCaption,
                   color: selectedColor,
