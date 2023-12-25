@@ -117,6 +117,7 @@ class _DashboardPageState extends State<DashboardPage> {
         },
         child: Text(
           existingFolder == null ? 'Erstellen' : 'Bearbeiten',
+          style: TextStyle(color: Colors.green),
         ),
       ),
     ],
@@ -153,7 +154,7 @@ class _DashboardPageState extends State<DashboardPage> {
           });
           Navigator.of(context).pop();
         },
-        child: Text('Löschen', style: TextStyle(color: Colors.white)),
+        child: Text('Löschen', style: TextStyle(color: Colors.red)),
       ),
     ],
   ),

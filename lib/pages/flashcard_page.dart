@@ -155,7 +155,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
             Navigator.of(context).pop();
           }
         },
-        child: Text('Erstellen', style: TextStyle(color: Colors.white)),
+        child: Text('Erstellen', style: TextStyle(color: Colors.green)),
       ),
     ],
   ),
@@ -193,7 +193,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
           });
           Navigator.of(context).pop();
         },
-        child: Text('Löschen', style: TextStyle(color: Colors.white)),
+        child: Text('Löschen', style: TextStyle(color: Colors.red)),
       ),
     ],
   ),
