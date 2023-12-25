@@ -124,7 +124,8 @@ class _FlashcardPageState extends State<FlashcardPage> {
           ),
           actions: [
             ButtonBar(
-              alignment: MainAxisAlignment.spaceBetween,
+              alignment:
+                  MainAxisAlignment.spaceBetween, // Adjust alignment as needed
               children: [
                 ElevatedButton(
                   onPressed: () {
@@ -139,11 +140,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       if (existingFlashcard == null) {
                         // Erstelle eine neue Karteikarte
                         setState(() {
-                          flashcards.add(Flashcard(
-                            frontCaption: frontCaption,
-                            backCaption: backCaption,
-                            color: selectedColor,
-                          ));
+                          flashcards.insert(
+                              0,
+                              Flashcard(
+                                frontCaption: frontCaption,
+                                backCaption: backCaption,
+                                color: selectedColor,
+                              ));
                         });
                       } else {
                         // Aktualisiere die vorhandene Karteikarte
