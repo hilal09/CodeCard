@@ -48,9 +48,14 @@ class _SuchleisteState extends State<Suchleiste> {
           SizedBox(width: 10),
           Expanded(
             child: TextField(
-              onChanged: widget.onSearch,
+              onChanged: (text) {
+                if (text.length <= 22) {
+                  widget.onSearch(text);
+                }
+              },
               focusNode: _focusNode,
               controller: _textEditingController,
+              maxLength: 22, // Begrenze die Länge auf 22 Zeichen
               style: TextStyle(fontSize: 17, color: Colors.white),
               decoration: InputDecoration(
                 labelText: _hasFocus || _textEditingController.text.isNotEmpty
@@ -60,6 +65,7 @@ class _SuchleisteState extends State<Suchleiste> {
                 fillColor: Color.fromARGB(255, 45, 31, 65),
                 filled: true,
                 contentPadding: EdgeInsets.symmetric(vertical: 10),
+                counterText: '', // Entferne die Anzeige der verbleibenden Zeichenanzahl
                 border: InputBorder.none,
               ),
             ),
