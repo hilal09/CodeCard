@@ -211,7 +211,6 @@ class RegistrationWidget extends StatelessWidget {
               ),
             ),
           ),
-          //DEBUG NUR UM AUF DASHBOARD ZU KOMMEN;
         ],
       ),
     );
