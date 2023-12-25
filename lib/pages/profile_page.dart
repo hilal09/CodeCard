@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               );
                             },
                             style: TextButton.styleFrom(
-                              primary: Colors.white,
+                              foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
@@ -93,7 +93,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           TextButton(
                             onPressed: ()  {},
                             style: TextButton.styleFrom(
-                              primary: Colors.white,
+                              foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
