@@ -50,7 +50,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 children: [
                   TextFormField(
                     controller: frontCaptionController,
-                    maxLength: 35,
+                    maxLength: 350,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -81,7 +81,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   SizedBox(height: 10),
                   TextFormField(
                     controller: backCaptionController,
-                    maxLength: 35,
+                    maxLength: 350,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -309,8 +309,10 @@ class _FlashcardPageState extends State<FlashcardPage> {
         _showCreateFlashcardDialog(existingFlashcard: karteikarte);
       },
       child: Stack(
-        children: [
-          Container(
+      children: [
+        AspectRatio(
+          aspectRatio: 1.5, // Ändere das Seitenverhältnis nach Bedarf
+          child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
@@ -340,25 +342,17 @@ class _FlashcardPageState extends State<FlashcardPage> {
               ),
             ),
           ),
-          Center(
-            child: Text(
-              karteikarte.frontCaption,
-              style: const TextStyle(
-                color: Colors.white,
-                shadows: [
-                  Shadow(
-                    color: Colors.black,
-                    offset: Offset(2.0, 2.0),
-                    blurRadius: 3.0,
-                  ),
-                ],
-              ),
-            ),
+        ),
+        Center(
+          child: Text(
+            karteikarte.frontCaption,
+            style: const TextStyle(color: Colors.white),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildEmptyFlashcardMessage() {
     return Center(
@@ -441,7 +435,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                             child: GridView.builder(
                               gridDelegate:
                                   SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
+                                maxCrossAxisExtent: 270,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
                               ),
