@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
+import 'package:codecard/pages/login_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({Key? key});
@@ -48,6 +49,12 @@ class ProfilePage extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               // Action when clicking the Logout button
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                  ),
+                                  );
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
@@ -71,6 +78,12 @@ class ProfilePage extends StatelessWidget {
                           TextButton(
                             onPressed: () {
                               // Action when clicking the Delete button
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => LoginPage(),
+                                  ),
+                                );
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
