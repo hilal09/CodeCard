@@ -16,6 +16,7 @@ class FlashcardPage extends StatefulWidget {
 
 class _FlashcardPageState extends State<FlashcardPage> {
   List<Flashcard> flashcards = [];
+  List<Flashcard> incorrectlyAnswered = [];
   String searchTerm = "";
   int currentCardIndex = 0;
 
@@ -50,7 +51,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 children: [
                   TextFormField(
                     controller: frontCaptionController,
-                    maxLength: 350,
+                    maxLength: 35,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -81,7 +82,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   SizedBox(height: 10),
                   TextFormField(
                     controller: backCaptionController,
-                    maxLength: 350,
+                    maxLength: 35,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -140,13 +141,11 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       if (existingFlashcard == null) {
                         // Erstelle eine neue Karteikarte
                         setState(() {
-                          flashcards.insert(
-                              0,
-                              Flashcard(
-                                frontCaption: frontCaption,
-                                backCaption: backCaption,
-                                color: selectedColor,
-                              ));
+                          flashcards.add(Flashcard(
+                            frontCaption: frontCaption,
+                            backCaption: backCaption,
+                            color: selectedColor,
+                          ));
                         });
                       } else {
                         // Aktualisiere die vorhandene Karteikarte
@@ -160,7 +159,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     }
                   },
                   child:
-                      Text('Erstellen', style: TextStyle(color: Colors.green)),
+                      Text('Erstellen', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -199,7 +198,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: Text('Löschen', style: TextStyle(color: Colors.red)),
+                  child: Text('Löschen', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -219,7 +218,43 @@ class _FlashcardPageState extends State<FlashcardPage> {
   }
 
   void _showQuizDialog() {
-    bool showFront = true; // To toggle between front and back captions
+    bool showFront = true;
+    List<Flashcard> incorrectCards = [];
+    int currentIndex = 0;
+    List<Flashcard> reviewedCards = [];
+    bool allCardsReviewed = false;
+
+    void showNextCard() {
+      if (currentIndex < flashcards.length - 1) {
+        currentIndex++;
+        showFront = true;
+      }
+    }
+
+    void startReview() {
+      allCardsReviewed = true;
+      flashcards.clear();
+      flashcards.addAll(incorrectCards);
+      incorrectCards.clear();
+      currentIndex = 0;
+      showFront = true;
+      if (flashcards.isNotEmpty) {
+        _showQuizDialog();
+      }
+    }
+
+    void _handleReviewAction(bool isCorrect) {
+      setState(() {
+        reviewedCards.add(flashcards[currentIndex]);
+        if (currentIndex == flashcards.length - 1) {
+          startReview();
+          Navigator.of(context)
+              .pop(); // Schließe das Popup-Fenster, wenn die letzte Karte bearbeitet wurde
+        } else {
+          showNextCard();
+        }
+      });
+    }
 
     showDialog(
       context: context,
@@ -241,12 +276,12 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     duration: Duration(milliseconds: 500),
                     child: showFront
                         ? _buildFlashcardSide(
-                            flashcards[currentCardIndex].frontCaption,
-                            flashcards[currentCardIndex].color,
+                            flashcards[currentIndex].frontCaption,
+                            flashcards[currentIndex].color,
                           )
                         : _buildFlashcardSide(
-                            flashcards[currentCardIndex].backCaption,
-                            flashcards[currentCardIndex].color,
+                            flashcards[currentIndex].backCaption,
+                            flashcards[currentIndex].color,
                           ),
                   ),
                 ),
@@ -254,34 +289,28 @@ class _FlashcardPageState extends State<FlashcardPage> {
               actions: [
                 ElevatedButton(
                   onPressed: () {
-                    if (currentCardIndex > 0) {
-                      setState(() {
-                        currentCardIndex--;
-                        showFront =
-                            true; // Reset to front when moving to the previous card
-                      });
-                    }
+                    _handleReviewAction(true); // Markiere als richtig
                   },
-                  child: Text('Zurück', style: TextStyle(color: Colors.white)),
+                  style: ElevatedButton.styleFrom(primary: Colors.green),
+                  child: Text('Richtig', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    if (currentCardIndex < flashcards.length - 1) {
-                      setState(() {
-                        currentCardIndex++;
-                        showFront =
-                            true; // Reset to front when moving to the next card
-                      });
-                    }
+                    _handleReviewAction(false); // Markiere als falsch
                   },
-                  child: Text('Weiter', style: TextStyle(color: Colors.white)),
+                  style: ElevatedButton.styleFrom(primary: Colors.red),
+                  child: Text('Falsch', style: TextStyle(color: Colors.white)),
                 ),
               ],
             );
           },
         );
       },
-    );
+    ).then((_) {
+      if (allCardsReviewed) {
+        Navigator.of(context).pop();
+      }
+    });
   }
 
   Widget _buildFlashcardSide(String caption, Color color) {
@@ -309,10 +338,8 @@ class _FlashcardPageState extends State<FlashcardPage> {
         _showCreateFlashcardDialog(existingFlashcard: karteikarte);
       },
       child: Stack(
-      children: [
-        AspectRatio(
-          aspectRatio: 1.5, // Ändere das Seitenverhältnis nach Bedarf
-          child: Container(
+        children: [
+          Container(
             margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
@@ -342,17 +369,16 @@ class _FlashcardPageState extends State<FlashcardPage> {
               ),
             ),
           ),
-        ),
-        Center(
-          child: Text(
-            karteikarte.frontCaption,
-            style: const TextStyle(color: Colors.white),
+          Center(
+            child: Text(
+              karteikarte.frontCaption,
+              style: const TextStyle(color: Colors.white),
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
+        ],
+      ),
+    );
+  }
 
   Widget _buildEmptyFlashcardMessage() {
     return Center(
@@ -435,7 +461,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                             child: GridView.builder(
                               gridDelegate:
                                   SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 270,
+                                maxCrossAxisExtent: 200,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
                               ),
