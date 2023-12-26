@@ -291,14 +291,14 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   onPressed: () {
                     _handleReviewAction(true); // Markiere als richtig
                   },
-                  style: ElevatedButton.styleFrom(primary: Colors.green),
+                  style: ElevatedButton.styleFrom(foregroundColor: Colors.green),
                   child: Text('Richtig', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     _handleReviewAction(false); // Markiere als falsch
                   },
-                  style: ElevatedButton.styleFrom(primary: Colors.red),
+                  style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
                   child: Text('Falsch', style: TextStyle(color: Colors.white)),
                 ),
               ],
