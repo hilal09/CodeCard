@@ -3,7 +3,6 @@ import 'package:codecard/widgets/left_sidebar.dart';
 import 'login_page.dart';
 import 'package:codecard/auth/auth_service.dart';
 
-
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
 
@@ -20,6 +19,17 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
+  // Callback function to update email in the database
+  void updateEmail(String newEmail) {
+    // Implement your logic to update email in the database
+    print('Updating email: $newEmail');
+  }
+
+  // Callback function to update password in the database
+  void updatePassword(String newPassword) {
+    // Implement your logic to update password in the database
+    print('Updating password: $newPassword');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,23 +61,26 @@ class _ProfilePageState extends State<ProfilePage> {
                         label: 'E-MAIL ADRESSE',
                         initialValue: 'john.doe@example.com',
                         width: 400,
+                        onUpdate: updateEmail,
                       ),
                       SizedBox(height: 20),
                       LabeledEditableTextField(
                         label: 'PASSWORT',
                         initialValue: '*********',
                         width: 400,
+                        onUpdate: updatePassword,
                       ),
                       SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
-                            onPressed: ()  {
+                            onPressed: () {
                               _authService.signOut();
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => LoginPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => LoginPage()),
                               );
                             },
                             style: TextButton.styleFrom(
@@ -82,8 +95,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
                             child: Column(
                               children: [
-                                Icon(Icons.logout_rounded,
-                                    color: Colors.white),
+                                Icon(Icons.logout_rounded, color: Colors.white),
                                 SizedBox(height: 5),
                                 Text('AUSLOGGEN'),
                               ],
@@ -91,7 +103,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(width: 20),
                           TextButton(
-                            onPressed: ()  {},
+                            onPressed: () {},
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(
@@ -123,18 +135,19 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
-
 }
 
 class LabeledEditableTextField extends StatefulWidget {
   final String label;
   final String initialValue;
   final double width;
+  final Function(String) onUpdate; // Callback function to update the info
 
   LabeledEditableTextField({
     required this.label,
     required this.initialValue,
     required this.width,
+    required this.onUpdate, // Pass the callback function
   });
 
   @override
@@ -145,6 +158,7 @@ class LabeledEditableTextField extends StatefulWidget {
 class _LabeledEditableTextFieldState extends State<LabeledEditableTextField> {
   late TextEditingController _controller;
   bool _isEditing = false;
+  bool _isPasswordVisible = false;
 
   @override
   void initState() {
@@ -181,26 +195,53 @@ class _LabeledEditableTextFieldState extends State<LabeledEditableTextField> {
               Expanded(
                 child: _isEditing
                     ? TextField(
-                  controller: _controller,
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                  decoration: InputDecoration(
-                    isCollapsed: true,
-                    contentPadding:
-                    EdgeInsets.symmetric(horizontal: 10),
-                    border: InputBorder.none,
-                  ),
-                )
+                        controller: _controller,
+                        obscureText:
+                            widget.label == 'PASSWORT' && !_isPasswordVisible,
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                          border: InputBorder.none,
+                        ),
+                      )
                     : Text(
-                  _controller.text,
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
-                ),
+                        widget.label == 'PASSWORT'
+                            ? _isPasswordVisible
+                                ? _controller.text
+                                : '•' * _controller.text.length
+                            : _controller.text,
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
               ),
+              if (_isEditing &&
+                  widget.label ==
+                      'PASSWORT') // Show eye icon only in editing mode for password field
+                IconButton(
+                  icon: Icon(
+                    _isPasswordVisible
+                        ? Icons.visibility
+                        : Icons.visibility_off,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _isPasswordVisible = !_isPasswordVisible;
+                    });
+                  },
+                ),
               IconButton(
-                icon: Icon(
-                    _isEditing ? Icons.done : Icons.edit, color: Colors.white),
+                icon: Icon(_isEditing ? Icons.done : Icons.edit,
+                    color: Colors.white),
                 onPressed: () {
                   setState(() {
                     _isEditing = !_isEditing;
+                    if (!_isEditing) {
+                      // Reset password visibility when editing is done
+                      _isPasswordVisible = false;
+                      // Invoke the callback to update info in the database
+                      widget.onUpdate(_controller.text);
+                    }
                   });
                 },
               ),
