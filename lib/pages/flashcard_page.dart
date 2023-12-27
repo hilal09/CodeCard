@@ -51,7 +51,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 children: [
                   TextFormField(
                     controller: frontCaptionController,
-                    maxLength: 35,
+                    maxLength: 350,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -82,7 +82,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   SizedBox(height: 10),
                   TextFormField(
                     controller: backCaptionController,
-                    maxLength: 35,
+                    maxLength: 350,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -136,38 +136,40 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       Text('Abbrechen', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState?.validate() == true) {
-                      if (existingFlashcard == null) {
-                        // Erstelle eine neue Karteikarte
-                        setState(() {
-                          flashcards.add(Flashcard(
+                onPressed: () {
+                  if (formKey.currentState?.validate() == true) {
+                    if (existingFlashcard == null) {
+                      // Erstelle eine neue Karteikarte und füge sie vorne hinzu
+                      setState(() {
+                        flashcards.insert(
+                          0,
+                          Flashcard(
                             frontCaption: frontCaption,
                             backCaption: backCaption,
                             color: selectedColor,
-                          ));
-                        });
-                      } else {
-                        // Aktualisiere die vorhandene Karteikarte
-                        setState(() {
-                          existingFlashcard.frontCaption = frontCaption;
-                          existingFlashcard.backCaption = backCaption;
-                          existingFlashcard.color = selectedColor;
-                        });
-                      }
-                      Navigator.of(context).pop();
+                          ),
+                        );
+                      });
+                    } else {
+                      // Aktualisiere die vorhandene Karteikarte
+                      setState(() {
+                        existingFlashcard.frontCaption = frontCaption;
+                        existingFlashcard.backCaption = backCaption;
+                        existingFlashcard.color = selectedColor;
+                      });
                     }
-                  },
-                  child:
-                      Text('Erstellen', style: TextStyle(color: Colors.white)),
-                ),
-              ],
-            ),
-          ],
-        );
-      },
-    );
-  }
+                    Navigator.of(context).pop();
+                  }
+                },
+                child: Text('Erstellen', style: TextStyle(color: Colors.white)),
+              ),
+            ],
+          ),
+        ],
+      );
+    },
+  );
+}
 
   Future<void> _showDeleteFlashcardDialog(Flashcard karteikarte) async {
     await showDialog(
@@ -349,40 +351,42 @@ class _FlashcardPageState extends State<FlashcardPage> {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Align(
-              alignment: Alignment.topRight,
-              child: PopupMenuButton(
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    child: Text("Bearbeiten"),
-                  ),
-                  PopupMenuItem(
-                    value: 2,
-                    child: Text("Löschen"),
-                  ),
-                ],
-                onSelected: (value) {
-                  if (value == 1) {
-                    _showCreateFlashcardDialog(existingFlashcard: karteikarte);
-                  } else if (value == 2) {
-                    _showDeleteFlashcardDialog(karteikarte);
-                  }
-                },
+              alignment: Alignment.center, // Ändere die Ausrichtung hier
+              child: Text(
+                _truncateText(karteikarte.frontCaption, 150),
+                style: const TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
               ),
             ),
           ),
         ),
-        Center(
-          child: Text(
-            _truncateText(karteikarte.frontCaption, 150),
-            style: const TextStyle(color: Colors.white),
-            textAlign: TextAlign.center,
+        Align(
+          alignment: Alignment.topRight,
+          child: PopupMenuButton(
+            itemBuilder: (context) => [
+              PopupMenuItem(
+                value: 1,
+                child: Text("Bearbeiten"),
+              ),
+              PopupMenuItem(
+                value: 2,
+                child: Text("Löschen"),
+              ),
+            ],
+            onSelected: (value) {
+              if (value == 1) {
+                _showCreateFlashcardDialog(existingFlashcard: karteikarte);
+              } else if (value == 2) {
+                _showDeleteFlashcardDialog(karteikarte);
+              }
+            },
           ),
         ),
       ],
     ),
   );
 }
+
 
 String _truncateText(String text, int maxLength) {
   if (text.length <= maxLength) {
