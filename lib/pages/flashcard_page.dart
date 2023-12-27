@@ -291,14 +291,14 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   onPressed: () {
                     _handleReviewAction(true); // Markiere als richtig
                   },
-                  style: ElevatedButton.styleFrom(foregroundColor: Colors.green),
+                  style: ElevatedButton.styleFrom(primary: Colors.green),
                   child: Text('Richtig', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     _handleReviewAction(false); // Markiere als falsch
                   },
-                  style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
+                  style: ElevatedButton.styleFrom(primary: Colors.red),
                   child: Text('Falsch', style: TextStyle(color: Colors.white)),
                 ),
               ],
@@ -333,14 +333,16 @@ class _FlashcardPageState extends State<FlashcardPage> {
   }
 
   Widget _buildFlashcardTile(Flashcard karteikarte) {
-    return GestureDetector(
-      onTap: () {
-        _showCreateFlashcardDialog(existingFlashcard: karteikarte);
-      },
-      child: Stack(
-        children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+  return GestureDetector(
+    onTap: () {
+      _showCreateFlashcardDialog(existingFlashcard: karteikarte);
+    },
+    child: Stack(
+      children: [
+        AspectRatio(
+          aspectRatio: 1.5, // Experimentiere mit diesem Verhältnis
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
             padding: const EdgeInsets.all(15),
             decoration: BoxDecoration(
               color: karteikarte.color,
@@ -369,16 +371,27 @@ class _FlashcardPageState extends State<FlashcardPage> {
               ),
             ),
           ),
-          Center(
-            child: Text(
-              karteikarte.frontCaption,
-              style: const TextStyle(color: Colors.white),
-            ),
+        ),
+        Center(
+          child: Text(
+            _truncateText(karteikarte.frontCaption, 150),
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
           ),
-        ],
-      ),
-    );
+        ),
+      ],
+    ),
+  );
+}
+
+String _truncateText(String text, int maxLength) {
+  if (text.length <= maxLength) {
+    return text;
+  } else {
+    return text.substring(0, maxLength - 3) + '...';
   }
+}
+
 
   Widget _buildEmptyFlashcardMessage() {
     return Center(
@@ -461,7 +474,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                             child: GridView.builder(
                               gridDelegate:
                                   SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
+                                maxCrossAxisExtent: 300,
                                 crossAxisSpacing: 10,
                                 mainAxisSpacing: 10,
                               ),
