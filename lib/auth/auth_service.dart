@@ -148,11 +148,9 @@ class AuthService {
   //Profile Function
   Future<void> signOut(BuildContext context) async {
     await _auth.signOut();
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginPage(),
-      ),
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (_) => LoginPage()),
+      (route) => false,
     );
   }
 
@@ -166,14 +164,14 @@ class AuthService {
 
       // Delete all folders of the user
       QuerySnapshot<Map<String, dynamic>> foldersSnapshot =
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('folders')
-          .get();
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .collection('folders')
+              .get();
 
       for (QueryDocumentSnapshot<Map<String, dynamic>> folderDoc
-      in foldersSnapshot.docs) {
+          in foldersSnapshot.docs) {
         // Delete all flashcards in each folder
         await FirebaseFirestore.instance
             .collection('users')
@@ -184,7 +182,7 @@ class AuthService {
             .get()
             .then((flashcardsSnapshot) {
           for (QueryDocumentSnapshot<Map<String, dynamic>> flashcardDoc
-          in flashcardsSnapshot.docs) {
+              in flashcardsSnapshot.docs) {
             flashcardDoc.reference.delete();
           }
         });
@@ -196,7 +194,6 @@ class AuthService {
       print('Error deleting user data: $e');
     }
   }
-
 
   Future<void> updateEmail(String newEmail) async {
     try {

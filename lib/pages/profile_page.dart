@@ -1,3 +1,4 @@
+import 'package:codecard/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
@@ -21,13 +22,13 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-
   Future<void> _showDeleteAccountDialog() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Bist du Dir sicher?', style: TextStyle(color: Colors.white)),
+          title: const Text('Bist du Dir sicher?',
+              style: TextStyle(color: Colors.white)),
           content: const Text(
             '''Wenn Du Löschen wählst, löschen wir Dein Konto auf unserem Server.
 
@@ -49,7 +50,10 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
               onPressed: () async {
                 // Call the deleteAccount method from AuthService
                 await _authService.deleteAccount(currentUser.uid);
-                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (_) => LoginPage()),
+                  (route) => false,
+                );
               },
             ),
           ],
@@ -86,7 +90,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                     children: [
                       LabeledEditableTextField(
                         label: 'E-MAIL ADRESSE',
-                        initialValue: 'john.doe@example.com',
+                        initialValue: currentUser.email ?? '',
                         width: 400,
                         onUpdate: _authService.updateEmail,
                       ),
