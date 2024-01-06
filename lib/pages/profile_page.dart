@@ -31,6 +31,21 @@ class _ProfilePageState extends State<ProfilePage> {
     print('Updating password: $newPassword');
   }
 
+  void logout() {
+    _authService.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
+  void deleteAccount() {
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginPage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -76,12 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              _authService.signOut();
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => LoginPage()),
-                              );
+                              logout();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
@@ -103,7 +113,9 @@ class _ProfilePageState extends State<ProfilePage> {
                           ),
                           SizedBox(width: 20),
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              deleteAccount();
+                            },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
                               padding: EdgeInsets.symmetric(
