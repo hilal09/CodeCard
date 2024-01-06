@@ -19,7 +19,7 @@ class _SplashScreenState extends State<SplashScreen>
   bool _showImage = false;
 
   // Parameter für horizontale Verschiebung (0 für Zentrierung, positiver Wert für Linksverschiebung)
-  final double horizontalShiftCm = 0.3; // Verschiebung in Zentimeter
+  final double horizontalShiftCm = 0.4; // Verschiebung in Zentimeter
 
   @override
   void initState() {
@@ -90,7 +90,7 @@ class _SplashScreenState extends State<SplashScreen>
               FadeTransition(
                 opacity: _imageAnimation,
                 child: Image.asset(
-                  'assets/images/SPS.png', // Pfad zu Ihrem Bild
+                  'assets/images/SPS.png', 
                   width: 200,
                   height: 200,
                   fit: BoxFit.cover,
