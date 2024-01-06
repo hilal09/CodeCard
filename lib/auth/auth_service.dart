@@ -9,9 +9,11 @@ import '../widgets/folder.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  User? user = FirebaseAuth.instance.currentUser;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
 
   VoidCallback? _setStateCallback;
 
@@ -20,7 +22,6 @@ class AuthService {
   String confirmPasswordError = "";
 
   AuthService();
-
 
   void setState(VoidCallback fn) {
     _setStateCallback = fn;
@@ -124,12 +125,10 @@ class AuthService {
         email: email,
         password: password,
       );
-
-      // Remove the check for email verification
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => DashboardPage()),
-            (route) => false,
+        (route) => false,
       );
     } catch (e) {
       print("Login error (AuthService): $e");
@@ -154,6 +153,47 @@ class AuthService {
     );
   }
 
+  Future<void> deleteAccount(String uid) async {
+    try {
+      //Delete user in Authentication
+      await user?.delete();
+
+      // Delete user details
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+
+      // Delete all folders of the user
+      QuerySnapshot<Map<String, dynamic>> foldersSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .collection('folders')
+              .get();
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> folderDoc
+          in foldersSnapshot.docs) {
+        // Delete all flashcards in each folder
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .collection('folders')
+            .doc(folderDoc.id)
+            .collection('flashcards')
+            .get()
+            .then((flashcardsSnapshot) {
+          for (QueryDocumentSnapshot<Map<String, dynamic>> flashcardDoc
+              in flashcardsSnapshot.docs) {
+            flashcardDoc.reference.delete();
+          }
+        });
+
+        // Delete the folder
+        folderDoc.reference.delete();
+      }
+    } catch (e) {
+      print('Error deleting user data: $e');
+    }
+  }
+
   Future<void> addUserDetails(String email, String uid) async {
     await FirebaseFirestore.instance.collection("users").doc(uid).set({
       "E-Mail": email,
@@ -168,7 +208,11 @@ class AuthService {
     });
 
     // Create an initial 'folders' collection for the user
-    await FirebaseFirestore.instance.collection("users").doc(uid).collection("folders").add({
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(uid)
+        .collection("folders")
+        .add({
       "name": "Default Folder",
       "color": 0xFFFFD4A4A,
       "userUID": uid,
@@ -177,7 +221,11 @@ class AuthService {
 
   Future<void> addFolderToUser(String uid, Folder folder) async {
     try {
-      await FirebaseFirestore.instance.collection('users').doc(uid).collection('folders').add({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('folders')
+          .add({
         'name': folder.name,
         'color': folder.color.value,
         "userUID": uid,
@@ -187,7 +235,8 @@ class AuthService {
     }
   }
 
-  Future<void> addFlashcardToUser(String uid, String folderId, Flashcard flashcard) async {
+  Future<void> addFlashcardToUser(
+      String uid, String folderId, Flashcard flashcard) async {
     try {
       await FirebaseFirestore.instance
           .collection('users')
@@ -210,7 +259,8 @@ class AuthService {
     try {
       String userId = currentUserUID()!;
 
-      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore
+          .instance
           .collection('users')
           .doc(userId)
           .collection('folders')
@@ -218,8 +268,8 @@ class AuthService {
           .collection('flashcards')
           .get();
 
-      List<Flashcard> userFlashcards = snapshot.docs
-          .map((DocumentSnapshot<Map<String, dynamic>> doc) {
+      List<Flashcard> userFlashcards =
+          snapshot.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
         Map<String, dynamic> data = doc.data()!;
         return Flashcard(
           userUID: data['userUID'], // Include userUID in the Flashcard model
@@ -227,8 +277,7 @@ class AuthService {
           backCaption: data['backCaption'],
           color: Color(data['color']),
         );
-      })
-          .toList();
+      }).toList();
 
       return userFlashcards;
     } catch (e) {

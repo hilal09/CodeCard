@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
-import 'login_page.dart';
 import 'package:codecard/auth/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -11,7 +12,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  late AuthService _authService;
+  late AuthService _authService = AuthService();
+  final currentUser = FirebaseAuth.instance.currentUser!;
 
   @override
   void initState() {
@@ -31,18 +33,40 @@ class _ProfilePageState extends State<ProfilePage> {
     print('Updating password: $newPassword');
   }
 
-  void logout() {
-    _authService.signOut(context);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
-    );
-  }
+  void _showDeleteAccountDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Bist du Dir sicher?',
+              style: TextStyle(color: Colors.white)),
+          content: const Text(
+            '''Wenn Du Löschen wählst, löschen wir Dein Konto auf unserem Server.
 
-  void deleteAccount() {
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => LoginPage()),
+Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.''',
+            style: TextStyle(color: Colors.white),
+          ),
+          actions: [
+            TextButton(
+              child: const Text(
+                'Cancel',
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Delete',
+                style: TextStyle(color: Color(0xffffd4a4a)),
+              ),
+              onPressed: () {
+                _authService.deleteAccount(currentUser.uid);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -91,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              logout();
+                              _authService.signOut(context);
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
@@ -114,7 +138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           const SizedBox(width: 20),
                           TextButton(
                             onPressed: () {
-                              deleteAccount();
+                              _showDeleteAccountDialog();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
