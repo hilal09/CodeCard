@@ -106,7 +106,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   ) async {
     await FirebaseFirestore.instance.collection("users").doc(uid).set({
       "E-Mail": email,
-      "UID": uid,
+      "userID": uid,
     });
   }
 
