@@ -4,6 +4,7 @@ import 'package:codecard/widgets/folder.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
 import 'package:codecard/widgets/suchleiste.dart';
 import 'package:flutter/material.dart';
+import '../auth/auth_service.dart';
 
 class FlashcardPage extends StatefulWidget {
   final Folder folder;
@@ -15,21 +16,51 @@ class FlashcardPage extends StatefulWidget {
 }
 
 class _FlashcardPageState extends State<FlashcardPage> {
+  AuthService authService = AuthService(); // Instantiate AuthService
+
   List<Flashcard> flashcards = [];
   List<Flashcard> incorrectlyAnswered = [];
   String searchTerm = "";
   int currentCardIndex = 0;
+  late Color selectedColor;
 
-  Future<void> _showCreateFlashcardDialog(
-      {Flashcard? existingFlashcard}) async {
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserFlashcards();
+  }
+
+  Future<void> _fetchUserFlashcards() async {
+    try {
+      // Assuming you have a method in AuthService to get user's flashcards
+      List<Flashcard> userFlashcards =
+      await authService.getUserFlashcards(widget.folder.id);
+
+      print("Fetched ${userFlashcards.length} flashcards for folder ${widget.folder.id}");
+
+      setState(() {
+        flashcards.clear(); // Clear existing flashcards
+        flashcards.addAll(userFlashcards); // Add newly fetched flashcards
+      });
+    } catch (e) {
+      print("Error fetching user flashcards: $e");
+      // Handle error fetching user flashcards
+    }
+  }
+
+  Future<void> _showCreateFlashcardDialog({
+    Flashcard? existingFlashcard,
+    required AuthService authService,
+  }) async {
     String frontCaption = existingFlashcard?.frontCaption ?? "";
     String backCaption = existingFlashcard?.backCaption ?? "";
-    Color selectedColor = existingFlashcard?.color ?? Color(0xFFFfd4a4a);
+    Color selectedColor =
+        existingFlashcard?.color ?? const Color(0xFFFfd4a4a);
 
     TextEditingController frontCaptionController =
-        TextEditingController(text: frontCaption);
+    TextEditingController(text: frontCaption);
     TextEditingController backCaptionController =
-        TextEditingController(text: backCaption);
+    TextEditingController(text: backCaption);
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
     await showDialog(
@@ -37,9 +68,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            existingFlashcard == null
-                ? "Karteikarte erstellen"
-                : "Karteikarte bearbeiten",
+            existingFlashcard == null ? "Create Flashcard" : "Edit Flashcard",
             style: TextStyle(color: Colors.white),
           ),
           content: Container(
@@ -51,7 +80,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 children: [
                   TextFormField(
                     controller: frontCaptionController,
-                    maxLength: 35,
+                    maxLength: 350,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -60,15 +89,15 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Bitte gib einen Text für die Vorderseite ein.';
+                        return 'Please enter text for the front side.';
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Text für die Vorderseite',
+                      labelText: 'Text for the front side',
                       counterText: "",
                       errorText: formKey.currentState?.validate() == false
-                          ? 'Bitte gib einen Text für die Vorderseite ein.'
+                          ? 'Please enter text for the front side.'
                           : null,
                       labelStyle: TextStyle(color: Colors.white),
                       focusedBorder: UnderlineInputBorder(
@@ -82,7 +111,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   SizedBox(height: 10),
                   TextFormField(
                     controller: backCaptionController,
-                    maxLength: 35,
+                    maxLength: 350,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -91,15 +120,15 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Bitte gib einen Text für die Rückseite ein.';
+                        return 'Please enter text for the back side.';
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Text für die Rückseite',
+                      labelText: 'Text for the back side',
                       counterText: "",
                       errorText: formKey.currentState?.validate() == false
-                          ? 'Bitte gib einen Text für die Rückseite ein.'
+                          ? 'Please enter text for the back side.'
                           : null,
                       labelStyle: TextStyle(color: Colors.white),
                       focusedBorder: UnderlineInputBorder(
@@ -111,13 +140,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 10),
-                  Text("Farbe auswählen:",
-                      style: TextStyle(color: Colors.white)),
+                  Text("Select color:", style: TextStyle(color: Colors.white)),
                   SizedBox(height: 5),
                   ColorPicker(
                     onColorSelected: (color) {
                       selectedColor = color;
                     },
+                    initialColor: selectedColor,
                   ),
                 ],
               ),
@@ -125,41 +154,44 @@ class _FlashcardPageState extends State<FlashcardPage> {
           ),
           actions: [
             ButtonBar(
-              alignment:
-                  MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+              alignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child:
-                      Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                  child: Text('Cancel', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     if (formKey.currentState?.validate() == true) {
                       if (existingFlashcard == null) {
-                        // Erstelle eine neue Karteikarte
+                        final newFlashcard = Flashcard(
+                          userUID: authService.currentUserUID()!,
+                          frontCaption: frontCaption,
+                          backCaption: backCaption,
+                          color: selectedColor,
+                        );
+
+                        await authService.addFlashcardToUser(
+                          authService.currentUserUID()!,
+                          widget.folder.id,
+                          newFlashcard,
+                        );
+
                         setState(() {
-                          flashcards.add(Flashcard(
-                            frontCaption: frontCaption,
-                            backCaption: backCaption,
-                            color: selectedColor,
-                          ));
+                          flashcards.insert(0, newFlashcard);
                         });
                       } else {
-                        // Aktualisiere die vorhandene Karteikarte
-                        setState(() {
-                          existingFlashcard.frontCaption = frontCaption;
-                          existingFlashcard.backCaption = backCaption;
-                          existingFlashcard.color = selectedColor;
-                        });
+                        existingFlashcard.frontCaption = frontCaption;
+                        existingFlashcard.backCaption = backCaption;
+                        existingFlashcard.color = selectedColor;
                       }
+
                       Navigator.of(context).pop();
                     }
                   },
-                  child:
-                      Text('Erstellen', style: TextStyle(color: Colors.white)),
+                  child: Text('Create', style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -181,15 +213,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
               style: TextStyle(color: Colors.white)),
           actions: [
             ButtonBar(
-              alignment:
-                  MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+              alignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child:
-                      Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                  child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -276,13 +306,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     duration: Duration(milliseconds: 500),
                     child: showFront
                         ? _buildFlashcardSide(
-                            flashcards[currentIndex].frontCaption,
-                            flashcards[currentIndex].color,
-                          )
+                      flashcards[currentIndex].frontCaption,
+                      flashcards[currentIndex].color,
+                    )
                         : _buildFlashcardSide(
-                            flashcards[currentIndex].backCaption,
-                            flashcards[currentIndex].color,
-                          ),
+                      flashcards[currentIndex].backCaption,
+                      flashcards[currentIndex].color,
+                    ),
                   ),
                 ),
               ),
@@ -291,14 +321,14 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   onPressed: () {
                     _handleReviewAction(true); // Markiere als richtig
                   },
-                  style: ElevatedButton.styleFrom(foregroundColor: Colors.green),
+                  style: ElevatedButton.styleFrom(primary: Colors.green),
                   child: Text('Richtig', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
                     _handleReviewAction(false); // Markiere als falsch
                   },
-                  style: ElevatedButton.styleFrom(foregroundColor: Colors.red),
+                  style: ElevatedButton.styleFrom(primary: Colors.red),
                   child: Text('Falsch', style: TextStyle(color: Colors.white)),
                 ),
               ],
@@ -315,7 +345,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
 
   Widget _buildFlashcardSide(String caption, Color color) {
     return RotatedBox(
-      quarterTurns: 0, // Set to 1 for a 90-degree turn, 2 for 180 degrees, etc.
+      quarterTurns: 0,
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
@@ -335,49 +365,71 @@ class _FlashcardPageState extends State<FlashcardPage> {
   Widget _buildFlashcardTile(Flashcard karteikarte) {
     return GestureDetector(
       onTap: () {
-        _showCreateFlashcardDialog(existingFlashcard: karteikarte);
+        AuthService authService = AuthService(); // Instantiate AuthService
+
+        _showCreateFlashcardDialog(
+          existingFlashcard: karteikarte,
+          authService: authService,
+        );
       },
       child: Stack(
         children: [
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-            padding: const EdgeInsets.all(15),
-            decoration: BoxDecoration(
-              color: karteikarte.color,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: PopupMenuButton(
-                itemBuilder: (context) => [
-                  PopupMenuItem(
-                    value: 1,
-                    child: Text("Bearbeiten"),
-                  ),
-                  PopupMenuItem(
-                    value: 2,
-                    child: Text("Löschen"),
-                  ),
-                ],
-                onSelected: (value) {
-                  if (value == 1) {
-                    _showCreateFlashcardDialog(existingFlashcard: karteikarte);
-                  } else if (value == 2) {
-                    _showDeleteFlashcardDialog(karteikarte);
-                  }
-                },
+          AspectRatio(
+            aspectRatio: 1.5,
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 2, vertical: 5),
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                color: karteikarte.color,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Align(
+                alignment: Alignment.center,
+                child: Text(
+                  _truncateText(karteikarte.frontCaption, 150),
+                  style: const TextStyle(color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
           ),
-          Center(
-            child: Text(
-              karteikarte.frontCaption,
-              style: const TextStyle(color: Colors.white),
+          Align(
+            alignment: Alignment.topRight,
+            child: PopupMenuButton(
+              itemBuilder: (context) => [
+                PopupMenuItem(
+                  value: 1,
+                  child: Text("Bearbeiten"),
+                ),
+                PopupMenuItem(
+                  value: 2,
+                  child: Text("Löschen"),
+                ),
+              ],
+              onSelected: (value) {
+                if (value == 1) {
+                  AuthService authService = AuthService(); // Instantiate AuthService
+                  _showCreateFlashcardDialog(
+                    existingFlashcard: karteikarte,
+                    authService: authService,
+                  );
+                } else if (value == 2) {
+                  _showDeleteFlashcardDialog(karteikarte);
+                }
+              },
             ),
           ),
         ],
       ),
     );
+  }
+
+  String _truncateText(String text, int maxLength) {
+    if (text.length <= maxLength) {
+      return text;
+    } else {
+      return text.substring(0, maxLength - 3) + '...';
+    }
   }
 
   Widget _buildEmptyFlashcardMessage() {
@@ -432,7 +484,8 @@ class _FlashcardPageState extends State<FlashcardPage> {
                               child: IconButton(
                                 icon: Icon(Icons.add, color: Colors.black),
                                 onPressed: () {
-                                  _showCreateFlashcardDialog();
+                                  AuthService authService = AuthService(); // Instantiate AuthService
+                                  _showCreateFlashcardDialog(authService: authService,);
                                 },
                               ),
                             ),
@@ -444,7 +497,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                               ),
                               child: IconButton(
                                 icon:
-                                    Icon(Icons.play_arrow, color: Colors.black),
+                                Icon(Icons.play_arrow, color: Colors.black),
                                 onPressed: () {
                                   _startQuiz();
                                 },
@@ -458,30 +511,30 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     flashcards.isEmpty
                         ? _buildEmptyFlashcardMessage()
                         : Expanded(
-                            child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                              ),
-                              itemCount: flashcards
-                                  .where((karteikarte) => karteikarte
-                                      .frontCaption
-                                      .toLowerCase()
-                                      .contains(searchTerm.toLowerCase()))
-                                  .length,
-                              itemBuilder: (BuildContext context, int index) {
-                                Flashcard karteikarte = flashcards
-                                    .where((karteikarte) => karteikarte
-                                        .frontCaption
-                                        .toLowerCase()
-                                        .contains(searchTerm.toLowerCase()))
-                                    .toList()[index];
-                                return _buildFlashcardTile(karteikarte);
-                              },
-                            ),
-                          ),
+                      child: GridView.builder(
+                        gridDelegate:
+                        SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 300,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: flashcards
+                            .where((karteikarte) => karteikarte
+                            .frontCaption
+                            .toLowerCase()
+                            .contains(searchTerm.toLowerCase()))
+                            .length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Flashcard karteikarte = flashcards
+                              .where((karteikarte) => karteikarte
+                              .frontCaption
+                              .toLowerCase()
+                              .contains(searchTerm.toLowerCase()))
+                              .toList()[index];
+                          return _buildFlashcardTile(karteikarte);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),

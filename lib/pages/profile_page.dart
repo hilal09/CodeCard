@@ -53,21 +53,21 @@ class _ProfilePageState extends State<ProfilePage> {
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
-            LeftSideBar(),
-            SizedBox(
+            const LeftSideBar(),
+            const SizedBox(
               width: 20,
             ),
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color(0xFFFF2c293a),
+                  color: const Color(0xffff2c293a),
                   borderRadius: BorderRadius.circular(20),
                   border: Border.all(
-                    color: Color.fromARGB(255, 141, 134, 134),
+                    color: const Color.fromARGB(255, 141, 134, 134),
                     width: 0.5,
                   ),
                 ),
-                padding: EdgeInsets.all(20),
+                padding: const EdgeInsets.all(20),
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -78,24 +78,29 @@ class _ProfilePageState extends State<ProfilePage> {
                         width: 400,
                         onUpdate: updateEmail,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       LabeledEditableTextField(
                         label: 'PASSWORT',
                         initialValue: '*********',
                         width: 400,
                         onUpdate: updatePassword,
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
                             onPressed: () {
-                              logout();
+                              _authService.signOut(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
+                              );
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
                               ),
@@ -103,7 +108,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: Column(
+                            child: const Column(
                               children: [
                                 Icon(Icons.logout_rounded, color: Colors.white),
                                 SizedBox(height: 5),
@@ -111,14 +116,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               ],
                             ),
                           ),
-                          SizedBox(width: 20),
+                          const SizedBox(width: 20),
                           TextButton(
                             onPressed: () {
                               deleteAccount();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,
-                              padding: EdgeInsets.symmetric(
+                              padding: const EdgeInsets.symmetric(
                                 vertical: 10,
                                 horizontal: 20,
                               ),
@@ -126,7 +131,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                             ),
-                            child: Column(
+                            child: const Column(
                               children: [
                                 Icon(Icons.delete_forever_rounded,
                                     color: Colors.white),
@@ -155,7 +160,8 @@ class LabeledEditableTextField extends StatefulWidget {
   final double width;
   final Function(String) onUpdate; // Callback function to update the info
 
-  LabeledEditableTextField({
+  const LabeledEditableTextField({
+    super.key,
     required this.label,
     required this.initialValue,
     required this.width,
@@ -191,12 +197,12 @@ class _LabeledEditableTextFieldState extends State<LabeledEditableTextField> {
       children: [
         Text(
           widget.label,
-          style: TextStyle(fontSize: 18, color: Colors.white),
+          style: const TextStyle(fontSize: 18, color: Colors.white),
         ),
         Container(
           width: widget.width,
-          margin: EdgeInsets.symmetric(vertical: 8),
-          padding: EdgeInsets.all(8),
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(
             border: Border.all(color: Colors.white),
             borderRadius: BorderRadius.circular(8),
@@ -210,8 +216,9 @@ class _LabeledEditableTextFieldState extends State<LabeledEditableTextField> {
                         controller: _controller,
                         obscureText:
                             widget.label == 'PASSWORT' && !_isPasswordVisible,
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                        decoration: InputDecoration(
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.white),
+                        decoration: const InputDecoration(
                           isCollapsed: true,
                           contentPadding: EdgeInsets.symmetric(horizontal: 10),
                           border: InputBorder.none,
@@ -223,7 +230,8 @@ class _LabeledEditableTextFieldState extends State<LabeledEditableTextField> {
                                 ? _controller.text
                                 : '•' * _controller.text.length
                             : _controller.text,
-                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                        style:
+                            const TextStyle(fontSize: 18, color: Colors.grey),
                       ),
               ),
               if (_isEditing &&

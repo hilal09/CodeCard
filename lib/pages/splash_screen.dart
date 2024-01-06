@@ -4,7 +4,7 @@ import 'login_page.dart';
 import 'package:google_fonts/google_fonts.dart'; // Import für Google Fonts
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -40,7 +40,7 @@ class _SplashScreenState extends State<SplashScreen>
     await Future.delayed(const Duration(seconds: 3));
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (_) => LoginPage(),
+        builder: (_) => const LoginPage(),
       ),
     );
   }
@@ -54,7 +54,7 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFF2c293a),
+      backgroundColor: const Color(0xffff2c293a),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -68,23 +68,23 @@ class _SplashScreenState extends State<SplashScreen>
                 fit: BoxFit.cover,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             FadeTransition(
               opacity: _fadeAnimation,
               child: Padding(
-                padding: EdgeInsets.only(
+                padding: const EdgeInsets.only(
                     left:
                         67.0), // Abstand damit mittig zum Zentrum der Animation
                 child: Text(
                   'CODE CARD',
                   style: GoogleFonts.sourceCodePro(
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                       color: Colors.white,
                       fontSize: 80,
                       shadows: [
                         Shadow(
                           blurRadius: 6.0,
-                          color: Color(0xFFF4cae97),
+                          color: Color(0xfff4cae97),
                           offset: Offset(3.0, 1.0),
                         ),
                       ],
