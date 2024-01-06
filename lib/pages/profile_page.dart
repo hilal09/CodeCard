@@ -32,7 +32,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void logout() {
-    _authService.signOut();
+    _authService.signOut(context);
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => LoginPage()),
@@ -91,12 +91,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           TextButton(
                             onPressed: () {
-                              _authService.signOut(context);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const LoginPage()),
-                              );
+                              logout();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: Colors.white,

@@ -41,7 +41,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return true;
   }
 
-
   @override
   void dispose() {
     _emailController.dispose();
@@ -84,15 +83,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
         password: _passwordController.text.trim(),
       );
 
-      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
-
       addUserDetails(
         _emailController.text.trim(),
         FirebaseAuth.instance.currentUser!.uid,
       );
 
-      showSnackBar(
-          "Registration successful. Please check your email for verification.");
+      showSnackBar("Registration successful.");
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -104,7 +100,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
-  Future<void> addUserDetails(String email, String uid,) async {
+  Future<void> addUserDetails(
+    String email,
+    String uid,
+  ) async {
     await FirebaseFirestore.instance.collection("users").doc(uid).set({
       "E-Mail": email,
       "UID": uid,
@@ -154,7 +153,8 @@ class RegistrationWidget extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
 
-  const RegistrationWidget({super.key, 
+  const RegistrationWidget({
+    super.key,
     required this.isRegisterTab,
     required this.onTabChanged,
     required this.onAuthPressed,
