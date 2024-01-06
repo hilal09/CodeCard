@@ -21,25 +21,13 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-  // Callback function to update email in the database
-  void updateEmail(String newEmail) {
-    // Implement your logic to update email in the database
-    print('Updating email: $newEmail');
-  }
 
-  // Callback function to update password in the database
-  void updatePassword(String newPassword) {
-    // Implement your logic to update password in the database
-    print('Updating password: $newPassword');
-  }
-
-  void _showDeleteAccountDialog() {
+  Future<void> _showDeleteAccountDialog() async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Bist du Dir sicher?',
-              style: TextStyle(color: Colors.white)),
+          title: const Text('Bist du Dir sicher?', style: TextStyle(color: Colors.white)),
           content: const Text(
             '''Wenn Du Löschen wählst, löschen wir Dein Konto auf unserem Server.
 
@@ -48,9 +36,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
           ),
           actions: [
             TextButton(
-              child: const Text(
-                'Cancel',
-              ),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -60,8 +46,10 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                 'Delete',
                 style: TextStyle(color: Color(0xffffd4a4a)),
               ),
-              onPressed: () {
-                _authService.deleteAccount(currentUser.uid);
+              onPressed: () async {
+                // Call the deleteAccount method from AuthService
+                await _authService.deleteAccount(currentUser.uid);
+                Navigator.of(context).pop();
               },
             ),
           ],
@@ -100,14 +88,14 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                         label: 'E-MAIL ADRESSE',
                         initialValue: 'john.doe@example.com',
                         width: 400,
-                        onUpdate: updateEmail,
+                        onUpdate: _authService.updateEmail,
                       ),
                       const SizedBox(height: 20),
                       LabeledEditableTextField(
                         label: 'PASSWORT',
                         initialValue: '*********',
                         width: 400,
-                        onUpdate: updatePassword,
+                        onUpdate: _authService.updatePassword,
                       ),
                       const SizedBox(height: 20),
                       Row(

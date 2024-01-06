@@ -63,6 +63,7 @@ class AuthService {
     }
   }
 
+  // Register Function
   Future signUp(BuildContext context) async {
     setState(() {
       emailError = "";
@@ -117,6 +118,7 @@ class AuthService {
     }
   }
 
+  //Login Function
   Future signIn(BuildContext context,
       {required String email, required String password}) async {
     try {
@@ -143,6 +145,7 @@ class AuthService {
     }
   }
 
+  //Profile Function
   Future<void> signOut(BuildContext context) async {
     await _auth.signOut();
     Navigator.push(
@@ -155,7 +158,7 @@ class AuthService {
 
   Future<void> deleteAccount(String uid) async {
     try {
-      //Delete user in Authentication
+      // Delete user in Authentication
       await user?.delete();
 
       // Delete user details
@@ -163,14 +166,14 @@ class AuthService {
 
       // Delete all folders of the user
       QuerySnapshot<Map<String, dynamic>> foldersSnapshot =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(uid)
-              .collection('folders')
-              .get();
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('folders')
+          .get();
 
       for (QueryDocumentSnapshot<Map<String, dynamic>> folderDoc
-          in foldersSnapshot.docs) {
+      in foldersSnapshot.docs) {
         // Delete all flashcards in each folder
         await FirebaseFirestore.instance
             .collection('users')
@@ -181,7 +184,7 @@ class AuthService {
             .get()
             .then((flashcardsSnapshot) {
           for (QueryDocumentSnapshot<Map<String, dynamic>> flashcardDoc
-              in flashcardsSnapshot.docs) {
+          in flashcardsSnapshot.docs) {
             flashcardDoc.reference.delete();
           }
         });
@@ -194,6 +197,30 @@ class AuthService {
     }
   }
 
+
+  Future<void> updateEmail(String newEmail) async {
+    try {
+      await _auth.currentUser?.updateEmail(newEmail);
+      // Update email in the database (you can implement this as needed)
+      print('Email updated successfully');
+    } catch (e) {
+      print('Error updating email: $e');
+      throw e; // Propagate the error
+    }
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    try {
+      await _auth.currentUser?.updatePassword(newPassword);
+      // Update password in the database (you can implement this as needed)
+      print('Password updated successfully');
+    } catch (e) {
+      print('Error updating password: $e');
+      throw e; // Propagate the error
+    }
+  }
+
+  //Add User Details to Database
   Future<void> addUserDetails(String email, String uid) async {
     await FirebaseFirestore.instance.collection("users").doc(uid).set({
       "E-Mail": email,
@@ -219,6 +246,7 @@ class AuthService {
     });
   }
 
+  //Add Folder to UserUID
   Future<void> addFolderToUser(String uid, Folder folder) async {
     try {
       await FirebaseFirestore.instance
@@ -235,6 +263,7 @@ class AuthService {
     }
   }
 
+  //Add Flashcards to Folders
   Future<void> addFlashcardToUser(
       String uid, String folderId, Flashcard flashcard) async {
     try {
