@@ -36,20 +36,25 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: AuthWidget(
         isLoginTab: isLoginTab,
-        onTabChanged: (bool isSelected) {
-          setState(() {
-            isLoginTab = isSelected;
-          });
+        onTabChanged: (bool? isSelected) {
+          print('onTabChanged - isSelected: $isSelected');
+          if (this.mounted) {
+            setState(() {
+              isLoginTab = isSelected != null ? isSelected : false;  // <-- Updated Line
+              print('onTabChanged - isLoginTab: $isLoginTab');
+            });
+          }
         },
+
+
+
         onAuthPressed: () async {
-          await _authService.logInUsingEmailPassword(
+          if (await _authService.signIn(
+            context,
             email: emailController.text,
             password: passwordController.text,
-          );
-
-          // Check if the user is authenticated
-          if (_authService.isLoggedIn()) {
-            // Redirect to DashboardPageh
+          )) {
+            // Redirect to DashboardPage
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => DashboardPage()),
@@ -58,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
         },
         onRegisterPressed: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (context) => RegistrationPage()),
+            MaterialPageRoute(builder: (context) => const RegistrationPage()),
           );
         },
         emailController: emailController,
@@ -73,17 +78,17 @@ class AuthWidget extends StatelessWidget {
   final Function(bool) onTabChanged;
   final VoidCallback onAuthPressed;
   final VoidCallback onRegisterPressed;
-  final TextEditingController? emailController;
-  final TextEditingController? passwordController;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
 
-  AuthWidget({
+  const AuthWidget({
     Key? key,
     required this.isLoginTab,
     required this.onTabChanged,
     required this.onAuthPressed,
     required this.onRegisterPressed,
-    this.emailController,
-    this.passwordController,
+    required this.emailController,
+    required this.passwordController,
   }) : super(key: key);
 
   @override
@@ -202,8 +207,7 @@ class AuthWidget extends StatelessWidget {
     );
   }
 
-  Widget buildTabButton(String text, bool isSelected,
-      [VoidCallback? onPressed]) {
+  Widget buildTabButton(String text, bool isSelected, [VoidCallback? onPressed]) {
     return ElevatedButton(
       onPressed: () {
         onTabChanged(isSelected);

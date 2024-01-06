@@ -1,64 +1,239 @@
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:codecard/pages/dashboard_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+import '../pages/login_page.dart';
+import '../widgets/flashcard.dart';
+import '../widgets/folder.dart';
 
 class AuthService {
-  late SupabaseClient client;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
 
-  AuthService() {
-    client = Supabase.instance.client;
+  VoidCallback? _setStateCallback;
+
+  String emailError = "";
+  String passwordError = "";
+  String confirmPasswordError = "";
+
+  AuthService();
+
+
+  void setState(VoidCallback fn) {
+    _setStateCallback = fn;
+    _setStateCallback?.call();
+  }
+
+  void showSnackBar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+      content: Text(message),
+    ));
+  }
+
+  bool passwordConfirmed() {
+    if (_passwordController.text.trim() !=
+        _confirmPasswordController.text.trim()) {
+      setState(() {
+        confirmPasswordError = "Passwords don't match!";
+      });
+      return false;
+    }
+    return true;
+  }
+
+  String? currentUserUID() {
+    try {
+      return _auth.currentUser?.uid;
+    } catch (e) {
+      print('Error getting current user UID: $e');
+      return null;
+    }
   }
 
   bool isLoggedIn() {
     try {
-      return client.auth.currentSession != null;
+      return _auth.currentUser != null;
     } catch (e) {
       print('Error checking login status: $e');
       return false;
     }
   }
 
-  Future<void> signUpUsingEmailPassword({
-    required String email,
-    required String password,
-  }) async {
-    try {
-      final AuthResponse res = await client.auth.signUp(
-        password: password,
-        email: email,
-      );
-      final Session? session = res.session;
+  Future signUp(BuildContext context) async {
+    setState(() {
+      emailError = "";
+      passwordError = "";
+      confirmPasswordError = "";
+    });
 
-      if (session == null) {
-        print('Sign-up successful');
-      } else {
-        print('Sign-up failed: ${session}');
-      }
+    if (_emailController.text.trim().isEmpty) {
+      setState(() {
+        emailError = "E-Mail address is necessary";
+      });
+      showSnackBar(context, "E-Mail address is necessary");
+      return;
+    }
+
+    if (_passwordController.text.trim().isEmpty) {
+      setState(() {
+        passwordError = "Password is necessary";
+      });
+      showSnackBar(context, "Password is necessary");
+      return;
+    }
+
+    if (!passwordConfirmed()) {
+      showSnackBar(context, "Passwords don't match!");
+      return;
+    }
+
+    try {
+      await _auth.createUserWithEmailAndPassword(
+        email: _emailController.text.trim(),
+        password: _passwordController.text.trim(),
+      );
+
+      await addUserDetailsWithFolders(
+        _emailController.text.trim(),
+        _auth.currentUser!.uid,
+      );
+
+      showSnackBar(
+        context,
+        "Registration successful. Please check your email for verification.",
+      );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginPage(),
+        ),
+      );
     } catch (e) {
-      print('Error during sign-up: $e');
+      showSnackBar(context, "Registration failed: $e");
     }
   }
 
-  Future<void> logInUsingEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  Future signIn(BuildContext context,
+      {required String email, required String password}) async {
     try {
-      final AuthResponse res = await client.auth.signInWithPassword(
-        password: password,
+      print("Email (AuthService): $email");
+      await _auth.signInWithEmailAndPassword(
         email: email,
+        password: password,
       );
-      final Session? session = res.session;
 
-      if (session == null) {
-        print('Sign-in successful');
-      } else {
-        print('Sign-in failed: ${session}');
-      }
+      // Remove the check for email verification
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => DashboardPage()),
+            (route) => false,
+      );
     } catch (e) {
-      print('Error during sign-in: $e');
+      print("Login error (AuthService): $e");
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            content: Text("Login failed: $e"),
+          );
+        },
+      );
     }
   }
 
-  Future<void> signOut() async {
-    await client.auth.signOut();
+  Future<void> signOut(BuildContext context) async {
+    await _auth.signOut();
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
+  }
+
+  Future<void> addUserDetails(String email, String uid) async {
+    await FirebaseFirestore.instance.collection("users").doc(uid).set({
+      "E-Mail": email,
+      "userUID": uid,
+    });
+  }
+
+  Future<void> addUserDetailsWithFolders(String email, String uid) async {
+    await FirebaseFirestore.instance.collection("users").doc(uid).set({
+      "E-Mail": email,
+      "userUID": uid,
+    });
+
+    // Create an initial 'folders' collection for the user
+    await FirebaseFirestore.instance.collection("users").doc(uid).collection("folders").add({
+      "name": "Default Folder",
+      "color": 0xFFFFD4A4A,
+      "userUID": uid,
+    });
+  }
+
+  Future<void> addFolderToUser(String uid, Folder folder) async {
+    try {
+      await FirebaseFirestore.instance.collection('users').doc(uid).collection('folders').add({
+        'name': folder.name,
+        'color': folder.color.value,
+        "userUID": uid,
+      });
+    } catch (e) {
+      print('Error adding folder to user: $e');
+    }
+  }
+
+  Future<void> addFlashcardToUser(String uid, String folderId, Flashcard flashcard) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('folders')
+          .doc(folderId)
+          .collection('flashcards')
+          .add({
+        'frontCaption': flashcard.frontCaption,
+        'backCaption': flashcard.backCaption,
+        'color': flashcard.color.value,
+        "userUID": uid,
+      });
+    } catch (e) {
+      print('Error adding flashcard to user: $e');
+    }
+  }
+
+  Future<List<Flashcard>> getUserFlashcards(String folderId) async {
+    try {
+      String userId = currentUserUID()!;
+
+      QuerySnapshot<Map<String, dynamic>> snapshot = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .collection('folders')
+          .doc(folderId)
+          .collection('flashcards')
+          .get();
+
+      List<Flashcard> userFlashcards = snapshot.docs
+          .map((DocumentSnapshot<Map<String, dynamic>> doc) {
+        Map<String, dynamic> data = doc.data()!;
+        return Flashcard(
+          userUID: data['userUID'], // Include userUID in the Flashcard model
+          frontCaption: data['frontCaption'],
+          backCaption: data['backCaption'],
+          color: Color(data['color']),
+        );
+      })
+          .toList();
+
+      return userFlashcards;
+    } catch (e) {
+      print("Error fetching user flashcards: $e");
+      throw e; // Propagate the error
+    }
   }
 }

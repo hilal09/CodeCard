@@ -1,29 +1,107 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codecard/pages/flashcard_page.dart';
 import 'package:codecard/widgets/colorpicker.dart';
 import 'package:codecard/widgets/folder.dart';
 import 'package:codecard/widgets/suchleiste.dart';
 import 'package:codecard/widgets/left_sidebar.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../auth/auth_service.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  DashboardPage({super.key});
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
-//DAS IST DIE LISTE
-  List<Folder> folders = [];
-  String searchTerm = "";
+  late List<Folder> folders;
+  late String searchTerm;
+  late TextEditingController folderNameController;
+  late Color selectedColor;
+  late AuthService authService;
+
+  @override
+  void initState() {
+    super.initState();
+    searchTerm = "";
+    authService = AuthService();
+    folderNameController = TextEditingController();
+    selectedColor = const Color(0xffffd4a4a);
+    folders = []; // Initialize folders
+    fetchUserFolders();
+  }
+
+  @override
+  void dispose() {
+    folderNameController.dispose();
+    super.dispose();
+  }
+
+  Future<void> fetchUserFolders() async {
+    final uid = authService.currentUserUID();
+    if (uid != null) {
+      try {
+        final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).collection('folders').get();
+        setState(() {
+          folders = snapshot.docs.map((doc) {
+            final data = doc.data() as Map<String, dynamic>;
+            return Folder(
+              name: data['name'] ?? '',
+              color: Color(data['color'] ?? 0),
+              id: doc.id,
+            );
+          }).toList();
+        });
+      } catch (e) {
+        print('Error fetching user folders: $e');
+      }
+    }
+  }
+
+  void _showFolderCreatedSnackbar(Folder folder) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: GestureDetector(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => FlashcardPage(folder: folder),
+              ),
+            );
+          },
+          child: Container(
+            height: 60,
+            decoration: BoxDecoration(
+              color: folder.color,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Center(
+              child: Text(
+                folder.name,
+                style: const TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ),
+        duration: const Duration(seconds: 3),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+    );
+  }
 
   Future<void> _showCreateFolderDialog({Folder? existingFolder}) async {
-    String folderName = existingFolder?.name ?? "";
-    Color selectedColor = existingFolder?.color ?? Color(0xFFFfd4a4a);
+    folderNameController.text = existingFolder?.name ?? "";
+    selectedColor = existingFolder?.color ?? const Color(0xffffd4a4a);
 
-    TextEditingController folderNameController =
-        TextEditingController(text: folderName);
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+    final authService = AuthService();
 
     await showDialog(
       context: context,
@@ -31,11 +109,10 @@ class _DashboardPageState extends State<DashboardPage> {
         return AlertDialog(
           title: Text(
             existingFolder == null ? "Erstelle ein Set" : "Bearbeite das Set",
-            style: TextStyle(color: Colors.white),
+            style: const TextStyle(color: Colors.white),
           ),
-          content: Container(
-            width: MediaQuery.of(context).size.width *
-                0.3, // Adjust the width as needed
+          content: SizedBox(
+            width: MediaQuery.of(context).size.width * 0.3,
             child: Form(
               key: formKey,
               child: Column(
@@ -43,12 +120,11 @@ class _DashboardPageState extends State<DashboardPage> {
                 children: [
                   TextFormField(
                     controller: folderNameController,
-                    maxLength: 35, // Set maximum length
+                    maxLength: 35,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
                       });
-                      folderName = value;
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -58,28 +134,27 @@ class _DashboardPageState extends State<DashboardPage> {
                     },
                     decoration: InputDecoration(
                       labelText: 'Name des Sets',
-                      counterText: "", // Remove character counter
+                      counterText: "",
                       errorText: formKey.currentState?.validate() == false
                           ? 'Trage einen Namen für das Set ein.'
                           : null,
-                      labelStyle:
-                          TextStyle(color: Colors.white), // Set label color
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white), // Set focused border color
+                      labelStyle: const TextStyle(color: Colors.white),
+                      focusedBorder: const UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
                       ),
-                      hintStyle: TextStyle(color: Colors.white),
-                      suffixStyle: TextStyle(color: Colors.white),
+                      hintStyle: const TextStyle(color: Colors.white),
+                      suffixStyle: const TextStyle(color: Colors.white),
                     ),
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
-                  SizedBox(height: 10),
-                  Text(
+                  const SizedBox(height: 10),
+                  const Text(
                     "Wähle eine Farbe aus:",
                     style: TextStyle(color: Colors.white),
                   ),
-                  SizedBox(height: 5),
+                  const SizedBox(height: 5),
                   ColorPicker(
+                    initialColor: selectedColor,
                     onColorSelected: (color) {
                       selectedColor = color;
                     },
@@ -90,36 +165,51 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           actions: [
             ButtonBar(
-              alignment:
-                  MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+              alignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child:
-                      Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                  child: const Text('Abbrechen', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState?.validate() == true) {
-                      if (existingFolder == null) {
-                        setState(() {
-                          folders.insert(0,
-                              Folder(name: folderName, color: selectedColor));
-                        });
-                      } else {
-                        setState(() {
-                          existingFolder.name = folderName;
-                          existingFolder.color = selectedColor;
-                        });
-                      }
-                      Navigator.of(context).pop();
+                  onPressed: () async {
+                    final name = folderNameController.text;
+                    final color = selectedColor;
+                    final uid = authService.currentUserUID();
+
+                    final folderData = {
+                      'name': name,
+                      'color': color.value,
+
+                    };
+
+                    if (existingFolder == null) {
+                      final docRef = await FirebaseFirestore.instance.collection('users').doc(uid).collection('folders').add(folderData);
+                      final newFolder = Folder(name: name, color: color, id: docRef.id);
+                      setState(() {
+                        folders.add(newFolder);
+                      });
+                    } else {
+                      await FirebaseFirestore.instance
+                          .collection('folders')
+                          .doc(existingFolder.id)
+                          .update(folderData);
+                      final updatedFolder = Folder(name: name, color: color, id: existingFolder.id);
+                      final index = folders.indexWhere((folder) => folder.id == existingFolder.id);
+                      setState(() {
+                        folders[index] = updatedFolder;
+                      });
                     }
+
+                    Navigator.of(context).pop();
+
+                    _showFolderCreatedSnackbar(Folder(name: name, color: color, id: '')); // Show the snackbar
                   },
                   child: Text(
                     existingFolder == null ? 'Erstellen' : 'Bearbeiten',
-                    style: TextStyle(color: Colors.green),
+                    style: const TextStyle(color: Colors.green),
                   ),
                 ),
               ],
@@ -135,21 +225,19 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(style: TextStyle(color: Colors.white), 'Set löschen'),
-          content: Text(
+          title: const Text(style: TextStyle(color: Colors.white), 'Set löschen'),
+          content: const Text(
               style: TextStyle(color: Colors.white),
               'Bist du dir sicher, dass du das Set löschen möchtest?'),
           actions: [
             ButtonBar(
-              alignment:
-                  MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+              alignment: MainAxisAlignment.spaceBetween,
               children: [
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child:
-                      Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                  child: const Text('Abbrechen', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -158,7 +246,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: Text('Löschen', style: TextStyle(color: Colors.red)),
+                  child: const Text('Löschen', style: TextStyle(color: Colors.red)),
                 ),
               ],
             ),
@@ -191,11 +279,11 @@ class _DashboardPageState extends State<DashboardPage> {
               alignment: Alignment.topRight,
               child: PopupMenuButton(
                 itemBuilder: (context) => [
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 1,
                     child: Text("Bearbeiten"),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 2,
                     child: Text("Löschen"),
                   ),
@@ -231,8 +319,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildEmptyFolderMessage() {
-    return SizedBox(
-      height: 450, // Ändere die Höhe nach Bedarf
+    return const SizedBox(
+      height: 450,
       child: Center(
         child: Text(
           'Klick auf das + Zeichen, um ein neues Set zu erstellen.',
@@ -246,7 +334,6 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-// UI der Seite
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -254,13 +341,13 @@ class _DashboardPageState extends State<DashboardPage> {
         padding: const EdgeInsets.all(20.0),
         child: Row(
           children: [
-            LeftSideBar(),
+            const LeftSideBar(),
             const SizedBox(width: 20),
             Expanded(
               child: Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: const Color(0xFFFF2c293a),
+                  color: const Color(0xffff2c293a),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: Column(
@@ -277,14 +364,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           },
                         ),
                         Container(
-                          decoration: BoxDecoration(
+                          decoration: const BoxDecoration(
                             shape: BoxShape.circle,
-                            color: Color.fromARGB(255, 96, 92,
-                                100), // Hintergrundfarbe des Kreises
+                            color: Color.fromARGB(255, 96, 92, 100),
                           ),
                           child: IconButton(
-                            icon: Icon(Icons.add,
-                                color: Colors.black), // Farbe des Pluszeichens
+                            icon: const Icon(Icons.add, color: Colors.black),
                             onPressed: () {
                               _showCreateFolderDialog();
                             },
@@ -292,32 +377,27 @@ class _DashboardPageState extends State<DashboardPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     folders.isEmpty
                         ? _buildEmptyFolderMessage()
                         : Expanded(
-                            child: GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 200,
-                                crossAxisSpacing: 10,
-                                mainAxisSpacing: 10,
-                              ),
-                              itemCount: folders
-                                  .where((folder) => folder.name
-                                      .toLowerCase()
-                                      .contains(searchTerm.toLowerCase()))
-                                  .length,
-                              itemBuilder: (BuildContext context, int index) {
-                                Folder folder = folders
-                                    .where((folder) => folder.name
-                                        .toLowerCase()
-                                        .contains(searchTerm.toLowerCase()))
-                                    .toList()[index];
-                                return _buildFolderTile(folder);
-                              },
-                            ),
-                          ),
+                      child: GridView.builder(
+                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                          maxCrossAxisExtent: 200,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10,
+                        ),
+                        itemCount: folders
+                            .where((folder) => folder.name.toLowerCase().contains(searchTerm.toLowerCase()))
+                            .length,
+                        itemBuilder: (BuildContext context, int index) {
+                          Folder folder = folders
+                              .where((folder) => folder.name.toLowerCase().contains(searchTerm.toLowerCase()))
+                              .toList()[index];
+                          return _buildFolderTile(folder);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
