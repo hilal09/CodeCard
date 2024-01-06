@@ -182,7 +182,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     final folderData = {
                       'name': name,
                       'color': color.value,
-
+                      'userUID': uid,
                     };
 
                     if (existingFolder == null) {
