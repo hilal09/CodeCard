@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'login_page.dart';
-import 'package:google_fonts/google_fonts.dart'; // Import für Google Fonts
+import 'package:google_fonts/google_fonts.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,9 +11,19 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
+  late Animation<double> _animation;
+  late AnimationController _imageAnimationController;
+  late Animation<double> _imageAnimation;
+  bool _showImage = false;
+
+  final double horizontalShiftCm =
+      0.4; // Verschiebung in Zentimeter, damit die bälle optisch in der mitte sind
+
+  late AnimationController _textAnimationController;
+  List<Animation<double>> _letterAnimations = [];
+  final String text = 'CODE CARD';
 
   @override
   void initState() {
@@ -21,78 +31,125 @@ class _SplashScreenState extends State<SplashScreen>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2), // Anpassbare Animationsdauer
+      duration: const Duration(seconds: 2),
+    );
+    _animation =
+        Tween<double>(begin: 1.0, end: 0.0).animate(_animationController);
+
+    _imageAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+    _imageAnimation =
+        Tween<double>(begin: 0.0, end: 1.0).animate(_imageAnimationController);
+
+    _animationController.forward().then((_) {
+      setState(() {
+        _showImage = true;
+      });
+      _imageAnimationController.forward();
+
+      Future.delayed(const Duration(seconds: 3), () {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => const LoginPage()),
+        );
+      });
+    });
+
+    // Text Animation
+    _textAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3), // Gesamtdauer für den Text
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeIn,
-      ),
-    );
+    int totalLetters = text.length;
+    for (int i = 0; i < totalLetters; i++) {
+      // Das Interval für jeden Buchstaben anpassen
+      double start = i / totalLetters;
+      double end = (i + 1) / totalLetters;
+      _letterAnimations.add(
+        Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: _textAnimationController,
+            curve: Interval(start, end, curve: Curves.easeIn),
+          ),
+        ),
+      );
+    }
 
-    _animationController.forward();
-
-    _navigateToLogin();
-  }
-
-  Future<void> _navigateToLogin() async {
-    await Future.delayed(const Duration(seconds: 3));
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (_) => const LoginPage(),
-      ),
-    );
+    _textAnimationController.forward();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
+    _imageAnimationController.dispose();
+    _textAnimationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    double shiftInPixels = MediaQuery.of(context).devicePixelRatio *
+        37.7952755906 *
+        horizontalShiftCm;
+
     return Scaffold(
       backgroundColor: const Color(0xffff2c293a),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: Lottie.asset(
-                'assets/images/balls.json',
-                width: 200,
-                height: 200,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(height: 20),
-            FadeTransition(
-              opacity: _fadeAnimation,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left:
-                        67.0), // Abstand damit mittig zum Zentrum der Animation
-                child: Text(
-                  'CODE CARD',
-                  style: GoogleFonts.sourceCodePro(
-                    textStyle: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 80,
-                      shadows: [
-                        Shadow(
-                          blurRadius: 6.0,
-                          color: Color(0xfff4cae97),
-                          offset: Offset(3.0, 1.0),
-                        ),
-                      ],
-                      fontWeight: FontWeight.w300,
-                    ),
+            if (!_showImage)
+              Transform.translate(
+                offset: Offset(-shiftInPixels, 0),
+                child: FadeTransition(
+                  opacity: _animation,
+                  child: Lottie.asset(
+                    'assets/images/balls.json',
+                    width: 200,
+                    height: 200,
+                    fit: BoxFit.cover,
                   ),
                 ),
               ),
+            if (_showImage)
+              FadeTransition(
+                opacity: _imageAnimation,
+                child: Image.asset(
+                  'assets/images/SPSLogo.png',
+                  width: 200,
+                  height: 200,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: _letterAnimations.asMap().entries.map((entry) {
+                int idx = entry.key;
+                Animation<double> animation = entry.value;
+                return FadeTransition(
+                  opacity: animation,
+                  child: Text(
+                    text[idx],
+                    style: GoogleFonts.sourceCodePro(
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 60,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 6.0,
+                            color: Color(0xfff4cae97),
+                            offset: Offset(3.0, 1.0),
+                          ),
+                        ],
+                        fontWeight: FontWeight.w300,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
             ),
           ],
         ),
