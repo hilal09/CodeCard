@@ -60,7 +60,7 @@ class _SuchleisteState extends State<Suchleiste> {
               decoration: InputDecoration(
                 labelText: _hasFocus || _textEditingController.text.isNotEmpty
                     ? ''
-                    : 'Search',
+                    : 'Suche',
                 labelStyle: const TextStyle(fontSize: 20, color: Colors.white),
                 fillColor: const Color.fromARGB(255, 45, 31, 65),
                 filled: true,

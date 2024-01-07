@@ -68,7 +68,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(
-            existingFlashcard == null ? "Create Flashcard" : "Edit Flashcard",
+            existingFlashcard == null ? "Erstelle Karteikarte" : "Bearbeite Karteikarte",
             style: TextStyle(color: Colors.white),
           ),
           content: Container(
@@ -89,15 +89,15 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter text for the front side.';
+                        return 'Bitte gebe den Text für die Vorderseite ein.';
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Text for the front side',
+                      labelText: 'Text für die Vorderseite',
                       counterText: "",
                       errorText: formKey.currentState?.validate() == false
-                          ? 'Please enter text for the front side.'
+                          ? 'Bitte gebe den Text für die Vorderseite ein.'
                           : null,
                       labelStyle: TextStyle(color: Colors.white),
                       focusedBorder: UnderlineInputBorder(
@@ -120,15 +120,15 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     },
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter text for the back side.';
+                        return 'Bitte gebe den Text für die Hinterseite ein.';
                       }
                       return null;
                     },
                     decoration: InputDecoration(
-                      labelText: 'Text for the back side',
+                      labelText: 'Text für die Hinterseite',
                       counterText: "",
                       errorText: formKey.currentState?.validate() == false
-                          ? 'Please enter text for the back side.'
+                          ? 'Bitte gebe den Text für die Hinterseite ein.'
                           : null,
                       labelStyle: TextStyle(color: Colors.white),
                       focusedBorder: UnderlineInputBorder(
@@ -140,7 +140,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 10),
-                  Text("Select color:", style: TextStyle(color: Colors.white)),
+                  Text("Wähle eine Farbe aus:", style: TextStyle(color: Colors.white)),
                   SizedBox(height: 5),
                   ColorPicker(
                     onColorSelected: (color) {
@@ -160,7 +160,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: Text('Cancel', style: TextStyle(color: Colors.white)),
+                  child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -191,7 +191,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: Text('Create', style: TextStyle(color: Colors.white)),
+                  child: Text('Erstellen', style: TextStyle(color: Color(0xfff4cae97))),
                 ),
               ],
             ),
