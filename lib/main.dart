@@ -1,3 +1,12 @@
+/* 
+DateiName: main.dart
+Authors: Hilal Cubukcu(ThemeData)
+Zuletzt bearbeitet am: 07.01.2024
+Beschreibung: Dieser Flutter-Code initialisiert Firebase und die Anwendung wird 
+gestartet, wobei ein dunkles Theme mit einer spezifischen Schriftart 
+(sourceCodePro) verwendet wird. Die Anwendung beginnt mit einer SplashScreen-Seite.
+*/
+
 import 'package:codecard/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

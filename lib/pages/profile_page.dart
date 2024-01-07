@@ -1,3 +1,16 @@
+/* 
+DateiName: profile_page.dart
+Authors: Hilal Cubukcu(alles)
+Zuletzt bearbeitet am: 07.01.2024
+Beschreibung: Dieser Flutter-Code definiert ein `ProfilePage`-Widget, das 
+Benutzerprofilinformationen wie die E-Mail-Adresse und das Passwort anzeigt. 
+Es enthält Funktionen zum Aktualisieren der E-Mail-Adresse, zum Ändern des Passworts,
+zum Ausloggen und zum Löschen des Benutzerkontos. Der Code verwendet verschiedene 
+Dialoge und Textfelder, um diese Aktionen zu ermöglichen, und interagiert mit 
+Firebase für Authentifizierung und Datenspeicherung.
+*/
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codecard/pages/login_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -134,17 +147,40 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   Future<void> _showDeleteAccountDialog() async {
+    final TextEditingController currentPasswordController =
+        TextEditingController();
+    bool showError = false;
+
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Bist du Dir sicher?',
               style: TextStyle(color: Colors.white)),
-          content: const Text(
-            '''Wenn Du Löschen wählst, löschen wir Dein Konto auf unserem Server.
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                '''Wenn Du Löschen wählst, löschen wir Dein Konto auf unserem Server.
 
 Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.''',
-            style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white),
+              ),
+              SizedBox(height: 16),
+              TextField(
+                controller: currentPasswordController,
+                obscureText: true,
+                decoration: InputDecoration(labelText: 'Aktuelles Passwort'),
+              ),
+              if (showError)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    'Bitte fülle das Passwort-Feld aus',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+            ],
           ),
           actions: [
             TextButton(
@@ -159,18 +195,69 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                 style: TextStyle(color: Color(0xffffd4a4a)),
               ),
               onPressed: () async {
-                // Call the deleteAccount method from AuthService
-                await _authService.deleteAccount(currentUser.uid);
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (_) => LoginPage()),
-                  (route) => false,
-                );
+                String currentPassword = currentPasswordController.text;
+
+                if (currentPassword.isNotEmpty) {
+                  await deleteAccount(currentUser.uid, currentPassword);
+                } else {
+                  setState(() {
+                    showError = true;
+                  });
+                }
               },
             ),
           ],
         );
       },
     );
+  }
+
+  Future<void> deleteAccount(String uid, String currentPassword) async {
+    User user = FirebaseAuth.instance.currentUser!;
+    AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!, password: currentPassword);
+
+    try {
+      await user.reauthenticateWithCredential(credential);
+
+      await currentUser.delete();
+
+      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
+
+      QuerySnapshot<Map<String, dynamic>> foldersSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(uid)
+              .collection('folders')
+              .get();
+
+      for (QueryDocumentSnapshot<Map<String, dynamic>> folderDoc
+          in foldersSnapshot.docs) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .collection('folders')
+            .doc(folderDoc.id)
+            .collection('flashcards')
+            .get()
+            .then((flashcardsSnapshot) {
+          for (QueryDocumentSnapshot<Map<String, dynamic>> flashcardDoc
+              in flashcardsSnapshot.docs) {
+            flashcardDoc.reference.delete();
+          }
+        });
+
+        folderDoc.reference.delete();
+      }
+
+      Navigator.of(context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => LoginPage()),
+        (route) => false,
+      );
+    } catch (e) {
+      print('Error deleting user data: $e');
+      _showErrorPopup(e.toString());
+    }
   }
 
   Future<String?> updateEmail(String currentPassword, String newEmail) async {
@@ -241,7 +328,9 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('OK', style: TextStyle(color: Color(0xFFFF7A00))),
+              child: Text(
+                'OK',
+              ),
             ),
           ],
         );
@@ -259,33 +348,33 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Update Email'),
+          title: Text('E-Mail Adresse ändern'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: currentPasswordController,
                 obscureText: true,
-                decoration: InputDecoration(labelText: 'Current Password'),
+                decoration: InputDecoration(labelText: 'Aktuelles Passwort'),
               ),
               SizedBox(height: 16),
               TextField(
                 controller: newEmailController,
-                decoration: InputDecoration(labelText: 'New Email'),
+                decoration: InputDecoration(labelText: 'Neue E-Mail Adresse'),
               ),
               if (showError)
                 Padding(
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
-                    'Please fill in both fields',
+                    'Beide Felder müssen ausgefüllt werden',
                     style: TextStyle(color: Colors.red),
                   ),
                 ),
               Padding(
                 padding: const EdgeInsets.only(top: 16.0),
                 child: Text(
-                  'Attention: You need to verify your new email before you can log in again.',
-                  style: TextStyle(color: Colors.blue),
+                  'Achtung: Du musst deine neue E-Mail-Adresse verifizieren, bevor du dich erneut anmelden kannst.',
+                  style: TextStyle(color: Color(0xffffd4a4a)),
                 ),
               ),
             ],
@@ -295,28 +384,23 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text('Abbrechen'),
             ),
             TextButton(
               onPressed: () {
-                // Add your logic to handle updating email
                 String currentPassword = currentPasswordController.text;
                 String newEmail = newEmailController.text;
 
-                // Validate fields and perform the update
                 if (currentPassword.isNotEmpty && newEmail.isNotEmpty) {
-                  // Call your update email function or perform the desired action
                   updateEmail(currentPassword, newEmail);
-                  Navigator.of(context)
-                      .pop(); // Close the dialog using the captured context
+                  Navigator.of(context).pop();
                 } else {
-                  // Show error message
                   setState(() {
                     showError = true;
                   });
                 }
               },
-              child: Text('Update'),
+              child: Text('Ändern'),
             ),
           ],
         );
@@ -329,7 +413,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Change Password'),
+          title: Text('Passwort ändern'),
           content: Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -338,7 +422,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                   TextFormField(
                     controller: _currentPasswordController,
                     decoration: InputDecoration(
-                      labelText: 'Current password',
+                      labelText: 'Aktuelles Passwort',
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xfffbd64b5)),
                       ),
@@ -346,7 +430,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'You need to type in your current password';
+                        return 'Du musst dein aktuelles Passwort eingeben.';
                       }
                       return null;
                     },
@@ -354,7 +438,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
-                      labelText: 'New Password',
+                      labelText: 'Neues Passwort',
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xfffbd64b5)),
                       ),
@@ -362,7 +446,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                     obscureText: true,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'You need to type in a password';
+                        return 'Du musst ein Passwort eingeben.';
                       }
                       return null;
                     },
@@ -370,9 +454,10 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                   TextFormField(
                     controller: _confirmPasswordController,
                     decoration: InputDecoration(
-                      labelText: 'Confirm Password',
-                      errorText:
-                          _passwordsMatch ? null : 'Passwords do not match',
+                      labelText: 'Passwort bestätigen',
+                      errorText: _passwordsMatch
+                          ? null
+                          : 'Passwörter stimmen nicht überein.',
                       errorStyle: TextStyle(color: Colors.red),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xfffbd64b5)),
@@ -382,7 +467,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                     validator: (value) {
                       if (_passwordController.text.isNotEmpty &&
                           value != _passwordController.text) {
-                        return 'Passwords do not match';
+                        return 'Passwörter stimmen nicht überein.';
                       }
                       return null;
                     },
@@ -397,7 +482,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                 Navigator.of(context).pop();
                 _clearTextFields();
               },
-              child: Text('Cancel', style: TextStyle(color: Colors.white)),
+              child: Text('Abbrechen', style: TextStyle(color: Colors.white)),
             ),
             TextButton(
               onPressed: () {
@@ -408,7 +493,8 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
                   _clearTextFields();
                 }
               },
-              child: Text('Save', style: TextStyle(color: Color(0xfff94ee6b))),
+              child: Text('Speichern',
+                  style: TextStyle(color: Color(0xfff94ee6b))),
             ),
           ],
         );
@@ -426,7 +512,7 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
     required String label,
     required String initialValue,
     required double width,
-    VoidCallback? onEditClick, // Callback function for edit icon click
+    VoidCallback? onEditClick,
   }) {
     late TextEditingController _controller;
     String _editingValue = initialValue;

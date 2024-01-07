@@ -1,10 +1,23 @@
+/* 
+DateiName: colorpicker.dart
+Authors: Hilal Cubukcu(alles)
+Zuletzt bearbeitet am: 07.01.2024
+Beschreibung: Dieser Flutter-Code implementiert einen einfachen Farbauswähler 
+(ColorPicker). Der Farbauswähler besteht aus verschiedenen Farbauswahl-Buttons, 
+die der Benutzer antippen kann. Die ausgewählte Farbe wird visuell durch ein 
+Häkchen in dem ausgewählten Farbbutton dargestellt. Der Farbauswähler gibt die 
+ausgewählte Farbe über die bereitgestellte Funktion onColorSelected zurück und 
+akzeptiert eine optionale anfängliche Farbe (initialColor).
+*/
+
 import 'package:flutter/material.dart';
 
 class ColorPicker extends StatefulWidget {
   final Function(Color) onColorSelected;
   final Color initialColor;
 
-  const ColorPicker({Key? key, required this.onColorSelected, required this.initialColor})
+  const ColorPicker(
+      {Key? key, required this.onColorSelected, required this.initialColor})
       : super(key: key);
 
   @override
@@ -17,7 +30,7 @@ class _ColorPickerState extends State<ColorPicker> {
   @override
   void initState() {
     super.initState();
-    selectedColor = widget.initialColor; // Initialize with the provided initial color
+    selectedColor = widget.initialColor;
   }
 
   Widget _buildColorButton(Color color) {
@@ -25,7 +38,7 @@ class _ColorPickerState extends State<ColorPicker> {
       onTap: () {
         setState(() {
           selectedColor = color;
-          widget.onColorSelected(selectedColor); // Notify parent about the selected color
+          widget.onColorSelected(selectedColor);
         });
       },
       child: Container(

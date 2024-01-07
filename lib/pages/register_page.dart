@@ -1,3 +1,14 @@
+/* 
+DateiName: register_page.dart
+Authors: Hilal Cubukcu(UI)
+Zuletzt bearbeitet am: 07.01.2024
+Beschreibung: Der Dart-Code implementiert eine Registrierungsseite in Flutter, 
+die die Firebase-Authentifizierung und Firestore für die Benutzerregistrierung 
+nutzt. Benutzer können ihre E-Mail-Adresse und ein Passwort eingeben, und nach 
+erfolgreicher Registrierung werden ihre Details in der Firestore-Datenbank gespeichert. 
+Die Seite enthält auch Validierungslogik und bietet die Möglichkeit, zwischen 
+den Anmelde- und Registrierungstabs zu wechseln.
+*/
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codecard/pages/dashboard_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';

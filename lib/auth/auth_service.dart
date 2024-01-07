@@ -156,47 +156,6 @@ class AuthService {
     );
   }
 
-  Future<void> deleteAccount(String uid) async {
-    try {
-      // Delete user in Authentication
-      await user?.delete();
-
-      // Delete user details
-      await FirebaseFirestore.instance.collection('users').doc(uid).delete();
-
-      // Delete all folders of the user
-      QuerySnapshot<Map<String, dynamic>> foldersSnapshot =
-          await FirebaseFirestore.instance
-              .collection('users')
-              .doc(uid)
-              .collection('folders')
-              .get();
-
-      for (QueryDocumentSnapshot<Map<String, dynamic>> folderDoc
-          in foldersSnapshot.docs) {
-        // Delete all flashcards in each folder
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(uid)
-            .collection('folders')
-            .doc(folderDoc.id)
-            .collection('flashcards')
-            .get()
-            .then((flashcardsSnapshot) {
-          for (QueryDocumentSnapshot<Map<String, dynamic>> flashcardDoc
-              in flashcardsSnapshot.docs) {
-            flashcardDoc.reference.delete();
-          }
-        });
-
-        // Delete the folder
-        folderDoc.reference.delete();
-      }
-    } catch (e) {
-      print('Error deleting user data: $e');
-    }
-  }
-
   //Add User Details to Database
   Future<void> addUserDetails(String email, String uid) async {
     await FirebaseFirestore.instance.collection("users").doc(uid).set({
