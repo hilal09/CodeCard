@@ -493,7 +493,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                             Container(
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Color.fromARGB(255, 76, 104, 90),
+                                color: Color.fromARGB(234, 78, 116, 97),
                               ),
                               child: IconButton(
                                 icon:
