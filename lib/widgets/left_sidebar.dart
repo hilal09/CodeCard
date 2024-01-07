@@ -20,7 +20,9 @@ import 'package:flutter/material.dart';
 import 'package:codecard/pages/dashboard_page.dart';
 
 class LeftSideBar extends StatefulWidget {
-  const LeftSideBar({Key? key}) : super(key: key);
+  final Function()? onFolderAdded;
+
+  const LeftSideBar({Key? key, this.onFolderAdded}) : super(key: key);
 
   @override
   _LeftSideBarState createState() => _LeftSideBarState();
@@ -73,6 +75,11 @@ class _LeftSideBarState extends State<LeftSideBar> {
             );
           }).toList();
         });
+
+        // Call the onFolderAdded callback if provided
+        if (widget.onFolderAdded != null) {
+          widget.onFolderAdded!();
+        }
       } catch (e) {
         print('Error fetching user folders: $e');
       }
@@ -114,9 +121,6 @@ class _LeftSideBarState extends State<LeftSideBar> {
               );
             },
           ),
-          const SizedBox(height: 10),
-
-          // Display the dynamically created FolderIcons
           Expanded(
             child: SingleChildScrollView(
               child: Column(
@@ -124,7 +128,6 @@ class _LeftSideBarState extends State<LeftSideBar> {
               ),
             ),
           ),
-
           IconButton(
             icon: const Icon(Icons.person, color: Colors.white),
             onPressed: () {

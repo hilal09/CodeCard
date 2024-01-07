@@ -62,11 +62,11 @@ class _ColorPickerState extends State<ColorPicker> {
       spacing: 8.0,
       runSpacing: 8.0,
       children: [
-        _buildColorButton(const Color(0xffffd4a4a)),
-        _buildColorButton(const Color(0xfffe81a81)),
-        _buildColorButton(const Color(0xfff94ee6b)),
-        _buildColorButton(const Color(0xfff4cae97)),
-        _buildColorButton(const Color(0xfffbd64b5)),
+        _buildColorButton(const Color(0xfffe69597)),
+        _buildColorButton(const Color(0xfffceb5b7)),
+        _buildColorButton(const Color(0xfff9cadce)),
+        _buildColorButton(const Color(0xfff7ec4cf)),
+        _buildColorButton(const Color(0xfff84dcc6)),
       ],
     );
   }

@@ -1,9 +1,9 @@
 /* 
 DateiName: folder_icon.dart
 Authors: Hilal Cubukcu(alles)
-Zuletzt bearbeitet am: .01.2024
+Zuletzt bearbeitet am: 07.01.2024
 Beschreibung: Dieser Flutter-Code implementiert ein anpassbares FolderIcon-Widget, 
-das ein farbiges Container-Element mit einer Textabkürzung für Ordner- oder 
+das ein farbiges Icon-Element mit einer Textabkürzung für Ordner- oder 
 Dateinamen darstellt. Dieses Widget ist interaktiv und ruft eine spezifizierte 
 Funktion (onTap) auf, wenn darauf getippt wird.
 */
@@ -30,18 +30,20 @@ class FolderIcon extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: GestureDetector(
         onTap: () => onTap(),
-        child: Container(
-          padding: const EdgeInsets.all(7),
-          decoration: BoxDecoration(
-            color: folderColor,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Text(
-            displayText,
-            style: const TextStyle(
-              color: Colors.white,
+        child: Column(
+          children: [
+            Icon(
+              Icons.folder,
+              color: folderColor,
+              size: 45,
             ),
-          ),
+            Text(
+              displayText,
+              style: const TextStyle(
+                color: Colors.white,
+              ),
+            ),
+          ],
         ),
       ),
     );
