@@ -12,9 +12,7 @@ void main() async {
           projectId: "codecard-52b0f",
           storageBucket: "codecard-52b0f.appspot.com",
           messagingSenderId: "935526288022",
-          appId: "1:935526288022:web:4f2ce41d960a1aeced10b7"
-      )
-  );
+          appId: "1:935526288022:web:4f2ce41d960a1aeced10b7"));
 
   runApp(const MyApp());
 }
@@ -27,7 +25,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-        textTheme: GoogleFonts.sourceCodeProTextTheme().copyWith(),
+        textTheme: GoogleFonts.sourceCodeProTextTheme().apply(
+          bodyColor: Colors.white,
+        ),
       ),
       home: const Scaffold(
         body: SplashScreen(),

@@ -40,14 +40,12 @@ class _LoginPageState extends State<LoginPage> {
           print('onTabChanged - isSelected: $isSelected');
           if (this.mounted) {
             setState(() {
-              isLoginTab = isSelected != null ? isSelected : false;  // <-- Updated Line
+              isLoginTab =
+                  isSelected != null ? isSelected : false; // <-- Updated Line
               print('onTabChanged - isLoginTab: $isLoginTab');
             });
           }
         },
-
-
-
         onAuthPressed: () async {
           if (await _authService.signIn(
             context,
@@ -110,7 +108,6 @@ class AuthWidget extends StatelessWidget {
                   const Text(
                     'CODE CARD',
                     style: TextStyle(
-                      color: Colors.white,
                       fontSize: 70,
                       shadows: [
                         Shadow(
@@ -138,11 +135,9 @@ class AuthWidget extends StatelessWidget {
                     width: 300,
                     child: TextField(
                       controller: emailController,
-                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         labelText: 'E-Mail Adresse',
                         prefixIcon: const Icon(Icons.mail, color: Colors.white),
-                        labelStyle: const TextStyle(color: Colors.white),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(10),
@@ -159,11 +154,9 @@ class AuthWidget extends StatelessWidget {
                     width: 300,
                     child: TextField(
                       controller: passwordController,
-                      style: const TextStyle(color: Colors.white),
                       decoration: InputDecoration(
                         labelText: 'Passwort',
                         prefixIcon: const Icon(Icons.lock, color: Colors.white),
-                        labelStyle: const TextStyle(color: Colors.white),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(color: Colors.white),
                           borderRadius: BorderRadius.circular(10),
@@ -207,7 +200,8 @@ class AuthWidget extends StatelessWidget {
     );
   }
 
-  Widget buildTabButton(String text, bool isSelected, [VoidCallback? onPressed]) {
+  Widget buildTabButton(String text, bool isSelected,
+      [VoidCallback? onPressed]) {
     return ElevatedButton(
       onPressed: () {
         onTabChanged(isSelected);
@@ -217,7 +211,7 @@ class AuthWidget extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor:
-        isSelected ? const Color(0xffff10111a) : const Color(0xffff2c293a),
+            isSelected ? const Color(0xffff10111a) : const Color(0xffff2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codecard/pages/dashboard_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -192,28 +194,6 @@ class AuthService {
       }
     } catch (e) {
       print('Error deleting user data: $e');
-    }
-  }
-
-  Future<void> updateEmail(String newEmail) async {
-    try {
-      await _auth.currentUser?.updateEmail(newEmail);
-      // Update email in the database (you can implement this as needed)
-      print('Email updated successfully');
-    } catch (e) {
-      print('Error updating email: $e');
-      throw e; // Propagate the error
-    }
-  }
-
-  Future<void> updatePassword(String newPassword) async {
-    try {
-      await _auth.currentUser?.updatePassword(newPassword);
-      // Update password in the database (you can implement this as needed)
-      print('Password updated successfully');
-    } catch (e) {
-      print('Error updating password: $e');
-      throw e; // Propagate the error
     }
   }
 
