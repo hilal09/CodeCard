@@ -78,9 +78,12 @@ class _FlashcardPageState extends State<FlashcardPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: frontCaptionController,
                     maxLength: 350,
+                    maxLines: null, // Erlaube beliebig viele Zeilen
+                    keyboardType: TextInputType.multiline,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -112,6 +115,8 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   TextFormField(
                     controller: backCaptionController,
                     maxLength: 350,
+                    maxLines: null, // Erlaube beliebig viele Zeilen
+                    keyboardType: TextInputType.multiline,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
