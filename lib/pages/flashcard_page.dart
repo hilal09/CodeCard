@@ -516,11 +516,12 @@ class _FlashcardPageState extends State<FlashcardPage> {
                         : Expanded(
                       child: GridView.builder(
                         gridDelegate:
-                        SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 300,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
+                        SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 4,  // Anzahl der Karten in einer Zeile
+  crossAxisSpacing: 10, // Horizontaler Abstand zwischen den Karten
+  mainAxisSpacing: 5,  // Vertikaler Abstand zwischen den Karten
+  childAspectRatio: 1.5, // Seitenverhältnis der Karten (Länge / Höhe)
+),
                         itemCount: flashcards
                             .where((karteikarte) => karteikarte
                             .frontCaption
