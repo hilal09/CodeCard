@@ -18,8 +18,12 @@ class _SplashScreenState extends State<SplashScreen>
   late Animation<double> _imageAnimation;
   bool _showImage = false;
 
-  // Parameter für horizontale Verschiebung (0 für Zentrierung, positiver Wert für Linksverschiebung)
-  final double horizontalShiftCm = 0.4; // Verschiebung in Zentimeter
+  final double horizontalShiftCm =
+      0.4; // Verschiebung in Zentimeter, damit die bälle optisch in der mitte sind
+
+  late AnimationController _textAnimationController;
+  List<Animation<double>> _letterAnimations = [];
+  final String text = 'CODE CARD';
 
   @override
   void initState() {
@@ -45,24 +49,47 @@ class _SplashScreenState extends State<SplashScreen>
       });
       _imageAnimationController.forward();
 
-      Future.delayed(const Duration(seconds: 2), () {
+      Future.delayed(const Duration(seconds: 3), () {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => const LoginPage()),
         );
       });
     });
+
+    // Text Animation
+    _textAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 3), // Gesamtdauer für den Text
+    );
+
+    int totalLetters = text.length;
+    for (int i = 0; i < totalLetters; i++) {
+      // Das Interval für jeden Buchstaben anpassen
+      double start = i / totalLetters;
+      double end = (i + 1) / totalLetters;
+      _letterAnimations.add(
+        Tween<double>(begin: 0.0, end: 1.0).animate(
+          CurvedAnimation(
+            parent: _textAnimationController,
+            curve: Interval(start, end, curve: Curves.easeIn),
+          ),
+        ),
+      );
+    }
+
+    _textAnimationController.forward();
   }
 
   @override
   void dispose() {
     _animationController.dispose();
     _imageAnimationController.dispose();
+    _textAnimationController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    // Umrechnung von cm zu Pixel für die Verschiebung
     double shiftInPixels = MediaQuery.of(context).devicePixelRatio *
         37.7952755906 *
         horizontalShiftCm;
@@ -75,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen>
           children: [
             if (!_showImage)
               Transform.translate(
-                offset: Offset(-shiftInPixels, 0), // Anpassbare Verschiebung
+                offset: Offset(-shiftInPixels, 0),
                 child: FadeTransition(
                   opacity: _animation,
                   child: Lottie.asset(
@@ -97,26 +124,32 @@ class _SplashScreenState extends State<SplashScreen>
                 ),
               ),
             const SizedBox(height: 20),
-            FadeTransition(
-              opacity:
-                  _imageAnimation, // denselben AnimationController für den Text
-              child: Text(
-                'CODE CARD',
-                style: GoogleFonts.sourceCodePro(
-                  textStyle: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 60,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 6.0,
-                        color: Color(0xfff4cae97),
-                        offset: Offset(3.0, 1.0),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: _letterAnimations.asMap().entries.map((entry) {
+                int idx = entry.key;
+                Animation<double> animation = entry.value;
+                return FadeTransition(
+                  opacity: animation,
+                  child: Text(
+                    text[idx],
+                    style: GoogleFonts.sourceCodePro(
+                      textStyle: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 60,
+                        shadows: [
+                          Shadow(
+                            blurRadius: 6.0,
+                            color: Color(0xfff4cae97),
+                            offset: Offset(3.0, 1.0),
+                          ),
+                        ],
+                        fontWeight: FontWeight.w300,
                       ),
-                    ],
-                    fontWeight: FontWeight.w300,
+                    ),
                   ),
-                ),
-              ),
+                );
+              }).toList(),
             ),
           ],
         ),
