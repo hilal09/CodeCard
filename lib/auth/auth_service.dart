@@ -66,7 +66,8 @@ class AuthService {
   }
 
   // Register Function
-  Future signUp(BuildContext context) async {
+  Future signUp(
+      BuildContext context, _emailController, _passwordControlle) async {
     setState(() {
       emailError = "";
       passwordError = "";
@@ -120,22 +121,32 @@ class AuthService {
     }
   }
 
-  //Login Function
   Future signIn(BuildContext context,
       {required String email, required String password}) async {
     try {
-      print("Email (AuthService): $email");
-      await _auth.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => DashboardPage()),
-        (route) => false,
-      );
+      if (FirebaseAuth.instance.currentUser!.emailVerified) {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (_) => DashboardPage()),
+          (route) => false,
+        );
+      } else {
+        print("Login error: not verified yet.");
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              content: Text('Please verify your email before logging in.'),
+            );
+          },
+        );
+      }
     } catch (e) {
-      print("Login error (AuthService): $e");
+      print("Login error: $e");
       showDialog(
         context: context,
         builder: (context) {

@@ -93,13 +93,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
+      await FirebaseAuth.instance.currentUser!.sendEmailVerification();
 
       addUserDetails(
         _emailController.text.trim(),
         FirebaseAuth.instance.currentUser!.uid,
       );
 
-      showSnackBar("Registration successful.");
+      showSnackBar(
+          "Registration successful. Please check your email for verification.");
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -132,13 +134,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           });
         },
         onAuthPressed: () {
-          signUp().then((_) {
-            // Redirect to DashboardPage after successful registration
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => DashboardPage()),
-            );
-          });
+          signUp();
         },
         onLoginPressed: () {
           // Navigate to RegistrationPage

@@ -59,17 +59,11 @@ class _LoginPageState extends State<LoginPage> {
           }
         },
         onAuthPressed: () async {
-          if (await _authService.signIn(
+          await _authService.signIn(
             context,
             email: emailController.text,
             password: passwordController.text,
-          )) {
-            // Redirect to DashboardPage
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => DashboardPage()),
-            );
-          }
+          );
         },
         onRegisterPressed: () {
           Navigator.of(context).push(
