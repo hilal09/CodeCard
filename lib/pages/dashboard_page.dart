@@ -189,7 +189,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       final docRef = await FirebaseFirestore.instance.collection('users').doc(uid).collection('folders').add(folderData);
                       final newFolder = Folder(name: name, color: color, id: docRef.id);
                       setState(() {
-                        folders.add(newFolder);
+                        folders.insert(0,newFolder);
                       });
                     } else {
                       await FirebaseFirestore.instance
