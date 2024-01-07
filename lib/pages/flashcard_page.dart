@@ -433,14 +433,17 @@ class _FlashcardPageState extends State<FlashcardPage> {
   }
 
   Widget _buildEmptyFlashcardMessage() {
-    return Center(
-      child: Text(
-        'Klicke auf das +, um eine neue Karteikarte zu erstellen',
-        style: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
+    return const SizedBox(
+      height: 450,
+      child: Center(
+        child: Text(
+          'Klick auf das + Zeichen, um ein neues Set zu erstellen.',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 18,
+          ),
+          textAlign: TextAlign.center,
         ),
-        textAlign: TextAlign.center,
       ),
     );
   }
