@@ -1,3 +1,15 @@
+/*
+DateiName: forgot_password_page.dart
+Authors: Arkan Kadir (Alles)
+Zuletzt bearbeitet am: 08.01.2024
+Beschreibung:
+  - Die `ForgotPasswordPage` ist eine StatelessWidget, die die Passwort-Wiederherstellungsseite der Anwendung darstellt.
+  - Benutzer können ihre E-Mail-Adresse eingeben, um einen Link zum Zurücksetzen ihres Passworts zu erhalten.
+  - Die Seite enthält ein Textfeld für die E-Mail-Adresse und einen Button zum Auslösen des Passwort-Zurücksetzen-Prozesses.
+  - Der `AuthService` wird verwendet, um die Passwort-Wiederherstellungsfunktion zu implementieren.
+  - Das UI-Design ist auf das CODE CARD-Branding abgestimmt, einschließlich des Logos und der Farbpalette.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:codecard/auth/auth_service.dart';
 

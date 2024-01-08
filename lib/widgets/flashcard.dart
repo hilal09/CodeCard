@@ -1,6 +1,6 @@
 /* 
 DateiName: flashcard.dart
-Authors: Hilal Cubukcu(alles, außer id)
+Authors: Hilal Cubukcu(Flashcard), Arkan Kadir (Flashcard copyWith)
 Zuletzt bearbeitet am: 07.01.2024
 Beschreibung: Dieser Dart-Code definiert eine Klasse namens Flashcard. Ein
 Flashcard-Objekt repräsentiert eine Karte in deiner Anwendung und enthält

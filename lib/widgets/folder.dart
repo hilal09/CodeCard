@@ -1,6 +1,6 @@
 /* 
 DateiName: folder.dart
-Authors: Hilal Cubukcu(alles, außer id)
+Authors: Hilal Cubukcu(alles, außer id), Arkan Kadir (rest)
 Zuletzt bearbeitet am: 07.01.2024
 Beschreibung: Dieser Dart-Code definiert eine Klasse namens Folder. Ein 
 Folder-Objekt repräsentiert einen Ordner in der Anwendung und enthält Informationen 

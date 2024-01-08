@@ -1,6 +1,6 @@
 /* 
 DateiName: flashcard_page.dart
-Authors: Hilal Cubukcu(UI, Funktionalität), Amara Akram (Abfragelogik), Ceyda Sariouglu (UI, Funktionalität)
+Authors: Hilal Cubukcu(UI, Funktionalität), Amara Akram (Abfragelogik), Ceyda Sariouglu (UI, Funktionalität), Arkan Kadir (Firebase)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung: Dieses Stateful Widget ist für die Darstellung und Verwaltung von Karteikarten (Flashcards) innerhalb eines bestimmten Ordners (Folder) zuständig.
 Hauptfunktionen:
@@ -17,7 +17,6 @@ Hauptfunktionen:
 (Hinzufügen, Bearbeiten, Löschen von Karteikarten) sowie der Benutzerinteraktion mit diesen Daten.
 */
 
-import 'package:codecard/widgets/colorpicker.dart';
 import 'package:codecard/widgets/flashcard.dart';
 import 'package:codecard/widgets/folder.dart';
 import 'package:codecard/widgets/left_sidebar.dart';

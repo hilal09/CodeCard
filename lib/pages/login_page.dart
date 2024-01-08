@@ -1,3 +1,15 @@
+/*
+DateiName: login_page.dart
+Authors: Hilal Cubukcu(UI), Yudum Yilmaz (UI), Arkan Kadir (Firebase)
+Zuletzt bearbeitet am: 07.01.2024
+Beschreibung: Der Dart-Code implementiert eine Flutter-Anmeldeseite, die die
+Firebase-Authentifizierung über den `AuthService`-Dienst integriert. Die Benutzer
+können sich mit ihrer E-Mail-Adresse und ihrem Passwort anmelden oder zur
+Registrierung wechseln. Die Seite enthält Funktionen zum Umschalten zwischen
+Anmeldungs- und Registrierungstabs sowie zur Verarbeitung von Anmeldeversuchen.
+Bei erfolgreicher Anmeldung wird der Benutzer zur Dashboard-Seite weitergeleitet.
+*/
+
 import 'package:codecard/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/register_page.dart';

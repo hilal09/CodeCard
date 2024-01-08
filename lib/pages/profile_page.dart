@@ -1,6 +1,6 @@
 /* 
 DateiName: profile_page.dart
-Authors: Hilal Cubukcu(alles)
+Authors: Hilal Cubukcu(alles), Arkan Kadir (Firebase)
 Zuletzt bearbeitet am: 07.01.2024
 Beschreibung: Dieser Flutter-Code definiert ein `ProfilePage`-Widget, das 
 Benutzerprofilinformationen wie die E-Mail-Adresse und das Passwort anzeigt. 

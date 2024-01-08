@@ -1,6 +1,6 @@
 /* 
 DateiName: auth_service.dart
-Authors: Hilal Cubukcu(E-Mail Verifizierung))
+Authors: Hilal Cubukcu(E-Mail Verifizierung), Arkan Kadir (Firebase, alle restlichen funktionen)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung:Dieses Dart-File enthält eine Klasse namens AuthService, die
 Funktionen für die Authentifizierung und Interaktion mit Firebase Authentication

@@ -1,6 +1,6 @@
 /* 
 DateiName: main.dart
-Authors: Hilal Cubukcu(ThemeData)
+Authors: Hilal Cubukcu(ThemeData), Arkan Kadir (Alles außer ThemeData)
 Zuletzt bearbeitet am: 07.01.2024
 Beschreibung: Dieser Flutter-Code initialisiert Firebase und die Anwendung wird 
 gestartet, wobei ein dunkles Theme mit einer spezifischen Schriftart 
