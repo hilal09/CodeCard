@@ -1,9 +1,17 @@
 /* 
 DateiName: flashcard_page.dart
-Authors: Hilal Cubukcu(UI), Amara Akram (Abfragelogik/ Quiz)
+Authors: Hilal Cubukcu(UI), Amara Akram (Abfragelogik/ Quiz), Ceyda Sariouglu (UI, Funktionalitäten) 
 Zuletzt bearbeitet am: 08.01.2024
-Beschreibung: 
-*/
+Beschreibung: Dieses Stateful Widget ist für die Darstellung und Verwaltung von Karteikarten (Flashcards) innerhalb eines bestimmten Ordners (Folder) zuständig. 
+Hauptfunktionen:
+- Abrufen der Karteikarten eines Benutzers von einem Firestore-Dienst (`_fetchUserFlashcards`).
+- Erstellen neuer Karteikarten und Bearbeiten bestehender Karteikarten durch einen Dialog (`_showCreateFlashcardDialog`).
+- Löschen von Karteikarten über einen Dialog (`_showDeleteFlashcardDialog`).
+- Durchführung einer Quiz-Funktion (`_startQuiz`), die die Benutzerinteraktion mit den Karteikarten ermöglicht.
+- Darstellung von Karteikartendetails und Interaktionsoptionen, einschließlich der Möglichkeit, Karteikarten zu bearbeiten und zu löschen.
+- Suchfunktionalität, die es Benutzern ermöglicht, Karteikarten basierend auf ihrem Inhalt zu filtern (`Suchleiste`).
+ Die Seite dient als interaktives Element für Benutzer, um mit ihren Lerninhalten effektiv zu arbeiten. Der Fokus liegt auf der Handhabung von Daten
+(Hinzufügen, Bearbeiten, Löschen von Karteikarten) sowie der Benutzerinteraktion mit diesen Daten.*/
 
 import 'package:codecard/widgets/colorpicker.dart';
 import 'package:codecard/widgets/flashcard.dart';
