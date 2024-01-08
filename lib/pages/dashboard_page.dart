@@ -1,9 +1,18 @@
 /* 
 DateiName: dashboard_page.dart
-Authors: Hilal Cubukcu(UI), Amara Akram (erstes UI, Grid)
+Authors: Hilal Cubukcu(UI), Amara Akram (erstes UI, Grid), Ceyda Sarioglu (UI, Funktionalitäten)
 Zuletzt bearbeitet am: 08.01.2024
-Beschreibung: 
+Beschreibung: Haupt-Dashboard für unsere Lernkarten-App. Es ermöglicht Benutzern, ihre persönlichen Lernkartenordner (Folders) zu verwalten und anzuzeigen.
+Die Logik und die Darstellung der Ordner und ihrer Interaktionsmöglichkeiten:
+ - Initialisierung und Verwaltung einer Liste von Ordnern, die aus einer Firestore-Datenbank abgerufen werden.
+ - Die Funktion `fetchUserFolders` ruft die Ordner des aktuellen Benutzers ab und speichert sie in einem lokalen Zustand.
+ - Dialogfunktionen zum Erstellen, Bearbeiten und Löschen von Ordnern.
+ - Die Funktion `_showFolderCreatedSnackbar` zeigt eine Snackbar-Benachrichtigung an, wenn ein neuer Ordner erstellt oder ein bestehender bearbeitet wird.
+ - Das Rendering von Ordnertiles (`_buildFolderTile`), die auf Berührung den Benutzer zur FlashcardPage des jeweiligen Ordners führen.
+ - Eine Suchleiste ermöglicht es Benutzern, ihre Ordnerliste basierend auf dem Suchbegriff zu filtern.
+ Diese Seite bildet das zentrale Interface für die Benutzerinteraktion mit Lernkarten und Ordnern.
 */
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codecard/pages/flashcard_page.dart';
 import 'package:codecard/widgets/colorpicker.dart';
