@@ -1,6 +1,6 @@
 /* 
 DateiName: dashboard_page.dart
-Authors: Hilal Cubukcu(UI)
+Authors: Hilal Cubukcu(UI), Amara Akram (erstes UI, Grid)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung: 
 */
