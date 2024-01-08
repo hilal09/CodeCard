@@ -59,11 +59,10 @@ class _LeftSideBarState extends State<LeftSideBar> {
             );
           }).toList();
 
-          // Update folderIcons based on fetched folders
           folderIcons = folders.map((folder) {
             return FolderIcon(
               folderName: folder.name,
-              folderColor: folder.color, // Pass the color to FolderIcon
+              folderColor: folder.color,
               onTap: () {
                 Navigator.push(
                   context,
@@ -76,7 +75,6 @@ class _LeftSideBarState extends State<LeftSideBar> {
           }).toList();
         });
 
-        // Call the onFolderAdded callback if provided
         if (widget.onFolderAdded != null) {
           widget.onFolderAdded!();
         }

@@ -11,7 +11,7 @@ import 'package:codecard/widgets/flashcard.dart';
 import 'package:flutter/material.dart';
 
 class Folder {
-  String id; // Add an ID field
+  String id;
   String name;
   Color color;
   List<Flashcard> flashcards;

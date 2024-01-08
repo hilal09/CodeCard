@@ -124,7 +124,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
           ),
           actions: [
   ButtonBar(
-    alignment: MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+    alignment: MainAxisAlignment.spaceBetween,
     children: [
       ElevatedButton(
         onPressed: () {
@@ -136,7 +136,6 @@ class _FlashcardPageState extends State<FlashcardPage> {
         onPressed: () {
           if (formKey.currentState?.validate() == true) {
             if (existingFlashcard == null) {
-              // Erstelle eine neue Karteikarte
               setState(() {
                 flashcards.insert(0, Flashcard(
                   frontCaption: frontCaption,
@@ -145,7 +144,6 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 ));
               });
             } else {
-              // Aktualisiere die vorhandene Karteikarte
               setState(() {
                 existingFlashcard.frontCaption = frontCaption;
                 existingFlashcard.backCaption = backCaption;
@@ -178,7 +176,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               style: TextStyle(color: Colors.white)),
           actions: [
   ButtonBar(
-    alignment: MainAxisAlignment.spaceBetween, // Adjust alignment as needed
+    alignment: MainAxisAlignment.spaceBetween,
     children: [
       ElevatedButton(
         onPressed: () {
@@ -214,7 +212,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
   }
 
   void _showQuizDialog() {
-    bool showFront = true; // To toggle between front and back captions
+    bool showFront = true;
 
     showDialog(
       context: context,
@@ -253,7 +251,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       setState(() {
                         currentCardIndex--;
                         showFront =
-                            true; // Reset to front when moving to the previous card
+                            true;
                       });
                     }
                   },
@@ -265,7 +263,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       setState(() {
                         currentCardIndex++;
                         showFront =
-                            true; // Reset to front when moving to the next card
+                            true;
                       });
                     }
                   },
@@ -281,7 +279,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
 
   Widget _buildFlashcardSide(String caption, Color color) {
     return RotatedBox(
-      quarterTurns: 0, // Set to 1 for a 90-degree turn, 2 for 180 degrees, etc.
+      quarterTurns: 0, 
       child: Container(
         padding: const EdgeInsets.all(15),
         decoration: BoxDecoration(
@@ -306,7 +304,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
       child: Stack(
       children: [
         AspectRatio(
-          aspectRatio: 1.5, // Ändere das Seitenverhältnis nach Bedarf
+          aspectRatio: 1.5,
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
             padding: const EdgeInsets.all(15),

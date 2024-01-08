@@ -23,7 +23,7 @@ class FlashcardPage extends StatefulWidget {
 }
 
 class _FlashcardPageState extends State<FlashcardPage> {
-  AuthService authService = AuthService(); // Instantiate AuthService
+  AuthService authService = AuthService();
 
   List<Flashcard> flashcards = [];
   List<Flashcard> incorrectlyAnswered = [];
@@ -39,7 +39,6 @@ class _FlashcardPageState extends State<FlashcardPage> {
 
   Future<void> _fetchUserFlashcards() async {
     try {
-      // Assuming you have a method in AuthService to get user's flashcards
       List<Flashcard> userFlashcards =
           await authService.getUserFlashcards(widget.folder.id);
 
@@ -47,12 +46,11 @@ class _FlashcardPageState extends State<FlashcardPage> {
           "Fetched ${userFlashcards.length} flashcards for folder ${widget.folder.id}");
 
       setState(() {
-        flashcards.clear(); // Clear existing flashcards
-        flashcards.addAll(userFlashcards); // Add newly fetched flashcards
+        flashcards.clear(); 
+        flashcards.addAll(userFlashcards);
       });
     } catch (e) {
       print("Error fetching user flashcards: $e");
-      // Handle error fetching user flashcards
     }
   }
 
@@ -91,7 +89,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   TextFormField(
                     controller: frontCaptionController,
                     maxLength: 350,
-                    maxLines: null, // Erlaube beliebig viele Zeilen
+                    maxLines: null,
                     keyboardType: TextInputType.multiline,
                     onChanged: (value) {
                       setState(() {
@@ -125,7 +123,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   TextFormField(
                     controller: backCaptionController,
                     maxLength: 350,
-                    maxLines: null, // Erlaube beliebig viele Zeilen
+                    maxLines: null,
                     keyboardType: TextInputType.multiline,
                     onChanged: (value) {
                       setState(() {
@@ -300,7 +298,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
         if (currentIndex == flashcards.length - 1) {
           startReview();
           Navigator.of(context)
-              .pop(); // Schließe das Popup-Fenster, wenn die letzte Karte bearbeitet wurde
+              .pop();
         } else {
           showNextCard();
         }
@@ -340,14 +338,14 @@ class _FlashcardPageState extends State<FlashcardPage> {
               actions: [
                 ElevatedButton(
                   onPressed: () {
-                    _handleReviewAction(true); // Markiere als richtig
+                    _handleReviewAction(true);
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.green),
                   child: Text('Richtig', style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    _handleReviewAction(false); // Markiere als falsch
+                    _handleReviewAction(false);
                   },
                   style: ElevatedButton.styleFrom(primary: Colors.red),
                   child: Text('Falsch', style: TextStyle(color: Colors.white)),
@@ -386,7 +384,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
   Widget _buildFlashcardTile(Flashcard karteikarte) {
     return GestureDetector(
       onTap: () {
-        AuthService authService = AuthService(); // Instantiate AuthService
+        AuthService authService = AuthService();
 
         _showCreateFlashcardDialog(
           existingFlashcard: karteikarte,
@@ -430,7 +428,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               onSelected: (value) {
                 if (value == 1) {
                   AuthService authService =
-                      AuthService(); // Instantiate AuthService
+                      AuthService(); 
                   _showCreateFlashcardDialog(
                     existingFlashcard: karteikarte,
                     authService: authService,
@@ -510,7 +508,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                 icon: Icon(Icons.add, color: Colors.black),
                                 onPressed: () {
                                   AuthService authService =
-                                      AuthService(); // Instantiate AuthService
+                                      AuthService();
                                   _showCreateFlashcardDialog(
                                     authService: authService,
                                   );
@@ -543,13 +541,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount:
-                                    4, // Anzahl der Karten in einer Zeile
+                                    4, 
                                 crossAxisSpacing:
-                                    10, // Horizontaler Abstand zwischen den Karten
+                                    10, 
                                 mainAxisSpacing:
-                                    5, // Vertikaler Abstand zwischen den Karten
+                                    5, 
                                 childAspectRatio:
-                                    1.5, // Seitenverhältnis der Karten (Länge / Höhe)
+                                    1.5, 
                               ),
                               itemCount: flashcards
                                   .where((karteikarte) => karteikarte

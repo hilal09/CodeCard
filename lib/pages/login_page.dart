@@ -1,6 +1,6 @@
 /* 
 DateiName: login_page.dart
-Authors: Hilal Cubukcu(UI)
+Authors: Hilal Cubukcu(UI), Yudum Yilmaz (UI)
 Zuletzt bearbeitet am: 07.01.2024
 Beschreibung: Der Dart-Code implementiert eine Flutter-Anmeldeseite, die die 
 Firebase-Authentifizierung über den `AuthService`-Dienst integriert. Die Benutzer 

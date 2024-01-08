@@ -34,8 +34,8 @@ class _DashboardPageState extends State<DashboardPage> {
     searchTerm = "";
     authService = AuthService();
     folderNameController = TextEditingController();
-    selectedColor;
-    folders = []; // Initialize folders
+    selectedColor = const Color(0xffff69597);
+    folders = []; 
     fetchUserFolders();
   }
 
@@ -107,7 +107,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> _showCreateFolderDialog({Folder? existingFolder}) async {
     folderNameController.text = existingFolder?.name ?? "";
-    selectedColor = existingFolder?.color ?? const Color(0xfffe69597);
+    selectedColor = existingFolder?.color ?? const Color(0xffffe69597);
 
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -224,7 +224,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     Navigator.of(context).pop();
 
                     _showFolderCreatedSnackbar(Folder(
-                        name: name, color: color, id: '')); // Show the snackbar
+                        name: name, color: color, id: ''));
                   },
                   child: Text(
                     existingFolder == null ? 'Erstellen' : 'Bearbeiten',

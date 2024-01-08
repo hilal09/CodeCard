@@ -72,7 +72,6 @@ class AuthService {
     }
   }
 
-  // Register Function
   Future signUp(
       BuildContext context, _emailController, _passwordControlle) async {
     setState(() {
@@ -165,7 +164,6 @@ class AuthService {
     }
   }
 
-  //Profile Function
   Future<void> signOut(BuildContext context) async {
     await _auth.signOut();
     Navigator.of(context).pushAndRemoveUntil(
@@ -174,7 +172,6 @@ class AuthService {
     );
   }
 
-  //Add User Details to Database
   Future<void> addUserDetails(String email, String uid) async {
     await FirebaseFirestore.instance.collection("users").doc(uid).set({
       "E-Mail": email,
@@ -188,7 +185,6 @@ class AuthService {
       "userUID": uid,
     });
 
-    // Create an initial 'folders' collection for the user
     await FirebaseFirestore.instance
         .collection("users")
         .doc(uid)
@@ -200,7 +196,6 @@ class AuthService {
     });
   }
 
-  //Add Folder to UserUID
   Future<void> addFolderToUser(String uid, Folder folder) async {
     try {
       await FirebaseFirestore.instance
@@ -217,7 +212,6 @@ class AuthService {
     }
   }
 
-  //Add Flashcards to Folders
   Future<void> addFlashcardToUser(
       String uid, String folderId, Flashcard flashcard) async {
     try {
@@ -255,7 +249,7 @@ class AuthService {
           snapshot.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
         Map<String, dynamic> data = doc.data()!;
         return Flashcard(
-          userUID: data['userUID'], // Include userUID in the Flashcard model
+          userUID: data['userUID'],
           frontCaption: data['frontCaption'],
           backCaption: data['backCaption'],
           color: Color(data['color']),
@@ -265,7 +259,7 @@ class AuthService {
       return userFlashcards;
     } catch (e) {
       print("Error fetching user flashcards: $e");
-      throw e; // Propagate the error
+      throw e;
     }
   }
 }

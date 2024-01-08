@@ -55,7 +55,7 @@ class _SuchleisteState extends State<Suchleiste> {
               },
               focusNode: _focusNode,
               controller: _textEditingController,
-              maxLength: 22, // Begrenze die Länge auf 22 Zeichen
+              maxLength: 22,
               style: const TextStyle(fontSize: 17, color: Colors.white),
               decoration: InputDecoration(
                 labelText: _hasFocus || _textEditingController.text.isNotEmpty
@@ -65,7 +65,7 @@ class _SuchleisteState extends State<Suchleiste> {
                 fillColor: const Color.fromARGB(255, 45, 31, 65),
                 filled: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                counterText: '', // Entferne die Anzeige der verbleibenden Zeichenanzahl
+                counterText: '', 
                 border: InputBorder.none,
               ),
             ),
