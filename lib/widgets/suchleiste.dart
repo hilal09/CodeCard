@@ -18,7 +18,6 @@ Diese Suchleiste stellt ein zentrales UI-Element für Benutzerinteraktionen dar,
 
 import 'package:flutter/material.dart';
 
-
 class Suchleiste extends StatefulWidget {
   final ValueChanged<String> onSearch;
 
@@ -84,7 +83,7 @@ class _SuchleisteState extends State<Suchleiste> {
                 fillColor: const Color.fromARGB(255, 45, 31, 65),
                 filled: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                counterText: '', 
+                counterText: '',
                 border: InputBorder.none,
               ),
             ),

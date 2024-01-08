@@ -17,7 +17,8 @@ Diese Klasse ist zentral für die Logik, die Karteikarten in der App betrifft, u
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-CollectionReference flashcards = FirebaseFirestore.instance.collection('flashcards');
+CollectionReference flashcards =
+    FirebaseFirestore.instance.collection('flashcards');
 
 class Flashcard {
   final String id;

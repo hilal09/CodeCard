@@ -278,8 +278,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     await authService.deleteFlashcardInUser(
                       authService.currentUserUID()!,
                       widget.folder.id,
-                      karteikarte
-                          .id,
+                      karteikarte.id,
                     );
 
                     setState(() {
@@ -679,8 +678,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                       ),
                                       SizedBox(height: 10),
                                       Container(
-                                        height:
-                                            400,
+                                        height: 400,
                                         child: _buildFlashcardsListView(
                                             flashcards),
                                       ),
@@ -699,8 +697,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                       ),
                                       SizedBox(height: 10),
                                       Container(
-                                        height:
-                                            400,
+                                        height: 400,
                                         child: _buildFlashcardsListView(
                                             flashcards),
                                       ),
@@ -719,8 +716,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                       ),
                                       SizedBox(height: 10),
                                       Container(
-                                        height:
-                                            400,
+                                        height: 400,
                                         child: _buildFlashcardsListView(
                                             flashcards),
                                       ),

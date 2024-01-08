@@ -15,7 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:codecard/pages/register_page.dart';
 import 'forgot_password_page.dart';
 
-
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -236,7 +235,7 @@ class AuthWidget extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor:
-        isSelected ? const Color(0xffff10111a) : const Color(0xffff2c293a),
+            isSelected ? const Color(0xffff10111a) : const Color(0xffff2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

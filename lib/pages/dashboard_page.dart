@@ -200,7 +200,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             .collection('folders')
                             .add(folderData);
                         final newFolder =
-                        Folder(name: name, color: color, id: docRef.id);
+                            Folder(name: name, color: color, id: docRef.id);
                         setState(() {
                           folders.insert(0, newFolder);
                         });
@@ -215,7 +215,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         final updatedFolder = Folder(
                             name: name, color: color, id: existingFolder.id);
                         final index = folders.indexWhere(
-                                (folder) => folder.id == existingFolder.id);
+                            (folder) => folder.id == existingFolder.id);
                         setState(() {
                           folders[index] = updatedFolder;
                         });
@@ -223,8 +223,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
                       Navigator.of(context).pop();
 
-                      _showFolderCreatedSnackbar(Folder(
-                          name: name, color: color, id: ''));
+                      _showFolderCreatedSnackbar(
+                          Folder(name: name, color: color, id: ''));
                     } catch (e) {
                       print('Error creating/updating folder: $e');
                     }
@@ -247,7 +247,8 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Set löschen', style: TextStyle(color: Colors.white)),
+          title:
+              const Text('Set löschen', style: TextStyle(color: Colors.white)),
           content: const Text(
             'Bist du dir sicher, dass du das Set löschen möchtest?',
             style: TextStyle(color: Colors.white),
@@ -260,7 +261,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                  child: const Text('Abbrechen',
+                      style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -284,7 +286,8 @@ class _DashboardPageState extends State<DashboardPage> {
                       print('Error deleting folder: $e');
                     }
                   },
-                  child: const Text('Löschen', style: TextStyle(color: Colors.red)),
+                  child: const Text('Löschen',
+                      style: TextStyle(color: Colors.red)),
                 ),
               ],
             ),
@@ -419,28 +422,28 @@ class _DashboardPageState extends State<DashboardPage> {
                     folders.isEmpty
                         ? _buildEmptyFolderMessage()
                         : Expanded(
-                      child: GridView.builder(
-                        gridDelegate:
-                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: folders
-                            .where((folder) => folder.name
-                            .toLowerCase()
-                            .contains(searchTerm.toLowerCase()))
-                            .length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Folder folder = folders
-                              .where((folder) => folder.name
-                              .toLowerCase()
-                              .contains(searchTerm.toLowerCase()))
-                              .toList()[index];
-                          return _buildFolderTile(folder);
-                        },
-                      ),
-                    ),
+                            child: GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemCount: folders
+                                  .where((folder) => folder.name
+                                      .toLowerCase()
+                                      .contains(searchTerm.toLowerCase()))
+                                  .length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Folder folder = folders
+                                    .where((folder) => folder.name
+                                        .toLowerCase()
+                                        .contains(searchTerm.toLowerCase()))
+                                    .toList()[index];
+                                return _buildFolderTile(folder);
+                              },
+                            ),
+                          ),
                   ],
                 ),
               ),

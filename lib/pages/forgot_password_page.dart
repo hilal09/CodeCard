@@ -71,7 +71,8 @@ class ForgotPasswordPage extends StatelessWidget {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () async {
-                      await _authService.resetPassword(emailController.text, context);
+                      await _authService.resetPassword(
+                          emailController.text, context);
                     },
                     style: ElevatedButton.styleFrom(
                       shape: RoundedRectangleBorder(
