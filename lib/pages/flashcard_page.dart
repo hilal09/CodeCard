@@ -1,6 +1,6 @@
 /* 
 DateiName: flashcard_page.dart
-Authors: Hilal Cubukcu(UI)
+Authors: Hilal Cubukcu(UI), Amara Akram (Abfragelogik/ Quiz)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung: 
 */
