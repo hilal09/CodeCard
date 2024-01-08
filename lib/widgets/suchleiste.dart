@@ -1,3 +1,21 @@
+/* 
+DateiName: suchleiste.dart
+Authors: Ceyda Sariouglu(alles)
+Zuletzt bearbeitet am: 07.01.2024
+Beschreibung:
+Ein benutzerdefiniertes StatefulWidget, das eine Suchleiste in der Codecard-App bereitstellt.
+Hauptfunktionen:
+- Ermöglicht Benutzern das Eingeben von Suchbegriffen, um spezifische Inhalte zu filtern oder zu suchen.
+- Nutzt einen `FocusNode`, um den Fokusstatus der Texteingabe zu überwachen und entsprechend zu reagieren.
+- Die Suchleiste passt ihre Größe dynamisch an die Bildschirmbreite an und begrenzt die maximale Breite.
+- Enthält ein Textfeld (`TextField`), in dem Benutzer Suchanfragen eingeben können.
+- Verwendet einen `TextEditingController` zur Steuerung des Textfeldinhalts.
+- Ruft die `onSearch`-Callback-Funktion mit dem aktuellen Suchtext auf, um die Suchaktion zu ermöglichen.
+- Bietet eine Clear-Button-Funktionalität, die das Textfeld leert und den Suchstatus zurücksetzt.
+- Passt das Design an, um sich in das Gesamterscheinungsbild der App zu integrieren, einschließlich benutzerdefinierter Farben und Stile.
+Diese Suchleiste stellt ein zentrales UI-Element für Benutzerinteraktionen dar, indem sie eine intuitive und responsive Suchfunktionalität bietet.
+*/
+
 import 'package:flutter/material.dart';
 import 'dart:math';
 
