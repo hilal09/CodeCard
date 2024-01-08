@@ -78,9 +78,12 @@ class _FlashcardPageState extends State<FlashcardPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  SizedBox(height: 10),
                   TextFormField(
                     controller: frontCaptionController,
                     maxLength: 350,
+                    maxLines: null, // Erlaube beliebig viele Zeilen
+                    keyboardType: TextInputType.multiline,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -99,7 +102,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       errorText: formKey.currentState?.validate() == false
                           ? 'Bitte gebe den Text für die Vorderseite ein.'
                           : null,
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Color.fromARGB(255, 120, 93, 130)),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
@@ -112,6 +115,8 @@ class _FlashcardPageState extends State<FlashcardPage> {
                   TextFormField(
                     controller: backCaptionController,
                     maxLength: 350,
+                    maxLines: null, // Erlaube beliebig viele Zeilen
+                    keyboardType: TextInputType.multiline,
                     onChanged: (value) {
                       setState(() {
                         formKey.currentState?.validate();
@@ -130,7 +135,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       errorText: formKey.currentState?.validate() == false
                           ? 'Bitte gebe den Text für die Hinterseite ein.'
                           : null,
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Color.fromARGB(255, 120, 93, 130)),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
@@ -191,7 +196,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: Text('Erstellen', style: TextStyle(color: Color(0xfff4cae97))),
+                  child: Text('Erstellen', style: TextStyle(color: Color.fromARGB(211, 106, 202, 144))),
                 ),
               ],
             ),
@@ -516,11 +521,12 @@ class _FlashcardPageState extends State<FlashcardPage> {
                         : Expanded(
                       child: GridView.builder(
                         gridDelegate:
-                        SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 300,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
+                        SliverGridDelegateWithFixedCrossAxisCount(
+  crossAxisCount: 4,  // Anzahl der Karten in einer Zeile
+  crossAxisSpacing: 10, // Horizontaler Abstand zwischen den Karten
+  mainAxisSpacing: 5,  // Vertikaler Abstand zwischen den Karten
+  childAspectRatio: 1.5, // Seitenverhältnis der Karten (Länge / Höhe)
+),
                         itemCount: flashcards
                             .where((karteikarte) => karteikarte
                             .frontCaption
