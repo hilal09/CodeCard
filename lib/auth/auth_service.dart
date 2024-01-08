@@ -1,3 +1,10 @@
+/* 
+DateiName: auth_service.dart
+Authors: Hilal Cubukcu(E-Mail Verifizierung))
+Zuletzt bearbeitet am: 08.01.2024
+Beschreibung: 
+*/
+
 import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';

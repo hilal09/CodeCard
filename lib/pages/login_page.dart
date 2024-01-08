@@ -52,8 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           print('onTabChanged - isSelected: $isSelected');
           if (this.mounted) {
             setState(() {
-              isLoginTab =
-                  isSelected != null ? isSelected : false; // <-- Updated Line
+              isLoginTab = isSelected != null ? isSelected : false;
               print('onTabChanged - isLoginTab: $isLoginTab');
             });
           }

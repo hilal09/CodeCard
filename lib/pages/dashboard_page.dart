@@ -1,3 +1,9 @@
+/* 
+DateiName: dashboard_page.dart
+Authors: Hilal Cubukcu(UI)
+Zuletzt bearbeitet am: 08.01.2024
+Beschreibung: 
+*/
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codecard/pages/flashcard_page.dart';
 import 'package:codecard/widgets/colorpicker.dart';
@@ -43,7 +49,11 @@ class _DashboardPageState extends State<DashboardPage> {
     final uid = authService.currentUserUID();
     if (uid != null) {
       try {
-        final snapshot = await FirebaseFirestore.instance.collection('users').doc(uid).collection('folders').get();
+        final snapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(uid)
+            .collection('folders')
+            .get();
         setState(() {
           folders = snapshot.docs.map((doc) {
             final data = doc.data() as Map<String, dynamic>;
@@ -171,7 +181,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                  child: const Text('Abbrechen',
+                      style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () async {
@@ -186,18 +197,25 @@ class _DashboardPageState extends State<DashboardPage> {
                     };
 
                     if (existingFolder == null) {
-                      final docRef = await FirebaseFirestore.instance.collection('users').doc(uid).collection('folders').add(folderData);
-                      final newFolder = Folder(name: name, color: color, id: docRef.id);
+                      final docRef = await FirebaseFirestore.instance
+                          .collection('users')
+                          .doc(uid)
+                          .collection('folders')
+                          .add(folderData);
+                      final newFolder =
+                          Folder(name: name, color: color, id: docRef.id);
                       setState(() {
-                        folders.insert(0,newFolder);
+                        folders.insert(0, newFolder);
                       });
                     } else {
                       await FirebaseFirestore.instance
                           .collection('folders')
                           .doc(existingFolder.id)
                           .update(folderData);
-                      final updatedFolder = Folder(name: name, color: color, id: existingFolder.id);
-                      final index = folders.indexWhere((folder) => folder.id == existingFolder.id);
+                      final updatedFolder = Folder(
+                          name: name, color: color, id: existingFolder.id);
+                      final index = folders.indexWhere(
+                          (folder) => folder.id == existingFolder.id);
                       setState(() {
                         folders[index] = updatedFolder;
                       });
@@ -205,7 +223,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
                     Navigator.of(context).pop();
 
-                    _showFolderCreatedSnackbar(Folder(name: name, color: color, id: '')); // Show the snackbar
+                    _showFolderCreatedSnackbar(Folder(
+                        name: name, color: color, id: '')); // Show the snackbar
                   },
                   child: Text(
                     existingFolder == null ? 'Erstellen' : 'Bearbeiten',
@@ -225,7 +244,8 @@ class _DashboardPageState extends State<DashboardPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text(style: TextStyle(color: Colors.white), 'Set löschen'),
+          title:
+              const Text(style: TextStyle(color: Colors.white), 'Set löschen'),
           content: const Text(
               style: TextStyle(color: Colors.white),
               'Bist du dir sicher, dass du das Set löschen möchtest?'),
@@ -237,7 +257,8 @@ class _DashboardPageState extends State<DashboardPage> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Abbrechen', style: TextStyle(color: Colors.white)),
+                  child: const Text('Abbrechen',
+                      style: TextStyle(color: Colors.white)),
                 ),
                 ElevatedButton(
                   onPressed: () {
@@ -246,7 +267,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     });
                     Navigator.of(context).pop();
                   },
-                  child: const Text('Löschen', style: TextStyle(color: Colors.red)),
+                  child: const Text('Löschen',
+                      style: TextStyle(color: Colors.red)),
                 ),
               ],
             ),
@@ -381,23 +403,28 @@ class _DashboardPageState extends State<DashboardPage> {
                     folders.isEmpty
                         ? _buildEmptyFolderMessage()
                         : Expanded(
-                      child: GridView.builder(
-                        gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: 200,
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
-                        ),
-                        itemCount: folders
-                            .where((folder) => folder.name.toLowerCase().contains(searchTerm.toLowerCase()))
-                            .length,
-                        itemBuilder: (BuildContext context, int index) {
-                          Folder folder = folders
-                              .where((folder) => folder.name.toLowerCase().contains(searchTerm.toLowerCase()))
-                              .toList()[index];
-                          return _buildFolderTile(folder);
-                        },
-                      ),
-                    ),
+                            child: GridView.builder(
+                              gridDelegate:
+                                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                                maxCrossAxisExtent: 200,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                              ),
+                              itemCount: folders
+                                  .where((folder) => folder.name
+                                      .toLowerCase()
+                                      .contains(searchTerm.toLowerCase()))
+                                  .length,
+                              itemBuilder: (BuildContext context, int index) {
+                                Folder folder = folders
+                                    .where((folder) => folder.name
+                                        .toLowerCase()
+                                        .contains(searchTerm.toLowerCase()))
+                                    .toList()[index];
+                                return _buildFolderTile(folder);
+                              },
+                            ),
+                          ),
                   ],
                 ),
               ),
