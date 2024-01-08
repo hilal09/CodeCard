@@ -1,6 +1,6 @@
 /* 
 DateiName: flashcard_page.dart
-Authors: Hilal Cubukcu(UI)
+Authors: Hilal Cubukcu(UI), Amara Akram (Abfragelogik), Ceyda Sariouglu (UI, Funktionalität)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung: Dieses Stateful Widget ist für die Darstellung und Verwaltung von Karteikarten (Flashcards) innerhalb eines bestimmten Ordners (Folder) zuständig. 
 Hauptfunktionen:
@@ -10,6 +10,9 @@ Hauptfunktionen:
 - Durchführung einer Quiz-Funktion (`_startQuiz`), die die Benutzerinteraktion mit den Karteikarten ermöglicht.
 - Darstellung von Karteikartendetails und Interaktionsoptionen, einschließlich der Möglichkeit, Karteikarten zu bearbeiten und zu löschen.
 - Suchfunktionalität, die es Benutzern ermöglicht, Karteikarten basierend auf ihrem Inhalt zu filtern (`Suchleiste`).
+- Implementiert den Leitner-Algorithmus, eine bekannte Methode zum effizienten Lernen und Wiederholen von Karteikarten. Der Algorithmus hilft, den Fortschritt des Benutzers zu verfolgen und Karteikarten basierend auf früheren Antworten zu organisieren.
+- Enthält Logik für Benutzerinteraktionen und dynamische Anzeige von Inhalten basierend auf dem aktuellen Status der Karteikarten.
+ Dieses Widget bildet eine Schlüsselkomponente der Benutzeroberfläche der App und ermöglicht eine dynamische und interaktive Lernerfahrung.
  Die Seite dient als interaktives Element für Benutzer, um mit ihren Lerninhalten effektiv zu arbeiten. Der Fokus liegt auf der Handhabung von Daten
 (Hinzufügen, Bearbeiten, Löschen von Karteikarten) sowie der Benutzerinteraktion mit diesen Daten.*/
 
