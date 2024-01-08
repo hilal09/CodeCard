@@ -3,7 +3,7 @@ DateiName: splash_screen.dart
 Authors: Amara Akram(alles)
 Zuletzt bearbeitet am: 07.01.2024
 Beschreibung: 
-/// Dieses Flutter StatefulWidget repräsentiert einen Startbildschirm für unsere Karteikartenapp "CODE CARD". 
+Dieses Flutter StatefulWidget repräsentiert einen Startbildschirm für unsere Karteikartenapp "CODE CARD". 
 Es beinhaltet Animationen für Text und Bilder, um eine dynamische und ansprechende Einführung in die App zu gewährleisten. 
 Der Bildschirm beginnt mit einer Animation, bei der ein Set von hüpfenden Bällen (mittels einer Lottie-Animation) ausgeblendet wird, 
 gefolgt vom Einblenden des App-Logos. Vom Beginn der ersten bis zum Ende der zweiten Animationen folgt die Textanimation des Namens "CODE CARD",
