@@ -10,7 +10,6 @@ Die Seite enthält auch Validierungslogik und bietet die Möglichkeit, zwischen
 den Anmelde- und Registrierungstabs zu wechseln.
 */
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:codecard/pages/dashboard_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/login_page.dart';

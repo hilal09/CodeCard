@@ -1,6 +1,6 @@
 /* 
 DateiName: suchleiste.dart
-Authors: Ceyda Sariouglu(alles)
+Authors: Ceyda Sariouglu(ganzes UI), Hilal Cubukcu(Funktionalität)
 Zuletzt bearbeitet am: 07.01.2024
 Beschreibung:
 Ein benutzerdefiniertes StatefulWidget, das eine Suchleiste in der Codecard-App bereitstellt.
@@ -54,11 +54,9 @@ class _SuchleisteState extends State<Suchleiste> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double searchBarWidth =
-        min(screenWidth * 0.8, 355); // Beispiel für maximale Breite
+    double searchBarWidth = min(screenWidth * 0.8, 355);
 
     return Center(
-        // Zentrieren der Suchleiste
         child: Container(
       width: searchBarWidth,
       height: 30,

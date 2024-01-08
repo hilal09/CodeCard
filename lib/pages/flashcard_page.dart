@@ -1,6 +1,6 @@
 /* 
 DateiName: flashcard_page.dart
-Authors: Hilal Cubukcu(UI), Amara Akram (Abfragelogik), Ceyda Sariouglu (UI, Funktionalität)
+Authors: Hilal Cubukcu(UI, Funktionalität), Amara Akram (Abfragelogik), Ceyda Sariouglu (UI, Funktionalität)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung: Dieses Stateful Widget ist für die Darstellung und Verwaltung von Karteikarten (Flashcards) innerhalb eines bestimmten Ordners (Folder) zuständig. 
 Hauptfunktionen:
@@ -14,7 +14,8 @@ Hauptfunktionen:
 - Enthält Logik für Benutzerinteraktionen und dynamische Anzeige von Inhalten basierend auf dem aktuellen Status der Karteikarten.
  Dieses Widget bildet eine Schlüsselkomponente der Benutzeroberfläche der App und ermöglicht eine dynamische und interaktive Lernerfahrung.
  Die Seite dient als interaktives Element für Benutzer, um mit ihren Lerninhalten effektiv zu arbeiten. Der Fokus liegt auf der Handhabung von Daten
-(Hinzufügen, Bearbeiten, Löschen von Karteikarten) sowie der Benutzerinteraktion mit diesen Daten.*/
+(Hinzufügen, Bearbeiten, Löschen von Karteikarten) sowie der Benutzerinteraktion mit diesen Daten.
+*/
 
 import 'package:codecard/widgets/colorpicker.dart';
 import 'package:codecard/widgets/flashcard.dart';
@@ -71,7 +72,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
   }) async {
     String frontCaption = existingFlashcard?.frontCaption ?? "";
     String backCaption = existingFlashcard?.backCaption ?? "";
-    Color selectedColor = existingFlashcard?.color ?? const Color(0xFFFfd4a4a);
+    Color selectedColor = existingFlashcard?.color ?? const Color(0xffff69597);
 
     TextEditingController frontCaptionController =
         TextEditingController(text: frontCaption);

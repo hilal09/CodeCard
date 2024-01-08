@@ -2,7 +2,12 @@
 DateiName: auth_service.dart
 Authors: Hilal Cubukcu(E-Mail Verifizierung))
 Zuletzt bearbeitet am: 08.01.2024
-Beschreibung: 
+Beschreibung:Dieses Dart-File enthält eine Klasse namens AuthService, die 
+Funktionen für die Authentifizierung und Interaktion mit Firebase Authentication 
+und Firestore bereitstellt. Die Klasse ermöglicht das Anmelden, Abmelden, 
+Registrieren von Benutzern, das Hinzufügen von Ordnern und Flashcards zu 
+Benutzerkonten sowie das Abrufen von Flashcards für einen bestimmten Ordner. 
+Zudem werden verschiedene Text-Controller und Fehlermeldungen für die Benutzeroberfläche verwaltet.
 */
 
 import 'dart:js';

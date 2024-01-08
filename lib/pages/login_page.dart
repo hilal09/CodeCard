@@ -13,7 +13,6 @@ Bei erfolgreicher Anmeldung wird der Benutzer zur Dashboard-Seite weitergeleitet
 import 'package:codecard/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/register_page.dart';
-import 'dashboard_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

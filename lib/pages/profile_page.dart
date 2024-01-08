@@ -260,84 +260,6 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
     }
   }
 
-  Future<String?> updateEmail(String currentPassword, String newEmail) async {
-    User user = FirebaseAuth.instance.currentUser!;
-    AuthCredential credential = EmailAuthProvider.credential(
-        email: user.email!, password: currentPassword);
-
-    Map<String, String?> codeResponses = {
-      "user-mismatch": null,
-      "invalid-credential": null,
-      "invalid-email": null,
-      "invalid-verification-code": null,
-      "invalid-verification-id": null,
-      "weak-password": null,
-      "requires-recent-login": null,
-      //die beiden funktionieren nicht wegen einer neuen email enumeration Regel seit September 23
-      "user-not-found": null,
-      "wrong-password": null,
-    };
-
-    try {
-      await user.reauthenticateWithCredential(credential);
-      await currentUser.verifyBeforeUpdateEmail(newEmail);
-      await _authService.signOut(context);
-      ;
-    } on FirebaseAuthException catch (error) {
-      _showErrorPopup(error.toString());
-    }
-  }
-
-  Future<String?> updatePassword(String oldPassword, String newPassword) async {
-    User user = FirebaseAuth.instance.currentUser!;
-    AuthCredential credential =
-        EmailAuthProvider.credential(email: user.email!, password: oldPassword);
-
-    Map<String, String?> codeResponses = {
-      "user-mismatch": null,
-      "user-not-found": null,
-      "invalid-credential": null,
-      "invalid-email": null,
-      "wrong-password": null,
-      "invalid-verification-code": null,
-      "invalid-verification-id": null,
-      "weak-password": null,
-      "requires-recent-login": null
-    };
-
-    try {
-      await user.reauthenticateWithCredential(credential);
-      await user.updatePassword(newPassword);
-      await _authService.signOut(context);
-    } on FirebaseAuthException catch (error) {
-      String errorMessage =
-          codeResponses[error.code] ?? "Wrong current password";
-      _showErrorPopup(errorMessage);
-    }
-  }
-
-  void _showErrorPopup(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(
-                'OK',
-              ),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   void showUpdateEmailDialog() {
     final TextEditingController currentPasswordController =
         TextEditingController();
@@ -406,6 +328,34 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
         );
       },
     );
+  }
+
+  Future<String?> updateEmail(String currentPassword, String newEmail) async {
+    User user = FirebaseAuth.instance.currentUser!;
+    AuthCredential credential = EmailAuthProvider.credential(
+        email: user.email!, password: currentPassword);
+
+    Map<String, String?> codeResponses = {
+      "user-mismatch": null,
+      "invalid-credential": null,
+      "invalid-email": null,
+      "invalid-verification-code": null,
+      "invalid-verification-id": null,
+      "weak-password": null,
+      "requires-recent-login": null,
+      //die beiden funktionieren nicht wegen einer neuen email enumeration Regel seit September 23
+      "user-not-found": null,
+      "wrong-password": null,
+    };
+
+    try {
+      await user.reauthenticateWithCredential(credential);
+      await currentUser.verifyBeforeUpdateEmail(newEmail);
+      await _authService.signOut(context);
+      ;
+    } on FirebaseAuthException catch (error) {
+      _showErrorPopup(error.toString());
+    }
   }
 
   void _showChangePasswordDialog() {
@@ -506,6 +456,56 @@ Deine App-Daten werden ebenfalls gelöscht und Du kannst sie nicht mehr abrufen.
     _currentPasswordController.clear();
     _passwordController.clear();
     _confirmPasswordController.clear();
+  }
+
+  Future<String?> updatePassword(String oldPassword, String newPassword) async {
+    User user = FirebaseAuth.instance.currentUser!;
+    AuthCredential credential =
+        EmailAuthProvider.credential(email: user.email!, password: oldPassword);
+
+    Map<String, String?> codeResponses = {
+      "user-mismatch": null,
+      "user-not-found": null,
+      "invalid-credential": null,
+      "invalid-email": null,
+      "wrong-password": null,
+      "invalid-verification-code": null,
+      "invalid-verification-id": null,
+      "weak-password": null,
+      "requires-recent-login": null
+    };
+
+    try {
+      await user.reauthenticateWithCredential(credential);
+      await user.updatePassword(newPassword);
+      await _authService.signOut(context);
+    } on FirebaseAuthException catch (error) {
+      String errorMessage =
+          codeResponses[error.code] ?? "Wrong current password";
+      _showErrorPopup(errorMessage);
+    }
+  }
+
+  void _showErrorPopup(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                'OK',
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   Widget labeledEditableTextField({

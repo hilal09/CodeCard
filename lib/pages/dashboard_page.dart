@@ -1,6 +1,6 @@
 /* 
 DateiName: dashboard_page.dart
-Authors: Hilal Cubukcu(UI), Amara Akram (erstes UI, Grid), Ceyda Sarioglu (UI, Funktionalitäten)
+Authors: Hilal Cubukcu(neues UI), Amara Akram (erstes UI, Grid), Ceyda Sarioglu (UI, Funktionalitäten)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung: Haupt-Dashboard für unsere Lernkarten-App. Es ermöglicht Benutzern, ihre persönlichen Lernkartenordner (Folders) zu verwalten und anzuzeigen.
 Die Logik und die Darstellung der Ordner und ihrer Interaktionsmöglichkeiten:
