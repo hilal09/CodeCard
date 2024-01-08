@@ -1,18 +1,8 @@
-/* 
-DateiName: login_page.dart
-Authors: Hilal Cubukcu(UI), Yudum Yilmaz (UI)
-Zuletzt bearbeitet am: 07.01.2024
-Beschreibung: Der Dart-Code implementiert eine Flutter-Anmeldeseite, die die 
-Firebase-Authentifizierung über den `AuthService`-Dienst integriert. Die Benutzer 
-können sich mit ihrer E-Mail-Adresse und ihrem Passwort anmelden oder zur 
-Registrierung wechseln. Die Seite enthält Funktionen zum Umschalten zwischen 
-Anmeldungs- und Registrierungstabs sowie zur Verarbeitung von Anmeldeversuchen. 
-Bei erfolgreicher Anmeldung wird der Benutzer zur Dashboard-Seite weitergeleitet.
-*/
-
 import 'package:codecard/auth/auth_service.dart';
 import 'package:flutter/material.dart';
 import 'package:codecard/pages/register_page.dart';
+import 'forgot_password_page.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -68,6 +58,11 @@ class _LoginPageState extends State<LoginPage> {
             MaterialPageRoute(builder: (context) => const RegistrationPage()),
           );
         },
+        onForgotPasswordPressed: () {
+          Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
+          );
+        },
         emailController: emailController,
         passwordController: passwordController,
       ),
@@ -80,6 +75,7 @@ class AuthWidget extends StatelessWidget {
   final Function(bool) onTabChanged;
   final VoidCallback onAuthPressed;
   final VoidCallback onRegisterPressed;
+  final VoidCallback onForgotPasswordPressed;
   final TextEditingController emailController;
   final TextEditingController passwordController;
 
@@ -89,6 +85,7 @@ class AuthWidget extends StatelessWidget {
     required this.onTabChanged,
     required this.onAuthPressed,
     required this.onRegisterPressed,
+    required this.onForgotPasswordPressed,
     required this.emailController,
     required this.passwordController,
   }) : super(key: key);
@@ -174,6 +171,18 @@ class AuthWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                        onPressed: onForgotPasswordPressed,
+                        child: Text(
+                          'Passwort vergessen?',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     width: 300,
                     child: ElevatedButton(
@@ -215,7 +224,7 @@ class AuthWidget extends StatelessWidget {
       },
       style: ElevatedButton.styleFrom(
         backgroundColor:
-            isSelected ? const Color(0xffff10111a) : const Color(0xffff2c293a),
+        isSelected ? const Color(0xffff10111a) : const Color(0xffff2c293a),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),

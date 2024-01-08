@@ -2,15 +2,13 @@
 DateiName: auth_service.dart
 Authors: Hilal Cubukcu(E-Mail Verifizierung))
 Zuletzt bearbeitet am: 08.01.2024
-Beschreibung:Dieses Dart-File enthält eine Klasse namens AuthService, die 
-Funktionen für die Authentifizierung und Interaktion mit Firebase Authentication 
-und Firestore bereitstellt. Die Klasse ermöglicht das Anmelden, Abmelden, 
-Registrieren von Benutzern, das Hinzufügen von Ordnern und Flashcards zu 
-Benutzerkonten sowie das Abrufen von Flashcards für einen bestimmten Ordner. 
+Beschreibung:Dieses Dart-File enthält eine Klasse namens AuthService, die
+Funktionen für die Authentifizierung und Interaktion mit Firebase Authentication
+und Firestore bereitstellt. Die Klasse ermöglicht das Anmelden, Abmelden,
+Registrieren von Benutzern, das Hinzufügen von Ordnern und Flashcards zu
+Benutzerkonten sowie das Abrufen von Flashcards für einen bestimmten Ordner.
 Zudem werden verschiedene Text-Controller und Fehlermeldungen für die Benutzeroberfläche verwaltet.
 */
-
-import 'dart:js';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:codecard/pages/dashboard_page.dart';
@@ -169,6 +167,27 @@ class AuthService {
     }
   }
 
+  Future<void> resetPassword(String email, BuildContext context) async {
+    try {
+      QuerySnapshot<Map<String, dynamic>> userQuery = await FirebaseFirestore
+          .instance
+          .collection('users')
+          .where('E-Mail', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (userQuery.docs.isEmpty) {
+        showSnackBar(context, "No user found with this email address.");
+        return;
+      }
+
+      await _auth.sendPasswordResetEmail(email: email);
+      showSnackBar(context, "Password reset email sent. Check your inbox.");
+    } catch (e) {
+      showSnackBar(context, "Failed to send password reset email: $e");
+    }
+  }
+
   Future<void> signOut(BuildContext context) async {
     await _auth.signOut();
     Navigator.of(context).pushAndRemoveUntil(
@@ -230,10 +249,12 @@ class AuthService {
         'frontCaption': flashcard.frontCaption,
         'backCaption': flashcard.backCaption,
         'color': flashcard.color.value,
-        "userUID": uid,
+        'userUID': uid,
+        'leitnerBox': flashcard.leitnerBox,
       });
     } catch (e) {
       print('Error adding flashcard to user: $e');
+      throw e;
     }
   }
 
@@ -254,16 +275,61 @@ class AuthService {
           snapshot.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
         Map<String, dynamic> data = doc.data()!;
         return Flashcard(
+          id: doc.id,
           userUID: data['userUID'],
           frontCaption: data['frontCaption'],
           backCaption: data['backCaption'],
           color: Color(data['color']),
+          leitnerBox: data['leitnerBox'] ?? 1,
         );
       }).toList();
 
       return userFlashcards;
     } catch (e) {
       print("Error fetching user flashcards: $e");
+      throw e;
+    }
+  }
+
+  Future<void> updateFlashcardInUser(
+      String uid, String folderId, Flashcard flashcard) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('folders')
+          .doc(folderId)
+          .collection('flashcards')
+          .doc(flashcard.id)
+          .update({
+        'frontCaption': flashcard.frontCaption,
+        'backCaption': flashcard.backCaption,
+        'color': flashcard.color.value,
+        'userUID': uid,
+        'leitnerBox': flashcard.leitnerBox,
+      });
+    } catch (e) {
+      print('Error updating flashcard: $e');
+      throw e;
+    }
+  }
+
+  Future<void> deleteFlashcardInUser(
+    String uid,
+    String folderId,
+    String flashcardId,
+  ) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(uid)
+          .collection('folders')
+          .doc(folderId)
+          .collection('flashcards')
+          .doc(flashcardId)
+          .delete();
+    } catch (e) {
+      print('Error deleting flashcard: $e');
       throw e;
     }
   }

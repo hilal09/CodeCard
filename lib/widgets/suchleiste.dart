@@ -1,4 +1,4 @@
-/* 
+/*
 DateiName: suchleiste.dart
 Authors: Ceyda Sariouglu(ganzes UI), Hilal Cubukcu(Funktionalität)
 Zuletzt bearbeitet am: 07.01.2024
@@ -17,7 +17,7 @@ Diese Suchleiste stellt ein zentrales UI-Element für Benutzerinteraktionen dar,
 */
 
 import 'package:flutter/material.dart';
-import 'dart:math';
+
 
 class Suchleiste extends StatefulWidget {
   final ValueChanged<String> onSearch;
@@ -53,12 +53,8 @@ class _SuchleisteState extends State<Suchleiste> {
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    double searchBarWidth = min(screenWidth * 0.8, 355);
-
-    return Center(
-        child: Container(
-      width: searchBarWidth,
+    return Container(
+      width: 355,
       height: 30,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -88,7 +84,7 @@ class _SuchleisteState extends State<Suchleiste> {
                 fillColor: const Color.fromARGB(255, 45, 31, 65),
                 filled: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                counterText: '',
+                counterText: '', 
                 border: InputBorder.none,
               ),
             ),
@@ -105,6 +101,6 @@ class _SuchleisteState extends State<Suchleiste> {
             ),
         ],
       ),
-    ));
+    );
   }
 }
