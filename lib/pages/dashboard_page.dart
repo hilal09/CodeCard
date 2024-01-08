@@ -34,7 +34,7 @@ class _DashboardPageState extends State<DashboardPage> {
     searchTerm = "";
     authService = AuthService();
     folderNameController = TextEditingController();
-    selectedColor = const Color(0xffffd4a4a);
+    selectedColor;
     folders = []; // Initialize folders
     fetchUserFolders();
   }
@@ -107,7 +107,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> _showCreateFolderDialog({Folder? existingFolder}) async {
     folderNameController.text = existingFolder?.name ?? "";
-    selectedColor = existingFolder?.color ?? const Color(0xffffd4a4a);
+    selectedColor = existingFolder?.color ?? const Color(0xfffe69597);
 
     GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
