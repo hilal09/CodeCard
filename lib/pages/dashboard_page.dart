@@ -44,7 +44,7 @@ class _DashboardPageState extends State<DashboardPage> {
     authService = AuthService();
     folderNameController = TextEditingController();
     selectedColor = const Color(0xffff69597);
-    folders = []; 
+    folders = [];
     fetchUserFolders();
   }
 
@@ -232,8 +232,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
                     Navigator.of(context).pop();
 
-                    _showFolderCreatedSnackbar(Folder(
-                        name: name, color: color, id: ''));
+                    _showFolderCreatedSnackbar(
+                        Folder(name: name, color: color, id: ''));
                   },
                   child: Text(
                     existingFolder == null ? 'Erstellen' : 'Bearbeiten',
@@ -387,13 +387,17 @@ class _DashboardPageState extends State<DashboardPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Suchleiste(
-                          onSearch: (term) {
-                            setState(() {
-                              searchTerm = term;
-                            });
-                          },
+                        Spacer(), // New spacer
+                        Flexible(
+                          child: Suchleiste(
+                            onSearch: (term) {
+                              setState(() {
+                                searchTerm = term;
+                              });
+                            },
+                          ),
                         ),
+                        Spacer(), // New spacer
                         Container(
                           decoration: const BoxDecoration(
                             shape: BoxShape.circle,

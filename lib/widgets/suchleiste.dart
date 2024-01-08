@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 class Suchleiste extends StatefulWidget {
   final ValueChanged<String> onSearch;
@@ -34,8 +35,14 @@ class _SuchleisteState extends State<Suchleiste> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 355,
+    double screenWidth = MediaQuery.of(context).size.width;
+    double searchBarWidth =
+        min(screenWidth * 0.8, 355); // Beispiel für maximale Breite
+
+    return Center(
+        // Zentrieren der Suchleiste
+        child: Container(
+      width: searchBarWidth,
       height: 30,
       padding: const EdgeInsets.symmetric(horizontal: 20),
       decoration: BoxDecoration(
@@ -65,7 +72,7 @@ class _SuchleisteState extends State<Suchleiste> {
                 fillColor: const Color.fromARGB(255, 45, 31, 65),
                 filled: true,
                 contentPadding: const EdgeInsets.symmetric(vertical: 10),
-                counterText: '', 
+                counterText: '',
                 border: InputBorder.none,
               ),
             ),
@@ -82,6 +89,6 @@ class _SuchleisteState extends State<Suchleiste> {
             ),
         ],
       ),
-    );
+    ));
   }
 }

@@ -1,6 +1,6 @@
 /* 
 DateiName: flashcard_page.dart
-Authors: Hilal Cubukcu(UI), Amara Akram (Abfragelogik/ Quiz), Ceyda Sariouglu (UI, Funktionalitäten) 
+Authors: Hilal Cubukcu(UI)
 Zuletzt bearbeitet am: 08.01.2024
 Beschreibung: Dieses Stateful Widget ist für die Darstellung und Verwaltung von Karteikarten (Flashcards) innerhalb eines bestimmten Ordners (Folder) zuständig. 
 Hauptfunktionen:
@@ -54,7 +54,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
           "Fetched ${userFlashcards.length} flashcards for folder ${widget.folder.id}");
 
       setState(() {
-        flashcards.clear(); 
+        flashcards.clear();
         flashcards.addAll(userFlashcards);
       });
     } catch (e) {
@@ -305,8 +305,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
         reviewedCards.add(flashcards[currentIndex]);
         if (currentIndex == flashcards.length - 1) {
           startReview();
-          Navigator.of(context)
-              .pop();
+          Navigator.of(context).pop();
         } else {
           showNextCard();
         }
@@ -435,8 +434,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
               ],
               onSelected: (value) {
                 if (value == 1) {
-                  AuthService authService =
-                      AuthService(); 
+                  AuthService authService = AuthService();
                   _showCreateFlashcardDialog(
                     existingFlashcard: karteikarte,
                     authService: authService,
@@ -498,13 +496,17 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Suchleiste(
-                          onSearch: (term) {
-                            setState(() {
-                              searchTerm = term;
-                            });
-                          },
+                        Spacer(), // Neuer Spacer
+                        Flexible(
+                          child: Suchleiste(
+                            onSearch: (term) {
+                              setState(() {
+                                searchTerm = term;
+                              });
+                            },
+                          ),
                         ),
+                        Spacer(), // Neuer Spacer
                         Row(
                           children: [
                             Container(
@@ -515,8 +517,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                               child: IconButton(
                                 icon: Icon(Icons.add, color: Colors.black),
                                 onPressed: () {
-                                  AuthService authService =
-                                      AuthService();
+                                  AuthService authService = AuthService();
                                   _showCreateFlashcardDialog(
                                     authService: authService,
                                   );
@@ -548,14 +549,10 @@ class _FlashcardPageState extends State<FlashcardPage> {
                             child: GridView.builder(
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    4, 
-                                crossAxisSpacing:
-                                    10, 
-                                mainAxisSpacing:
-                                    5, 
-                                childAspectRatio:
-                                    1.5, 
+                                crossAxisCount: 4,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 5,
+                                childAspectRatio: 1.5,
                               ),
                               itemCount: flashcards
                                   .where((karteikarte) => karteikarte
