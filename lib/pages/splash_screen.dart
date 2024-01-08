@@ -6,7 +6,7 @@ Beschreibung:
 /// Dieses Flutter StatefulWidget repräsentiert einen Startbildschirm für unsere Karteikartenapp "CODE CARD". 
 Es beinhaltet Animationen für Text und Bilder, um eine dynamische und ansprechende Einführung in die App zu gewährleisten. 
 Der Bildschirm beginnt mit einer Animation, bei der ein Set von hüpfenden Bällen (mittels einer Lottie-Animation) ausgeblendet wird, 
-gefolgt vom Einblenden des App-Logos. Nach der Bildanimation folgt die Textanimation des Namens "CODE CARD",
+gefolgt vom Einblenden des App-Logos. Vom Beginn der ersten bis zum Ende der zweiten Animationen folgt die Textanimation des Namens "CODE CARD",
 bei der jeder Buchstabe nacheinander eingeblendet wird. Die gesamte Animationssequenz ist auf 3 Sekunden festgelegt,
 bevor automatisch zur `LoginPage` navigiert wird. Dieses Widget beinhaltet auch gerätespezifische Berechnungen, 
 um eine korrekte Ausrichtung und Skalierung auf verschiedenen Geräten zu gewährleisten.
