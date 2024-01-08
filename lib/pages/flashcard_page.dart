@@ -102,7 +102,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       errorText: formKey.currentState?.validate() == false
                           ? 'Bitte gebe den Text für die Vorderseite ein.'
                           : null,
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Color.fromARGB(255, 120, 93, 130)),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
@@ -135,7 +135,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       errorText: formKey.currentState?.validate() == false
                           ? 'Bitte gebe den Text für die Hinterseite ein.'
                           : null,
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: TextStyle(color: Color.fromARGB(255, 120, 93, 130)),
                       focusedBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
@@ -196,7 +196,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: Text('Erstellen', style: TextStyle(color: Color(0xfff4cae97))),
+                  child: Text('Erstellen', style: TextStyle(color: Color.fromARGB(211, 106, 202, 144))),
                 ),
               ],
             ),
