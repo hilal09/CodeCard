@@ -1,4 +1,4 @@
-/* 
+/*
 DateiName: flashcard.dart
 Authors: Hilal Cubukcu(Flashcard), Arkan Kadir (Flashcard copyWith)
 Zuletzt bearbeitet am: 07.01.2024
@@ -17,16 +17,16 @@ Diese Klasse ist zentral für die Logik, die Karteikarten in der App betrifft, u
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-CollectionReference flashcards =
-    FirebaseFirestore.instance.collection('flashcards');
+CollectionReference flashcards = FirebaseFirestore.instance.collection('flashcards');
 
 class Flashcard {
   final String id;
   final String userUID;
-  late String frontCaption;
-  late String backCaption;
-  late Color color;
+  String frontCaption;
+  String backCaption;
+  Color color;
   int leitnerBox;
+  String category; // Added category property
 
   Flashcard({
     required this.id,
@@ -35,6 +35,7 @@ class Flashcard {
     required this.backCaption,
     required this.color,
     required this.leitnerBox,
+    required this.category, // Added category parameter to constructor
   });
 
   Flashcard copyWith({
@@ -44,6 +45,7 @@ class Flashcard {
     String? backCaption,
     Color? color,
     int? leitnerBox,
+    String? category, // Added category parameter to copyWith
   }) {
     return Flashcard(
       id: id ?? this.id,
@@ -52,6 +54,32 @@ class Flashcard {
       backCaption: backCaption ?? this.backCaption,
       color: color ?? this.color,
       leitnerBox: leitnerBox ?? this.leitnerBox,
+      category: category ?? this.category,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'userUID': userUID,
+      'frontCaption': frontCaption,
+      'backCaption': backCaption,
+      'color': color.value, // assuming color is of type Color
+      'leitnerBox': leitnerBox,
+      'category': category, // Added category to the map
+      // Add other properties as needed
+    };
+  }
+
+  factory Flashcard.fromMap(Map<String, dynamic> map) {
+    return Flashcard(
+      id: map['id'],
+      userUID: map['userUID'],
+      frontCaption: map['frontCaption'],
+      backCaption: map['backCaption'],
+      color: Color(map['color']),
+      leitnerBox: map['leitnerBox'],
+      category: map['category'], // Added category property
     );
   }
 }

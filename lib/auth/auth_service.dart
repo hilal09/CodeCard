@@ -236,28 +236,6 @@ class AuthService {
     }
   }
 
-  Future<void> addFlashcardToUser(
-      String uid, String folderId, Flashcard flashcard) async {
-    try {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(uid)
-          .collection('folders')
-          .doc(folderId)
-          .collection('flashcards')
-          .add({
-        'frontCaption': flashcard.frontCaption,
-        'backCaption': flashcard.backCaption,
-        'color': flashcard.color.value,
-        'userUID': uid,
-        'leitnerBox': flashcard.leitnerBox,
-      });
-    } catch (e) {
-      print('Error adding flashcard to user: $e');
-      throw e;
-    }
-  }
-
   Future<List<Flashcard>> getUserFlashcards(String folderId) async {
     try {
       String userId = currentUserUID()!;
@@ -272,7 +250,7 @@ class AuthService {
           .get();
 
       List<Flashcard> userFlashcards =
-          snapshot.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
+      snapshot.docs.map((DocumentSnapshot<Map<String, dynamic>> doc) {
         Map<String, dynamic> data = doc.data()!;
         return Flashcard(
           id: doc.id,
@@ -280,7 +258,7 @@ class AuthService {
           frontCaption: data['frontCaption'],
           backCaption: data['backCaption'],
           color: Color(data['color']),
-          leitnerBox: data['leitnerBox'] ?? 1,
+          leitnerBox: data['leitnerBox'] ?? 1, category: '',
         );
       }).toList();
 
@@ -291,46 +269,66 @@ class AuthService {
     }
   }
 
-  Future<void> updateFlashcardInUser(
-      String uid, String folderId, Flashcard flashcard) async {
+  Future<void> addFlashcardToUser(String userId, String folderId, Flashcard flashcard) async {
     try {
+      // Assuming you have a 'users' collection, 'folders' subcollection, and 'flashcards' collection
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(uid)
+          .doc(userId)
           .collection('folders')
           .doc(folderId)
           .collection('flashcards')
-          .doc(flashcard.id)
-          .update({
-        'frontCaption': flashcard.frontCaption,
-        'backCaption': flashcard.backCaption,
-        'color': flashcard.color.value,
-        'userUID': uid,
-        'leitnerBox': flashcard.leitnerBox,
-      });
+          .add(flashcard.toMap());
     } catch (e) {
-      print('Error updating flashcard: $e');
-      throw e;
+      print("Error adding flashcard to user: $e");
+      // Handle the error as needed
     }
   }
 
-  Future<void> deleteFlashcardInUser(
-    String uid,
-    String folderId,
-    String flashcardId,
-  ) async {
+  Future<void> updateFlashcardInUser(
+      String userUID,
+      String folderId,
+      Flashcard flashcard,
+      ) async {
     try {
+      print('Updating flashcard with ID: ${flashcard.id}');
+
+      // Build the path to the flashcard within the user's folder
+      DocumentReference flashcardRef = FirebaseFirestore.instance
+          .collection('users')
+          .doc(userUID)
+          .collection('folders')
+          .doc(folderId)
+          .collection('flashcards')
+          .doc(flashcard.id);
+
+      // Update the flashcard using set with merge option
+      await flashcardRef.set(flashcard.toMap(), SetOptions(merge: true));
+
+      print('Flashcard updated successfully');
+    } catch (e) {
+      print('Error updating flashcard in user: $e');
+      rethrow; // Rethrow the error to propagate it up
+    }
+  }
+
+
+
+
+  Future<void> deleteFlashcardInUser(String userId, String folderId, String flashcardId) async {
+    try {
+      // Assuming you have a 'users' collection, 'folders' subcollection, and 'flashcards' collection
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(uid)
+          .doc(userId)
           .collection('folders')
           .doc(folderId)
           .collection('flashcards')
           .doc(flashcardId)
           .delete();
     } catch (e) {
-      print('Error deleting flashcard: $e');
-      throw e;
+      print("Error deleting flashcard in user: $e");
+      // Handle the error as needed
     }
   }
 }

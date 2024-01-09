@@ -182,18 +182,18 @@ class AuthWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      TextButton(
-                        onPressed: onForgotPasswordPressed,
-                        child: Text(
-                          'Passwort vergessen?',
-                          style: TextStyle(color: Colors.white),
+
+                     Center(
+                      child:
+                        TextButton(
+                          onPressed: onForgotPasswordPressed,
+                          child: Text(
+                            'Passwort vergessen?',
+                            style: TextStyle(color: Colors.white),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
+
+                    ),
                   SizedBox(
                     width: 300,
                     child: ElevatedButton(

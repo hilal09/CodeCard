@@ -1,4 +1,4 @@
-/* 
+/*
 DateiName: flashcard_page.dart
 Authors: Hilal Cubukcu(UI, Funktionalität), Amara Akram (Abfragelogik), Ceyda Sariouglu (UI, Funktionalität), Arkan Kadir (Firebase)
 Zuletzt bearbeitet am: 08.01.2024
@@ -41,6 +41,27 @@ class FlashcardPage extends StatefulWidget {
 }
 
 class _FlashcardPageState extends State<FlashcardPage> {
+  Widget _buildRightFlashcards() {
+    List<Flashcard> rightFlashcards = flashcards
+        .where((flashcard) => flashcard.category == "Richtig")
+        .toList();
+    return _buildFlashcardsListView(rightFlashcards);
+  }
+
+  Widget _buildWrongFlashcards() {
+    List<Flashcard> wrongFlashcards = flashcards
+        .where((flashcard) => flashcard.category == "Falsche")
+        .toList();
+    return _buildFlashcardsListView(wrongFlashcards);
+  }
+
+  Widget _buildSkippedFlashcards() {
+    List<Flashcard> skippedFlashcards = flashcards
+        .where((flashcard) => flashcard.category == "Übersprungene")
+        .toList();
+    return _buildFlashcardsListView(skippedFlashcards);
+  }
+
   AuthService authService = AuthService();
   static const Color placeholderColor = Colors.transparent;
 
@@ -55,6 +76,10 @@ class _FlashcardPageState extends State<FlashcardPage> {
   List<Flashcard> leitnerBox1 = [];
   List<Flashcard> leitnerBox2 = [];
   List<Flashcard> leitnerBox3 = [];
+
+  int get currentIndex => _currentIndex;
+
+  String get category => flashcards[currentIndex].category;
 
   @override
   void initState() {
@@ -96,10 +121,10 @@ class _FlashcardPageState extends State<FlashcardPage> {
   Future<void> _showCreateFlashcardDialog({
     Flashcard? existingFlashcard,
     required AuthService authService,
+    required String category,
   }) async {
     String frontCaption = existingFlashcard?.frontCaption ?? "";
     String backCaption = existingFlashcard?.backCaption ?? "";
-    Color selectedColor = existingFlashcard?.color ?? const Color(0xFFFfd4a4a);
 
     TextEditingController frontCaptionController =
         TextEditingController(text: frontCaption);
@@ -187,6 +212,44 @@ class _FlashcardPageState extends State<FlashcardPage> {
                     style: TextStyle(color: Colors.white),
                   ),
                   SizedBox(height: 10),
+                  DropdownButtonFormField<String>(
+                    value: category,
+                    items: [
+                      DropdownMenuItem(
+                        value: 'Richtig',
+                        child: Text('Richtig'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Falsch',
+                        child: Text('Falsch'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'Übersprungene',
+                        child: Text('Übersprungene'),
+                      ),
+                    ],
+                    onChanged: (value) {
+                      setState(() {
+                        category = value!;
+                      });
+                    },
+                    decoration: InputDecoration(
+                      labelText: 'Kategorie auswählen',
+                      labelStyle: TextStyle(color: Colors.white),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white),
+                      ),
+                    ),
+                    // Ensure the dropdown button has a hint or value to display
+                    hint: Text('Bitte auswählen'), // Add a hint if necessary
+                    // Ensure there's a validator if the field is required
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Bitte wählen Sie eine Kategorie aus.';
+                      }
+                      return null;
+                    },
+                  ),
                   SizedBox(height: 10),
                 ],
               ),
@@ -214,6 +277,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                           backCaption: backCaption,
                           color: placeholderColor,
                           leitnerBox: 1,
+                          category: category,
                         );
 
                         await authService.addFlashcardToUser(
@@ -228,7 +292,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                       } else {
                         existingFlashcard.frontCaption = frontCaption;
                         existingFlashcard.backCaption = backCaption;
-                        existingFlashcard.color = selectedColor;
+                        existingFlashcard.category = category;
 
                         await authService.updateFlashcardInUser(
                           authService.currentUserUID()!,
@@ -301,14 +365,14 @@ class _FlashcardPageState extends State<FlashcardPage> {
       setState(() {
         _currentIndex = 0;
       });
-      _showQuizDialog();
+      _showQuizDialog(_currentIndex); // Pass _currentIndex as a parameter
     }
   }
 
-  void _showQuizDialog() {
+  void _showQuizDialog(initialIndex) {
     bool showFront = true;
     List<Flashcard> incorrectCards = [];
-    int currentIndex = 0;
+    int currentIndex = initialIndex;
     List<Flashcard> reviewedCards = [];
     bool allCardsReviewed = false;
 
@@ -316,9 +380,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
       setState(() {
         if (_currentIndex < flashcards.length - 1) {
           _currentIndex++;
-        } else {}
+        } else {
+          // If we reached the end of the flashcards list, reset to the beginning
+          _currentIndex = 0;
+        }
       });
     }
+
 
     void startReview() {
       if (flashcards.isNotEmpty) {
@@ -331,7 +399,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
           showFront = true;
         });
 
-        _showQuizDialog();
+        _showQuizDialog(initialIndex);
       }
     }
 
@@ -345,14 +413,17 @@ class _FlashcardPageState extends State<FlashcardPage> {
           case ReviewAction.Right:
             currentFlashcard.leitnerBox++;
             currentFlashcard.color = Colors.green;
+            currentFlashcard.category = "Richtig";
             break;
           case ReviewAction.Wrong:
             currentFlashcard.leitnerBox = 1;
             currentFlashcard.color = Colors.red;
+            currentFlashcard.category = "Falsche";
             break;
           case ReviewAction.Skip:
             currentFlashcard.leitnerBox = 1;
             currentFlashcard.color = Colors.grey;
+            currentFlashcard.category = "Übersprungene";
             break;
           default:
             break;
@@ -462,6 +533,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
         _showCreateFlashcardDialog(
           existingFlashcard: karteikarte,
           authService: authService,
+          category: karteikarte.category, // Add this line
         );
       },
       child: Stack(
@@ -502,8 +574,9 @@ class _FlashcardPageState extends State<FlashcardPage> {
                 if (value == 1) {
                   AuthService authService = AuthService();
                   _showCreateFlashcardDialog(
-                    existingFlashcard: karteikarte,
+                    existingFlashcard: flashcards[currentIndex],
                     authService: authService,
+                    category: category, // Use the parameter directly
                   );
                 } else if (value == 2) {
                   _showDeleteFlashcardDialog(karteikarte);
@@ -583,19 +656,13 @@ class _FlashcardPageState extends State<FlashcardPage> {
         content = _buildFlashcardsListView(flashcards);
         break;
       case ReviewAction.Right:
-        content = _buildFlashcardsListView(flashcards
-            .where((flashcard) => flashcard.color == Colors.green)
-            .toList());
+        content = _buildRightFlashcards();
         break;
       case ReviewAction.Wrong:
-        content = _buildFlashcardsListView(flashcards
-            .where((flashcard) => flashcard.color == Colors.red)
-            .toList());
+        content = _buildWrongFlashcards();
         break;
       case ReviewAction.Skip:
-        content = _buildFlashcardsListView(flashcards
-            .where((flashcard) => flashcard.color == Colors.grey)
-            .toList());
+        content = _buildSkippedFlashcards();
         break;
     }
 
@@ -639,6 +706,9 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                   AuthService authService = AuthService();
                                   _showCreateFlashcardDialog(
                                     authService: authService,
+                                    category: flashcards.isNotEmpty
+                                        ? flashcards[_currentIndex].category
+                                        : 'Richtig', // Replace 'Richtig' with your default category
                                   );
                                 },
                               ),
@@ -679,8 +749,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                       SizedBox(height: 10),
                                       Container(
                                         height: 400,
-                                        child: _buildFlashcardsListView(
-                                            flashcards),
+                                        child: _buildRightFlashcards(),
                                       ),
                                     ],
                                   ),
@@ -698,8 +767,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                       SizedBox(height: 10),
                                       Container(
                                         height: 400,
-                                        child: _buildFlashcardsListView(
-                                            flashcards),
+                                        child: _buildWrongFlashcards(),
                                       ),
                                     ],
                                   ),
@@ -717,8 +785,7 @@ class _FlashcardPageState extends State<FlashcardPage> {
                                       SizedBox(height: 10),
                                       Container(
                                         height: 400,
-                                        child: _buildFlashcardsListView(
-                                            flashcards),
+                                        child: _buildSkippedFlashcards(),
                                       ),
                                     ],
                                   ),
